@@ -1,6 +1,10 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import logo from "./logo.svg";
+import Login from "./pages/Login";
+
+function entrar() {
+  console.log("entrar");
+}
 
 function App() {
   return (
@@ -18,6 +22,7 @@ function App() {
         >
           Learn React
         </a>
+        <Login />
       </header>
     </div>
   );
