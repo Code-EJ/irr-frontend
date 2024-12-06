@@ -1,15 +1,16 @@
 type CardProps = {
   children: any;
+  width: string;
 };
 
-const Card = ({ children }: CardProps) => {
+const Card = ({ children, width }: CardProps) => {
   return (
     <div
       style={{
-        width: "500px",
+        width: width,
         height: "fit-content",
         backgroundColor: "white",
-        borderRadius: "50px",
+        borderRadius: "40px",
         padding: "50px",
         color: "black",
       }}
