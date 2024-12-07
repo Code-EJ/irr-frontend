@@ -6,9 +6,20 @@ const handleLogin = () => {
   console.log("login");
 };
 
+const testee = [1, 2, 3, 4, 5, 6, 7];
+
 const Login = () => {
   return (
-    <div>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "black",
+        display: "flex",
+        alignContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Card width="400px">
         <div
           style={{
