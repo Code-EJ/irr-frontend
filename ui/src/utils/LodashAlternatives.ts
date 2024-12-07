@@ -1,3 +1,4 @@
+// Função que pega valores de um objeto
 export const get = (obj: any, path: string, defaultValue = undefined) => {
   const travel = (regexp: any) =>
     String.prototype.split
@@ -10,3 +11,4 @@ export const get = (obj: any, path: string, defaultValue = undefined) => {
   const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
   return result === undefined || result === obj ? defaultValue : result;
 };
+// COmentario
