@@ -8,6 +8,7 @@ This is the front end of a project, being complete responsability for those who 
 ### The setup can be used with Yarn or NPM, use it as you may fit
 
 ### Node version ~v22.9.0
+### Yarn v1.22.0
 
 ### npm
 ```bash
