@@ -1,6 +1,6 @@
 import { inputStyle } from "./styles/InputStyle";
 
-const InputText = ({ titulo }) => {
+const InputText = ({ titulo, ...props }) => {
   return (
     <div
       style={{
@@ -13,7 +13,7 @@ const InputText = ({ titulo }) => {
       <div style={{ width: "100%", display: "flex", marginBottom: "15px" }}>
         <b style={{ fontSize: "15px", fontStyle: "bold" }}>{titulo}</b>
       </div>
-      <input style={inputStyle} />
+      <input style={inputStyle} {...props} />
     </div>
   );
 };
