@@ -1,9 +1,20 @@
+import { toast } from "react-toastify";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import InputText from "../components/InputText";
+import { handleAuth } from "../services/AuthServices";
+import { Navigate } from "react-router-dom";
 
-const handleLogin = () => {
-  console.log("login");
+// formik YUP !!!
+
+const onSubmit = (values) => {
+  const data = {
+    username: values.username,
+    password: values.password,
+  };
+  handleAuth(data)
+    .then(() => <Navigate to="/home" />)
+    .catch(() => toast.error("Usuário invalido"));
 };
 
 const testee = [1, 2, 3, 4, 5, 6, 7];
@@ -85,7 +96,7 @@ const Login = () => {
             </div>
             <Button
               titulo="Entrar"
-              onClick={handleLogin}
+              onClick={handleAuth}
               style={{ width: "100%" }}
             />
           </div>
