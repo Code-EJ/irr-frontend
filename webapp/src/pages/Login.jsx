@@ -17,6 +17,8 @@ const onSubmit = (values) => {
     .catch(() => toast.error("Usuário invalido"));
 };
 
+const testee = [1, 2, 3, 4, 5, 6, 7];
+
 const Login = () => {
   return (
     <div
@@ -30,7 +32,8 @@ const Login = () => {
         justifyContent: "center",
       }}
     >
-      <Card width="400px">
+      <Card width="400px"
+      >
         <div
           style={{
             height: "550px",
@@ -38,34 +41,15 @@ const Login = () => {
             flexDirection: "column",
           }}
         >
-          <p
-            style={{
-              padding: "10px 0",
-              margin: "0",
-              color: "#5D8C68",
-              fontFamily: "NeverMind Bauhaus",
-              fontWeight: "600",
-            }}
-          >
-            Login
-          </p>
+          <p style={{ padding: "10px 0", margin: "0", color: "#5D8C68", fontFamily: "NeverMind Bauhaus", fontWeight: "600" }} >Login</p >
 
           <InputText titulo="Nome" />
           <InputText titulo="E-mail" />
           <InputText titulo="Senha" />
-
-          {/* ultima opcao do card */}
+          
 
           <div>
-            <label
-              style={{
-                fontSize: "15px",
-                display: "flex",
-                fontWeight: "bold",
-                paddingTop: 15,
-                paddingBottom: 15,
-              }}
-            >
+            <label style={{ fontSize: "15px", display: "flex", fontWeight: "bold", paddingTop: 15, paddingBottom: 15 }}>
               Tipo de usuário
             </label>
 
@@ -79,7 +63,7 @@ const Login = () => {
                 border: "1px solid rgb(18, 61, 27)",
                 boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 6px",
                 transition: "box-shadow 0.3s",
-                transform: "0.3s",
+                transform: "0.3s"
               }}
             />
 
@@ -107,12 +91,8 @@ const Login = () => {
                 justifyContent: "space-between",
               }}
             >
-              <a style={{ fontSize: "15px", cursor: "pointer" }}>
-                Lembre-se de mim
-              </a>
-              <u style={{ fontSize: "15px", cursor: "pointer" }}>
-                Esqueci minha senha
-              </u>
+              <a style={{ fontSize: "15px", cursor: "pointer" }}> Lembre-se de mim</a>
+              <a style={{ fontSize: "15px", cursor: "pointer" }}> Esqueci minha senha</a>
             </div>
             <Button
               titulo="Entrar"
