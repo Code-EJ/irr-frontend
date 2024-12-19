@@ -7,7 +7,6 @@ export const getToken = () => {
     return token;
   } else {
     return null;
-    // window.location.href = "/login";
   }
 };
 

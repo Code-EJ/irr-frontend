@@ -55,9 +55,9 @@ const Login = () => {
               >
                 Login
               </p>
-              <InputText titulo="Nome" />
-              <InputText titulo="E-mail" />
-              <InputText titulo="Senha" />
+              <InputText titulo="Nome" name="username" />
+              <InputText titulo="E-mail" name="email" />
+              <InputText titulo="Senha" name="password" />
               <div>
                 <label
                   style={{
