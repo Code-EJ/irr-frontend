@@ -2,11 +2,11 @@ import { toast } from "react-toastify";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import InputText from "../components/InputText";
+import InputList from "../components/InputList";
 import { handleAuth } from "../services/AuthServices";
 import { Navigate } from "react-router-dom";
 import SimpleForm from "../components/SimpleForm";
-
-// formik YUP !!!
+import LoginImage from "../assets/background.png";
 
 const onSubmit = (values) => {
   const data = {
@@ -21,96 +21,26 @@ const onSubmit = (values) => {
     .catch(() => toast.error("Usuário invalido"));
 };
 
-const testee = [1, 2, 3, 4, 5, 6, 7];
-
 const Login = () => {
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "black",
-        display: "flex",
-        alignContent: "center",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <div className="w-screen h-screen bg-black flex flex-row content-center items-center justify-center">
       <SimpleForm onSubmit={onSubmit} initialValues={{}}>
-        {({ formik }) => (
-          <Card width="400px">
-            <div
-              style={{
-                height: "550px",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
+        {() => (
+          <Card className="w-[500px] h-[650px] flex flex-row rounded-l-[40px]">
+            <div className="flex flex-col">
               <p
-                style={{
-                  padding: "10px 0",
-                  margin: "0",
-                  color: "#5D8C68",
-                  fontFamily: "NeverMind Bauhaus",
-                  fontWeight: "600",
-                }}
+                 className="py-2.5 m-0 text-[#5D8C68] font-semibold"
+                 style={{ fontFamily: "NeverMind Bauhaus" }}
               >
                 Login
               </p>
               <InputText titulo="Nome" name="username" />
               <InputText titulo="E-mail" name="email" />
               <InputText titulo="Senha" name="password" />
-              <div>
-                <label
-                  style={{
-                    fontSize: "15px",
-                    display: "flex",
-                    fontWeight: "bold",
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                  }}
-                >
-                  Tipo de usuário
-                </label>
+              <InputList titulo="Tipo de usuário" name="type" />
 
-                <input
-                  list="userType"
-                  style={{
-                    display: "flex",
-                    width: "300px",
-                    height: "35px",
-                    borderRadius: "10px",
-                    border: "1px solid rgb(18, 61, 27)",
-                    boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 6px",
-                    transition: "box-shadow 0.3s",
-                    transform: "0.3s",
-                  }}
-                />
-
-                <datalist id="userType">
-                  <option value="Admin" />
-                  <option value="Organização" />
-                  <option value="Prefeitura" />
-                  <option value="Representante de Catadores" />
-                </datalist>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    padding: "40px",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
+              <div className="flex flex-col justify-between  w-full">
+                <div className="flex flex-row justify-between w-full pt-4 pb-14">
                   <a style={{ fontSize: "15px", cursor: "pointer" }}>
                     {" "}
                     Lembre-se de mim
@@ -124,13 +54,16 @@ const Login = () => {
                   titulo="Entrar"
                   action="primary"
                   type="submit"
-                  style={{ width: "100%" }}
+                  className="w-full"
                 />
               </div>
             </div>
           </Card>
         )}
       </SimpleForm>
+      <div className="w-[500px] h-[650px]">
+        <img src={LoginImage} alt="Imagem de login" className="rounded-r-[40px] w-full h-full"/>
+      </div>
     </div>
   );
 };
