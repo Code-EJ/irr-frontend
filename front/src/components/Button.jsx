@@ -1,8 +1,7 @@
-import { buttonStyle } from "./styles/ButtonStyle";
-
-const Button = ({ titulo, style, type, ...rest }) => {
+const Button = ({ titulo, className, type, ...rest }) => {
   return (
-    <button style={{ ...buttonStyle, ...style }} type={type} {...rest}>
+    <button className={`inline-flex justify-center items-center px-5 py-2.5 h-10 rounded-lg bg-[#5d8a69] shadow-xl cursor-pointer hover:bg-[#31b554] transition-shadow transition-transform duration-300 ease-in-out ${className}`}
+      type={type} {...rest}>
       <h2 style={{ color: "white" }}> {titulo} </h2>
     </button>
   );

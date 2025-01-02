@@ -5,8 +5,8 @@ import AppRouter from "./route/Router";
 
 function App() {
   return (
-    <>
-  <AppRouter />
+    <div className="w-screen h-screen">
+      <AppRouter />
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -19,7 +19,7 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-    </>
+    </div>
   );
 }
 

@@ -5,27 +5,31 @@ import { apiClient, getToken } from "../services/ApiClient";
 import { deleteToken } from "../services/AuthServices";
 
 const AppRouter = () => {
+  // Rotas se tornam publicas no inicio
   const [routes, setRoutes] = useState(publicRoutes);
   const [validToken, setValidToken] = useState(false); // Significa q a validaçao ocorreu
 
+  // Checa se o usuario e valido pelo token
+  // Se é válido, troca as rotas para privadas
   const checkUserIsValid = async () => {
     try {
       await apiClient.post("/login/validate", {
         login: getToken(),
       });
-      setValidToken(true);
       setRoutes(privateRoutes);
     } catch (err) {
       deleteToken();
-      setValidToken(true);
       setRoutes(publicRoutes);
     }
+    setValidToken(true);
   };
 
   useEffect(() => {
     checkUserIsValid();
   }, []);
-  console.log(validToken, routes);
+
+  // Enquanto as rotas nao validaram, mantém um Skeleton
+  // Depois que validaram, setam as rotas
   if (validToken) {
     return <RouterProvider router={routes} />;
   } else {

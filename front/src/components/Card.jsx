@@ -1,14 +1,9 @@
-const Card = ({ children, width }) => {
+const Card = ({ children, width, className }) => {
+  // PADRAO DE BORDAS: rounded-[40px]
   return (
     <div
-      style={{
-        width: width,
-        height: "fit-content",
-        backgroundColor: "white",
-        borderRadius: "40px",
-        padding: "50px",
-        color: "black",
-      }}
+      className={`bg-white h-auto p-14 text-black ${className}`}
+      style={{width: width}}
     >
       {children}
     </div>
