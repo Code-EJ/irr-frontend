@@ -29,7 +29,7 @@ const Login = () => {
           <Card className="w-[500px] h-[650px] flex flex-row rounded-l-[40px]">
             <div className="flex flex-col">
               <p
-                 className="py-2.5 m-0 text-[#5D8C68] font-semibold"
+                 className="py-2.5 m-0 text-[#5D8C68] font-[MontSerrat]"
                  style={{ fontFamily: "NeverMind Bauhaus" }}
               >
                 Login
@@ -51,7 +51,7 @@ const Login = () => {
                   </a>
                 </div>
                 <Button
-                  titulo="Entrar"
+                  titulo="ENTRAR"
                   action="primary"
                   type="submit"
                   className="w-full"
@@ -62,7 +62,7 @@ const Login = () => {
         )}
       </SimpleForm>
       <div className="w-[500px] h-[650px]">
-        <img src={LoginImage} alt="Imagem de login" className="rounded-r-[40px] w-full h-full"/>
+        <img src={LoginImage} alt="Imagem de login" className="rounded-r-[40px] w-[500px] h-[650px]"/>
       </div>
     </div>
   );

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { publicRoutes, privateRoutes } from "./RoutesList";
 import { apiClient, getToken } from "../services/ApiClient";
 import { deleteToken } from "../services/AuthServices";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const AppRouter = () => {
   // Rotas se tornam publicas no inicio
@@ -31,7 +33,23 @@ const AppRouter = () => {
   // Enquanto as rotas nao validaram, mantém um Skeleton
   // Depois que validaram, setam as rotas
   if (validToken) {
-    return <RouterProvider router={routes} />;
+    if (routes == privateRoutes) {
+      return (
+        <>
+        <Header />
+          <RouterProvider router={routes} />
+        <Footer />
+        </>
+      )
+    } else {
+      return (
+        <>
+        <RouterProvider router={routes} />
+        <Footer />
+        </>
+      )
+    }
+    
   } else {
     return <>loading...</>;
   }
