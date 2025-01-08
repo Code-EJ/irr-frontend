@@ -46,6 +46,7 @@ const ManageUsers = () => {
           Gerenciamento de Usuários
         </h1>
 
+        {/* Card Principal */}
         <div className="flex flex-wrap lg:flex-nowrap gap-8">
           <Card className="flex-1 bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
             <div className="bg-yellow-600 p-4 rounded-3xl min-w-52">
@@ -91,7 +92,7 @@ const ManageUsers = () => {
             </div>
           </Card>
 
-          {/* Card de Desativação */}
+          {/* Card de desativação de usuário */}
           <Card className="flex-1 bg-white rounded-xl shadow-lg p-6 flex flex-col gap-6">
             <h3 className="text-gray-700 text-center font-medium text-xl">
               Desativar Usuário
