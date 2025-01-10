@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import ManageUsers from "../pages/ManagementUsers";
 import RegisterUserAdmin from '../pages/RegisterUserAdmin';
 import VehicleRegistration from "../pages/VehicleRegistration";
+import CollectionList from "../pages/CollectionsList";  
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
 export const publicRoutes = createBrowserRouter([
@@ -17,6 +18,10 @@ export const publicRoutes = createBrowserRouter([
   {
     path: "/vehicle-registration",
     element: <VehicleRegistration />,
+  },
+  {
+    path: "/collections-list",
+    element: <CollectionList />,
   }
 ]);
 
