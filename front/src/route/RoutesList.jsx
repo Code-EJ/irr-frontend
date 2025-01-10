@@ -1,5 +1,9 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
+import ManageUsers from "../pages/ManagementUsers";
+import RegisterUserAdmin from '../pages/RegisterUserAdmin';
+import VehicleRegistration from "../pages/VehicleRegistration";
+import CollectionList from "../pages/CollectionsList";  
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
 export const publicRoutes = createBrowserRouter([
@@ -8,9 +12,17 @@ export const publicRoutes = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "*",
-    element: <Navigate to="/login" />,
+    path: "/register-admin",
+    element: <RegisterUserAdmin />,
   },
+  {
+    path: "/vehicle-registration",
+    element: <VehicleRegistration />,
+  },
+  {
+    path: "/collections-list",
+    element: <CollectionList />,
+  }
 ]);
 
 // Aqui ficarão as rotas que podem ser acessadas SOMENTE LOGADO
@@ -19,4 +31,8 @@ export const privateRoutes = createBrowserRouter([
     path: "*",
     element: <Navigate to="/login" />,
   },
+  {
+    path: "/management-users",
+    element: <ManageUsers />,
+  }
 ]);
