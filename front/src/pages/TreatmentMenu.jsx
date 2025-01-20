@@ -2,7 +2,7 @@ import Card from "../components/Card";
 
 const TreatmentMenu = () => {
   const menuItems = [
-    { title: "TRIAGENS", color: "#133D1A", link: "/menu-tratamentos" },
+    { title: "TRIAGENS", color: "#133D1A", link: "/screening" },
     { title: "PRENSAGENS", color: "#133D1A", link: "/menu-tratamentos" },
   ];
 

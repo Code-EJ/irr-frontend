@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import SimpleForm from "../components/SimpleForm";
 import { apiClient } from "../services/ApiClient";
 import { successToast, errorToast } from "../services/ToastServices";
+import { deleteToken } from "../services/AuthServices";
 
 const ManageUsers = () => {
   const [selectedFilter, setSelectedFilter] = useState("Todos");
@@ -37,6 +38,11 @@ const ManageUsers = () => {
         `Erro ao desativar o usuário ${values.name}. Por favor, tente novamente.`,
       );
     }
+  };
+
+  const handleLogout = () => {
+    deleteToken();
+    window.location.href = "/login";
   };
 
   return (
@@ -89,7 +95,6 @@ const ManageUsers = () => {
             </div>
           </Card>
 
-          {/* Card de desativação de usuário */}
           <Card className="flex-1 bg-white rounded-xl shadow-lg p-6 flex flex-col gap-6">
             <h3 className="text-gray-700 text-center font-medium text-xl">
               Desativar Usuário
@@ -122,12 +127,10 @@ const ManageUsers = () => {
             </SimpleForm>
           </Card>
         </div>
-
-        {/* Botão Sair */}
         <div className="flex justify-end">
           <Button
             titulo="Sair"
-            onClick={() => (window.location.href = "/login")}
+            onClick={() => handleLogout()}
             className="bg-red-700 text-white rounded-lg px-6 py-2 text-sm"
           />
         </div>

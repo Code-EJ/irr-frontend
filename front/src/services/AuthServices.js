@@ -21,5 +21,5 @@ export const handleAuth = async (data) => {
 
 export const logout = () => {
   deleteToken();
-  window.location.href = "/login"
-}
+  window.location.href = "/login";
+};
