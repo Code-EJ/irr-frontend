@@ -6,6 +6,7 @@ import VehicleRegistration from "../pages/VehicleRegistration";
 import CollectionList from "../pages/CollectionsList";
 import LandingPage from "../pages/LandingPage";
 import TreatmentMenu from "../pages/TreatmentMenu";
+import ScreeningPage from "../pages/ScreeningPage";
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
 export const publicRoutes = createBrowserRouter([
@@ -52,5 +53,9 @@ export const privateRoutes = createBrowserRouter([
   {
     path: "/menu-tratamentos",
     element: <TreatmentMenu />,
+  },
+  {
+    path: "/screening",
+    element: <ScreeningPage />,
   },
 ]);
