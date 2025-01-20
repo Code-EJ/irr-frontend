@@ -27,7 +27,7 @@ const RegisterUserAdmin = () => {
   };
 
   return (
-    <div className="bg-cover bg-center min-h-screen flex justify-center items-center p-6">
+    <div className="bg-cover bg-center min-h-screen flex justify-center items-center p-6 bg-green-900">
       {/* Card Principal */}
       <Card className="w-full max-w-4xl bg-gray-100 rounded-3xl shadow-lg p-8">
         {/* Título */}

@@ -3,10 +3,11 @@ import Button from "../components/Button";
 import Card from "../components/Card";
 import InputText from "../components/InputText";
 import InputList from "../components/InputList";
-import { handleAuth } from "../services/AuthServices";
+import { deleteToken, handleAuth } from "../services/AuthServices";
 import { Navigate } from "react-router-dom";
 import SimpleForm from "../components/SimpleForm";
 import LoginImage from "../assets/background.png";
+import { useEffect } from "react";
 
 const onSubmit = (values) => {
   const data = {
@@ -22,6 +23,10 @@ const onSubmit = (values) => {
 };
 
 const Login = () => {
+  useEffect(() => {
+    deleteToken();
+  }, []);
+
   return (
     <div className="w-screen h-screen bg-black flex flex-row content-center items-center justify-center">
       <SimpleForm onSubmit={onSubmit} initialValues={{}}>
@@ -29,8 +34,8 @@ const Login = () => {
           <Card className="w-[500px] h-[650px] flex flex-row rounded-l-[40px]">
             <div className="flex flex-col">
               <p
-                 className="py-2.5 m-0 text-[#5D8C68] font-[MontSerrat]"
-                 style={{ fontFamily: "NeverMind Bauhaus" }}
+                className="py-2.5 m-0 text-[#5D8C68] font-[MontSerrat]"
+                style={{ fontFamily: "NeverMind Bauhaus" }}
               >
                 Login
               </p>
@@ -62,7 +67,11 @@ const Login = () => {
         )}
       </SimpleForm>
       <div className="w-[500px] h-[650px]">
-        <img src={LoginImage} alt="Imagem de login" className="rounded-r-[40px] w-[500px] h-[650px]"/>
+        <img
+          src={LoginImage}
+          alt="Imagem de login"
+          className="rounded-r-[40px] w-[500px] h-[650px]"
+        />
       </div>
     </div>
   );

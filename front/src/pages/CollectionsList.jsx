@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
 import { apiClient } from "../services/ApiClient";
 import { successToast, errorToast } from "../services/ToastServices";
+import Button from "../components/Button";
 
 const CollectionList = () => {
   const exampleCollections = [
@@ -64,11 +65,7 @@ const CollectionList = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Espaço para o header */}
-      <header className="h-20 bg-gray-100"></header>
-
-      <main className="flex-grow flex flex-col items-center p-6 bg-gray-50">
+    <div className="min-h-screen flex flex-col justify-around items-center bg-green-900">
         {/* Botões de ações */}
         <div className="flex gap-4 mb-6">
           <button
@@ -86,7 +83,7 @@ const CollectionList = () => {
         </div>
 
         {/* Card com a tabela de Coletas */}
-        <Card className="w-full max-w-4xl rounded-lg">
+        <Card className="w-full max-w-4xl rounded-[40px]">
           <div className="p-4">
             <h3 className="text-xl font-bold text-center mb-4">Coletas</h3>
             <table className="w-full border-collapse border border-gray-300">
@@ -134,26 +131,21 @@ const CollectionList = () => {
 
           {/* Paginação */}
           <div className="flex justify-between items-center mt-4">
-            <button
+            <Button
               onClick={() => handlePageChange(currentPage - 1)}
               className="px-4 py-2 text-gray-600 hover:underline"
-              disabled={currentPage === 1}
-            >
-              Anterior
-            </button>
+              titulo="ANTERIOR"
+            />
             <span>
               Página {currentPage} de {totalPages}
             </span>
-            <button
+            <Button
               onClick={() => handlePageChange(currentPage + 1)}
               className="px-4 py-2 text-gray-600 hover:underline"
-              disabled={currentPage === totalPages}
-            >
-              Próxima
-            </button>
+              titulo="Proxima pagina"
+            />
           </div>
         </Card>
-      </main>
     </div>
   );
 };

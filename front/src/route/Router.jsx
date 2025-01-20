@@ -9,21 +9,28 @@ import Footer from "../components/Footer";
 const AppRouter = () => {
   // Rotas se tornam publicas no inicio
   const [routes, setRoutes] = useState(publicRoutes);
-  const [validToken, setValidToken] = useState(false); // Significa q a validaçao ocorreu
+  const [validToken, setValidateToken] = useState(false); // Significa q a validaçao ocorreu
 
   // Checa se o usuario e valido pelo token
   // Se é válido, troca as rotas para privadas
   const checkUserIsValid = async () => {
-    try {
-      await apiClient.post("/login/validate", {
-        login: getToken(),
-      });
-      setRoutes(privateRoutes);
-    } catch (err) {
-      deleteToken();
-      setRoutes(publicRoutes);
+    // try {
+    //   await apiClient.post("/login/validate", {
+    //     login: getToken(),
+    //   });
+    //   setRoutes(privateRoutes);
+    // } catch (err) {
+    //   deleteToken();
+    //   setRoutes(publicRoutes);
+    // }
+    if (getToken()) {
+      setRoutes(privateRoutes)
     }
-    setValidToken(true);
+    else {
+      // setRoutes(publicRoutes)
+      setRoutes(privateRoutes)
+    }
+    setValidateToken(true);
   };
 
   useEffect(() => {

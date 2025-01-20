@@ -20,13 +20,11 @@ const VehicleRegistration = () => {
 
   return (
     <div className="bg-green-900 min-h-screen flex justify-center items-center p-8">
-      <Card className="w-full max-w-4xl rounded-lg">
-        <div className="bg-white rounded-lg p-8 shadow-lg flex flex-col items-center">
+      <Card className="w-full max-w-4xl rounded-[40px]">
           <h2 className="text-2xl text-green-800 font-bold mb-6">
             CADASTRO DE VEÍCULO
           </h2>
 
-          {/* Formulário utilizando SimpleForm */}
           <SimpleForm
             initialValues={{
               modelo: "",
@@ -76,7 +74,6 @@ const VehicleRegistration = () => {
               </>
             )}
           </SimpleForm>
-        </div>
       </Card>
     </div>
   );
