@@ -1,51 +1,26 @@
-# Front-end IRR
+# Projeto React com Vite
 
-## Description
-This is the front end of a project, being complete responsability for those who have access, not publish, share or in any way disclose the internal contents of the project.
+Este é um projeto desenvolvido em React utilizando o Vite como bundler e o Yarn como gerenciador de pacotes.
 
+## Pré-requisitos
 
-## Project setup
-### The setup can be used with Yarn or NPM, use it as you may fit
+Antes de começar, certifique-se de que você possui os seguintes requisitos instalados em sua máquina:
 
-### Node version ~v22.9.0
-### Yarn v1.22.0
+- **Node.js**: Recomendado a versão LTS mais recente. [Instale aqui](https://nodejs.org/)
+- **Yarn**: Gerenciador de pacotes. [Instale aqui](https://classic.yarnpkg.com/lang/en/docs/install/)
 
-### npm
+## Como rodar o projeto
+
+Siga os passos abaixo para configurar e rodar o projeto localmente:
+
+### 1. Clone o repositório
 ```bash
-$ npm install
+git clone <Nome do repositorio>
+cd front-irr
 ```
 
-### Yarn
 ```bash
-$ yarn install
+yarn install
+yarn run dev
 ```
 
-## Compile and run the project
-
-### npm
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-### Yarn
-```bash
-# development
-$ yarn start
-
-# watch mode
-$ yarn start:dev
-
-# production mode
-$ yarn start:prod
-```
-
-## Resources
-
-## Support
