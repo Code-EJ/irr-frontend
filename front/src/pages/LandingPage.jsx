@@ -1,23 +1,33 @@
+import Button from "../components/Button";
 import Card from "../components/Card";
+import { logout } from "../services/AuthServices";
 
 const LandingPage = () => {
   const menuItems = [
-    { title: "Manejo de usuários", color: "#133D1A", link: "/manage-users" },
+    { title: "Cadastro de usuários", color: "#133D1A", link: "/cadastro-usuarios" },
+    { title: "Manejo de usuários", color: "#133D1A", link: "/manejo-usuarios" },
     { title: "Tratamento", color: "#133D1A", link: "/menu-tratamentos" },
-    {
-      title: "Relatórios e visualização",
-      color: "#133D1A",
-      link: "/menu-relatorios",
-    },
     {
       title: "Entradas e saídas",
       color: "#133D1A",
       link: "/menu-entradas-saidas",
     },
+    // {
+    //   title: "Relatórios e visualização",
+    //   color: "#133D1A",
+    //   link: "/menu-relatorios",
+
+    // },
+    {
+      title: "Lista de coletas",
+      color: "#133D1A",
+      link: "/lista-coletas",
+
+    },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-green-900 justify-center items-center p-8">
+    <div className="flex w-full flex-col">
       <div className="flex flex-1 items-center justify-center">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
           {menuItems.map((item, index) => (
@@ -32,6 +42,13 @@ const LandingPage = () => {
             </Card>
           ))}
         </div>
+      </div>
+      <div className="flex justify-center mt-10">
+        <Button
+          titulo="Sair"
+          onClick={() => logout()}
+          className="bg-red-700 text-white text-sm hover:bg-[#5e0b12]"
+        />
       </div>
     </div>
   );

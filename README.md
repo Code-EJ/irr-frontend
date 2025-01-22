@@ -15,7 +15,7 @@ Siga os passos abaixo para configurar e rodar o projeto localmente:
 
 ### 1. Clone o repositório
 ```bash
-git clone <Nome do repositorio>
+git clone https://github.com/Code-EJ/front-irr.git
 cd front-irr
 ```
 

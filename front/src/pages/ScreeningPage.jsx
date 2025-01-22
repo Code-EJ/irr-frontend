@@ -1,16 +1,16 @@
-import { toast } from "react-toastify";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import InputText from "../components/InputText";
 import SimpleForm from "../components/SimpleForm";
-import { handleNewTriagem } from "../services/TriagemServices";
+import { createTriagem } from "../services/TriagemServices";
 import { get } from "../utils/LodashAlternatives";
+import { handleBack } from "../services/NavigationServices";
+import { errorToast, successToast } from "../services/ToastServices";
+import BackButton from "../components/BackButton";
+import InputList from "../components/InputList";
 
 const ScreeningPage = () => {
-  const handleBack = () => {
-    window.location.href = "/home";
-  };
-
+  const tiposTriagem = [{ name: "Grossa", value: 1 }, { name: "Primaria", value: 2 }, { name: "Fina", value: 3 }]
   const handleSubmit = (values) => {
     const data = {
       screening_date: get(values, "screening_date"),
@@ -22,85 +22,74 @@ const ScreeningPage = () => {
       material_origin: get(values, "material_origin"),
       material_destination: get(values, "material_destination"),
     };
-    handleNewTriagem(data)
-      .then(() => toast.success("Deu certo"))
-      .catch(() => toast.error("Deu errado"));
+    createTriagem(data)
+      .then(() => successToast("Deu certo"))
+      .catch((err) => errorToast(err.message));
   };
 
   return (
-    <div className="bg-green-700 bg-cover min-h-screen w-full flex justify-center items-center p-5">
-      <Card className="bg-[#5c8a68] rounded-[50px] shadow-lg d-flex flex-col">
-        <h1 className="text-center text-3xl text-white font-bold">TRIAGENS</h1>
-
-        <div>
-          <SimpleForm initialValues={{}} onSubmit={handleSubmit}>
-            {() => (
-              <div className="grid grid-cols-2 gap-x-32 gap-y-3">
-                <InputText
-                  titleStyle="text-white"
-                  className="h-12"
-                  titulo="Data da triagem"
-                  name="screening_date"
-                />
-                <InputText
-                  titleStyle="text-white"
-                  className="h-12"
-                  titulo="Tipo da triagem"
-                  name="screening_type"
-                />
-                <InputText
-                  titleStyle="text-white"
-                  className="h-12"
-                  titulo="Tipo do material"
-                  name="material_type"
-                />
-                <InputText
-                  titleStyle="text-white"
-                  className="h-12"
-                  titulo="Volume do material"
-                  name="material_volume"
-                />
-                <InputText
-                  titleStyle="text-white"
-                  className="h-12"
-                  titulo="Qualidade do material"
-                  name="material_quality"
-                />
-                <InputText
-                  titleStyle="text-white"
-                  className="h-12"
-                  titulo="Rejeito do material"
-                  name="material_reject"
-                />
-                <InputText
-                  titleStyle="text-white"
-                  className="h-12"
-                  titulo="Origem do material"
-                  name="material_origin"
-                />
-                <InputText
-                  titleStyle="text-white"
-                  className="h-12"
-                  titulo="Destino do material"
-                  name="material_destination"
-                />
-                <Button
-                  titulo="Voltar"
-                  onClick={() => handleBack()}
-                  className="bg-red-700 text-white rounded-lg px-6 py-2 text-sm"
-                />
-                <Button
-                  titulo="Concluir"
-                  action="primary"
-                  type="submit"
-                  className="bg-green-950 text-white rounded-lg px-6 py-2 text-sm"
-                />
-              </div>
-            )}
-          </SimpleForm>
-        </div>
-      </Card>
-    </div>
+    <Card className="rounded-[50px] shadow-lg d-flex flex-col" bgColor="#5d8b68">
+      <h1 className="text-center text-3xl text-white font-bold">TRIAGEM</h1>
+      <div>
+        <SimpleForm initialValues={{}} onSubmit={handleSubmit}>
+          {() => (
+            <div className="grid grid-cols-2 gap-x-32 gap-y-3">
+              <InputText
+                mask="##/##/####"
+                titleStyle="text-white"
+                className="h-12"
+                titulo="Data da triagem"
+                name="screening_date"
+              />
+              <InputList titleStyle="text-white" titulo="Tipo da triagem" name="screening_type" options={tiposTriagem} />
+              <InputText
+                titleStyle="text-white"
+                className="h-12"
+                titulo="Tipo do material"
+                name="material_type"
+              />
+              <InputText
+                titleStyle="text-white"
+                className="h-12"
+                titulo="Volume do material"
+                name="material_volume"
+              />
+              <InputText
+                titleStyle="text-white"
+                className="h-12"
+                titulo="Qualidade do material"
+                name="material_quality"
+              />
+              <InputText
+                titleStyle="text-white"
+                className="h-12"
+                titulo="Rejeito do material"
+                name="material_reject"
+              />
+              <InputText
+                titleStyle="text-white"
+                className="h-12"
+                titulo="Origem do material"
+                name="material_origin"
+              />
+              <InputText
+                titleStyle="text-white"
+                className="h-12"
+                titulo="Destino do material"
+                name="material_destination"
+              />
+              <BackButton onClick={handleBack} route="menu-tratamentos" />
+              <Button
+                titulo="Concluir"
+                action="primary"
+                type="submit"
+                className="bg-green-950 text-white text-sm"
+              />
+            </div>
+          )}
+        </SimpleForm>
+      </div>
+    </Card>
   );
 };
 

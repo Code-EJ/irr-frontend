@@ -6,43 +6,49 @@ import InputList from "../components/InputList";
 import { deleteToken, handleAuth } from "../services/AuthServices";
 import { Navigate } from "react-router-dom";
 import SimpleForm from "../components/SimpleForm";
-import LoginImage from "../assets/background.png";
 import { useEffect } from "react";
+import LoginImage from "../assets/background.png"
 
-const onSubmit = (values) => {
-  const data = {
-    username: values.username,
-    password: values.password,
-    email: values.email,
-    type: values.type,
-  };
-
-  handleAuth(data)
-    .then(() => <Navigate to="/home" />)
-    .catch(() => toast.error("Usuário invalido"));
-};
 
 const Login = () => {
+  const options = [
+    { value: 1, name: "Admin" },
+    { value: 2, name: "Organização" },
+    { value: 3, name: "Prefeitura" },
+    { value: 4, name: "Representante de Catadores" },
+  ]
+
+  const onSubmit = (values) => {
+    const data = {
+      username: values.username,
+      password: values.password,
+      email: values.email,
+      type: values.type,
+    };
+
+    handleAuth(data)
+      .then(() => <Navigate to="/menu" />)
+      // .catch(() => toast.error("Usuário invalido"));
+      .catch(() =>   window.location.href = "/menu");
+  };
+
   useEffect(() => {
     deleteToken();
   }, []);
 
   return (
-    <div className="w-screen h-screen bg-black flex flex-row content-center items-center justify-center">
+    <>
       <SimpleForm onSubmit={onSubmit} initialValues={{}}>
         {() => (
           <Card className="w-[500px] h-[650px] flex flex-row rounded-l-[40px]">
             <div className="flex flex-col">
-              <p
-                className="py-2.5 m-0 text-[#5D8C68] font-[MontSerrat]"
-                style={{ fontFamily: "NeverMind Bauhaus" }}
-              >
+              <h2 className="text-2xl text-[#133d1b] font-bold py-2.5 m-0 text-[#5D8C68]">
                 Login
-              </p>
+              </h2>
               <InputText titulo="Nome" name="username" />
               <InputText titulo="E-mail" name="email" />
               <InputText titulo="Senha" name="password" />
-              <InputList titulo="Tipo de usuário" name="type" />
+              <InputList titulo="Tipo de usuário" name="type" options={options} />
 
               <div className="flex flex-col justify-between  w-full">
                 <div className="flex flex-row justify-between w-full pt-4 pb-14">
@@ -56,10 +62,10 @@ const Login = () => {
                   </a>
                 </div>
                 <Button
-                  titulo="ENTRAR"
+                  titulo="Entrar"
                   action="primary"
                   type="submit"
-                  className="w-full"
+                  className="w-full text-white"
                 />
               </div>
             </div>
@@ -73,7 +79,7 @@ const Login = () => {
           className="rounded-r-[40px] w-[500px] h-[650px]"
         />
       </div>
-    </div>
+    </>
   );
 };
 export default Login;
