@@ -1,9 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Card from "../components/Card";
 import { apiClient } from "../services/ApiClient";
 import { successToast, errorToast } from "../services/ToastServices";
 import Button from "../components/Button";
+import { handleBack } from "../services/NavigationServices";
+import BackButton from "../components/BackButton";
 
 const CollectionList = () => {
   const exampleCollections = [
@@ -28,7 +29,7 @@ const CollectionList = () => {
         setTotalPages(response.data.totalPages);
       }
     } catch (error) {
-      errorToast("Erro ao carregar as Coletas.");
+      // errorToast("Erro ao carregar as Coletas.");
     }
   };
 
@@ -65,88 +66,84 @@ const CollectionList = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-around items-center bg-green-900">
-        {/* Botões de ações */}
-        <div className="flex gap-4 mb-6">
-          <button
-            onClick={handleGenerateRandomReport}
-            className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-600"
-          >
-            Gerar um relatório aleatório
-          </button>
-          <button
-            onClick={handleGenerateCustomReport}
-            className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-600"
-          >
-            Gerar um relatório personalizado
-          </button>
-        </div>
+    <Card className="w-full max-w-4xl rounded-[40px]">
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={handleGenerateRandomReport}
+          className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-600"
+        >
+          Gerar um relatório aleatório
+        </button>
+        <button
+          onClick={handleGenerateCustomReport}
+          className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-600"
+        >
+          Gerar um relatório personalizado
+        </button>
+      </div>
 
-        {/* Card com a tabela de Coletas */}
-        <Card className="w-full max-w-4xl rounded-[40px]">
-          <div className="p-4">
-            <h3 className="text-xl font-bold text-center mb-4">Coletas</h3>
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2 text-left">
-                    nº relatório
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">
-                    data
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">
-                    hora
-                  </th>
+      <div className="p-4">
+        <h3 className="text-xl font-bold text-center mb-4">Coletas</h3>
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-gray-300 px-4 py-2 text-left">
+                nº relatório
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left">
+                data
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left">
+                hora
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {collections.length > 0 ? (
+              collections.map((coleta) => (
+                <tr key={coleta.id}>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {coleta.numero}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {coleta.data}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {coleta.hora}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {collections.length > 0 ? (
-                  collections.map((coleta) => (
-                    <tr key={coleta.id}>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {coleta.numero}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {coleta.data}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {coleta.hora}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="3"
-                      className="border border-gray-300 px-4 py-2 text-center"
-                    >
-                      Nenhuma coleta encontrada.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="3"
+                  className="border border-gray-300 px-4 py-2 text-center"
+                >
+                  Nenhuma coleta encontrada.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
-          {/* Paginação */}
-          <div className="flex justify-between items-center mt-4">
-            <Button
-              onClick={() => handlePageChange(currentPage - 1)}
-              className="px-4 py-2 text-gray-600 hover:underline"
-              titulo="ANTERIOR"
-            />
-            <span>
-              Página {currentPage} de {totalPages}
-            </span>
-            <Button
-              onClick={() => handlePageChange(currentPage + 1)}
-              className="px-4 py-2 text-gray-600 hover:underline"
-              titulo="Proxima pagina"
-            />
-          </div>
-        </Card>
-    </div>
+      <div className="flex justify-between items-center mt-4">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="px-4 py-2 text-gray-600 hover:underline hover:bg-green-700 text-white"
+          titulo="Pagina anterior"
+        />
+        <span>
+          Página {currentPage} de {totalPages}
+        </span>
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="px-4 py-2 text-gray-600 hover:underline hover:bg-green-700 text-white"
+          titulo="Proxima pagina"
+        />
+      </div>
+      <BackButton onClick={handleBack} route="menu" />
+    </Card>
   );
 };
 

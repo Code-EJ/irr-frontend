@@ -6,8 +6,19 @@ import Button from "../components/Button";
 import SimpleForm from "../components/SimpleForm";
 import { apiClient } from "../services/ApiClient";
 import { successToast, errorToast } from "../services/ToastServices";
+import LogoImg from "../assets/logo_IRR.png";
+import { handleBack } from "../services/NavigationServices";
+import BackButton from "../components/BackButton";
+import InputList from "../components/InputList";
 
 const RegisterUserAdmin = () => {
+  const userTypes = [
+    { value: 1, name: "Admin" },
+    { value: 2, name: "Organização" },
+    { value: 3, name: "Prefeitura" },
+    { value: 4, name: "Representante de Catadores" },
+  ]
+  
   const handleRegister = async (values, { setFieldError }) => {
     try {
       const res = await apiClient.post("/users/register", values);
@@ -27,77 +38,45 @@ const RegisterUserAdmin = () => {
   };
 
   return (
-    <div className="bg-cover bg-center min-h-screen flex justify-center items-center p-6 bg-green-900">
-      {/* Card Principal */}
-      <Card className="w-full max-w-4xl bg-gray-100 rounded-3xl shadow-lg p-8">
-        {/* Título */}
-        <h2 className="text-2xl font-bold text-gray-700 mb-6">Cadastrar Usuário</h2>
-
-        {/* Formulário */}
-        <SimpleForm
-          initialValues={{ nome: "", funcao: "", email: "", senha: "" }}
-          onSubmit={handleRegister}
-          autoSetErrors
-        >
-          {(formik) => (
-            <div className="flex flex-wrap gap-8">
-              {/* Coluna Esquerda */}
-              <div className="flex-1 min-w-[300px]">
-                <InputText
-                  titulo="Nome"
-                  name="nome"
-                  value={formik.values.nome}
-                  onChange={formik.handleChange}
-                />
-                <InputText
-                  titulo="Função"
-                  name="funcao"
-                  value={formik.values.funcao}
-                  onChange={formik.handleChange}
-                />
-              </div>
-
-              {/* Coluna Direita */}
-              <div className="flex-1 min-w-[300px]">
-                <InputText
-                  titulo="E-mail"
-                  name="email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  error={formik.errors.email}
-                />
-                <InputText
-                  titulo="Senha"
-                  name="senha"
-                  value={formik.values.senha}
-                  onChange={formik.handleChange}
-                />
-
-                {/* Botão */}
-                <div className="mt-6 text-right">
-                  <Button
-                    titulo="Cadastrar"
-                    type="submit"
-                    className="bg-green-700 text-white rounded-full px-6 py-2"
-                    onClick={formik.handleSubmit}
-                    disabled={formik.isSubmitting}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </SimpleForm>
-
-        {/* Logo */}
-        <div className="mt-8 flex justify-end">
-          <img
-            src="/src/logo.svg"
-            alt="Logo"
-            className="w-24 h-auto"
-          />
-        </div>
-      </Card>
-    </div>
+    <Card className="w-full h-3/4 max-w-4xl bg-gray-100 rounded-3xl shadow-lg p-8">
+      <h2 className="text-2xl font-bold text-[#133d1b] mb-6">
+        Cadastro de Usuário
+      </h2>
+      <SimpleForm
+        initialValues={{ nome: "", funcao: "", email: "", senha: "" }}
+        onSubmit={handleRegister}
+        autoSetErrors
+      >
+        {(formik) => (
+          <div className="grid grid-cols-2 gap-6 justify-between w-full">
+            <InputText
+              titulo="Nome"
+              name="nome"
+            />
+            <InputList options={userTypes} titulo="Função" name="function" />
+            <InputText
+              titulo="E-mail"
+              name="email"
+              error={formik.errors.email}
+            />
+            <InputText
+              titulo="Senha"
+              name="senha"
+            />
+            <BackButton onClick={handleBack} route="menu" />
+            <Button
+              titulo="Cadastrar"
+              type="submit"
+              action="primary"
+              className="bg-green-950 text-white text-sm"
+              onClick={formik.handleSubmit}
+              disabled={formik.isSubmitting}
+            />
+            <img src={LogoImg} alt="Imagem de login" className="w-24 h-24" />
+          </div>
+        )}
+      </SimpleForm>
+    </Card>
   );
 };
 

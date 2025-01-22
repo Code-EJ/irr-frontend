@@ -5,6 +5,7 @@ import { apiClient, getToken } from "../services/ApiClient";
 import { deleteToken } from "../services/AuthServices";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import BackgroundImage from "../components/BackgroundImage";
 
 const AppRouter = () => {
   // Rotas se tornam publicas no inicio
@@ -44,14 +45,20 @@ const AppRouter = () => {
       return (
         <>
         <Header />
+        <BackgroundImage>
+          
           <RouterProvider router={routes} />
+        </BackgroundImage>
         <Footer />
         </>
       )
     } else {
       return (
         <>
+        <BackgroundImage>
+
         <RouterProvider router={routes} />
+        </BackgroundImage>
         <Footer />
         </>
       )
