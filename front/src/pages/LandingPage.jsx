@@ -22,7 +22,21 @@ const LandingPage = () => {
       title: "Lista de coletas",
       color: "#133D1A",
       link: "/lista-coletas",
-
+    },
+    {
+      title: "Materiais",
+      color: "#133D1A",
+      link: "/menu-materiais",
+    },
+    {
+      title: "Controle de estoque",
+      color: "#133D1A",
+      link: "/menu-estoque",
+    },
+    {
+      title: "Mercado",
+      color: "#133D1A",
+      link: "/menu-mercado",
     },
   ];
 
