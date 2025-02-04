@@ -2,12 +2,12 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json yarn.lock ./
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 COPY . .
-RUN yarn run dev
+RUN yarn build
 
 FROM nginx:alpine
 
