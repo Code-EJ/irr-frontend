@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "npm run dev",
-    "start": "npm run build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
