@@ -2,11 +2,13 @@ FROM node:latest
 
 WORKDIR /app
 
+COPY package*.json ./
+RUN npm install
+
 COPY . .
 
-RUN rm -rf node_modules
-RUN npm i
+RUN npm run build
 
-CMD ["npm", "build"]
+CMD ["npm", "run", "preview"]
 
 EXPOSE 80
