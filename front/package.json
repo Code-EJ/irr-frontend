@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "run dev",
-    "start": "run build",
+    "dev": "npm run dev",
+    "start": "npm run build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
