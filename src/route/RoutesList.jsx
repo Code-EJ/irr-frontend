@@ -8,9 +8,9 @@ import LandingPage from "../pages/LandingPage";
 import TreatmentMenu from "../pages/TreatmentMenu";
 import ScreeningPage from "../pages/ScreeningPage";
 import EntryMenu from "../pages/EntryMenu";
-import PressPage from "../pages/Presspage";
 import DonationRegistration from "../pages/DonationRegistration";
 import CollectionRegistration from "../pages/CollectionRegister";
+import PressPage from "../pages/PressPage";
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
 export const publicRoutes = createBrowserRouter([
