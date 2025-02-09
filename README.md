@@ -1,26 +1,8 @@
-# Projeto React com Vite
+# React + Vite
 
-Este é um projeto desenvolvido em React utilizando o Vite como bundler e o Yarn como gerenciador de pacotes.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Pré-requisitos
+Currently, two official plugins are available:
 
-Antes de começar, certifique-se de que você possui os seguintes requisitos instalados em sua máquina:
-
-- **Node.js**: Recomendado a versão LTS mais recente. [Instale aqui](https://nodejs.org/)
-- **Yarn**: Gerenciador de pacotes. [Instale aqui](https://classic.yarnpkg.com/lang/en/docs/install/)
-
-## Como rodar o projeto
-
-Siga os passos abaixo para configurar e rodar o projeto localmente:
-
-### 1. Clone o repositório
-```bash
-git clone https://github.com/Code-EJ/front-irr.git
-cd front-irr
-```
-
-```bash
-yarn install
-yarn run dev
-```
-
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
