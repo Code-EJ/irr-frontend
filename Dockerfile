@@ -11,4 +11,4 @@ RUN npm run build
 
 EXPOSE 4173
 
-CMD ["sh", "-c", "npm run preview -- --port $PORT --host"]
+CMD ["sh", "-c", "vite preview --port $PORT --host"]
