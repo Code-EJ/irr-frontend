@@ -9,6 +9,6 @@ COPY . .
 
 RUN npm run build
 
-CMD ["npm", "run", "preview"]
+EXPOSE 4173
 
-EXPOSE 5173
+CMD ["sh", "-c", "npm run preview -- --port $PORT --host"]
