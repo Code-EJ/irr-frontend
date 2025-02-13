@@ -1,11 +1,11 @@
 import { RouterProvider } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { publicRoutes, privateRoutes } from "./RoutesList";
-import { apiClient, getToken } from "../services/ApiClient";
-import { deleteToken } from "../services/AuthServices";
+import { getToken } from "../services/ApiClient";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BackgroundImage from "../components/BackgroundImage";
+import React from "react";
 
 const AppRouter = () => {
   // Rotas se tornam publicas no inicio
@@ -44,28 +44,25 @@ const AppRouter = () => {
     if (routes == privateRoutes) {
       return (
         <>
-        <Header />
-        <BackgroundImage>
-          
-          <RouterProvider router={routes} />
-        </BackgroundImage>
-        <Footer />
+          <Header />
+          <BackgroundImage>
+            <RouterProvider router={routes} />
+          </BackgroundImage>
+          <Footer />
         </>
       )
     } else {
       return (
         <>
-        <BackgroundImage>
-
-        <RouterProvider router={routes} />
-        </BackgroundImage>
-        <Footer />
+          <BackgroundImage>
+            <RouterProvider router={routes} />
+          </BackgroundImage>
+          <Footer />
         </>
       )
     }
-    
   } else {
-    return <>loading...</>;
+    return <>carregando...</>;
   }
 };
 
