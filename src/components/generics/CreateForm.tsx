@@ -1,7 +1,9 @@
-import { Field, Form, Formik} from "formik";
 import React from "react";
-import BaseService from "../services/api/BaseService";
-import api from "../services/api/Api";
+import { Form, Formik } from "formik";
+import BaseService from "../../services/api/BaseService";
+import api from "../../services/api/Api";
+import { InputField } from "./InputField";
+import { Model } from "../../services/api/Entities";
 
 /**
  * Formulário genérico para criação de entidades.
@@ -12,7 +14,7 @@ import api from "../services/api/Api";
  * @param children é um campo do react. Serve para posicionar componentes em uma posição específica. Nesse caso, os componentes são do tipo InputField. {@link https://pt-br.react.dev/learn/passing-props-to-a-component#passing-jsx-as-children Documentação do react sobre children}
  * @returns o formulário de criação da entidade especificada nas propriedades do componente.
  */
-function CreateForm<E>({
+function CreateForm<E extends Model>({
   restService,
   initialValues,
   children
@@ -25,7 +27,6 @@ function CreateForm<E>({
           restService.create(data)
         } catch (e) {
           // TODO: podemos mostrar mensagens customizadas de erro para o usuário caso uma requisição não tenha funcionado.
-          // para isso, 
           alert(e);
         }
       } }
@@ -41,51 +42,20 @@ function CreateForm<E>({
 /**
  * Propriedades aceitas no componente ``CreateForm``. 
  */
-interface CreateFormProps<E> {
+interface CreateFormProps<E extends Model> {
   restService: BaseService<E>;
   initialValues: any;
   children: any;
 }
 
 /**
- * Componente que serve para definir os campos de valores do formulário.
- * O formulário é feito usando o Formik.
- * @todo Deve ser estilizado.
- * @param label é o texto que aparece para o usuário acima ou do lado do campo.
- * @param id é o nome do campo dentro do banco de dados. Acesse o arquivo src/services/api/Entities.ts para consultar o nome dos campos de uma entidade.
- * @param type é o tipo do valor aceito na tag input do html. {@link https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/input#type Lista de valores aceitos}.
- */
-function InputField({ 
-  label,
-  id,
-  type
- }: InputFieldProps) {
-  return (
-    <div>
-      <label htmlFor={id}>{label}</label>
-      <Field id={id} name={id} type={type} />
-    </div>
-  )
-}
-
-/**
- * Propriedades aceitas no componente ``InputField``. 
- * @aviso nem todos os valores possíveis do campo ``type`` foram preenchidos. {@link https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/input#type Vide documentação}.
- */
-interface InputFieldProps {
-  label: string;
-  id: string;
-  type: "email" | "text" | "password" | "checkbox" | "number" | "date" | "file";
-}
-
-/**
  * Exemplo de formulário para criar registros de motoristas no banco de dados.
  * A entidade motorista tem dois campos que precisam ser preenchidos, ``nome`` e ``cpf``.
  * Os campos ``id`` e ``criadorId`` são criados automaticamente para todas as entidades.
- * Todos os formulários de criação devem ter esse formato apresentado.
+ * Todos os formulários de criação devem ter o formato apresentado.
  * @aviso esse componente não deve ser estilizado, todos os estilos devem ser feitos nos componentes ``CreateForm`` e ``InputField``.
  */
-function CreateDriverForm() {
+export function CreateDriverForm() {
   return (
     <CreateForm restService={api.driver} initialValues={{
       nome: "",
@@ -97,14 +67,8 @@ function CreateDriverForm() {
   )
 }
 
-/**
- * Exemplo de ulitização do formulário depois de criado.
- */
-export function Example() {
+function Example() {
   return (
-    <>
-      <h1>Criação de motorista</h1>
-      <CreateDriverForm />
-    </>
+    <CreateDriverForm />
   )
 }
