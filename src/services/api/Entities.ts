@@ -1,46 +1,41 @@
-export interface User {
+import { FormikValues } from "formik";
+
+export interface Model extends FormikValues {
   criadorId: string;
   id: string;
+}
+
+export interface User extends Model {
   nome: string;
   email: string;
   tipo: "ADMINISTRADOR" | "PREFEITURA" | "ORGANIZACAO" | "REPRESENTANTE";
 }
 
-export interface Driver {
-  criadorId: string;
-  id: string;
+export interface Driver extends Model {
   nome: string;
   cpf: string;
 }
 
-export interface Vehicle {
-  criadorId: string;
-  id: string;
+export interface Vehicle extends Model {
   modelo: string;
   placa: string;
 }
 
-export interface Donation {
-  criadorId: string;
-  id: string;
+export interface Donation extends Model {
   pesagem: number;
   tipologiaId: string;
   subtipologiaId: string;
   doadorId: string;
 }
 
-export interface Donator {
-  criadorId: string;
-  id: string;
+export interface Donator extends Model {
   nome: string;
   endereco: string;
   tipo: "PESSOA_FISICA" | "PESSOA_JURIDICA";
   cadastroNacional: string;
 }
 
-export interface Collection {
-  criadorId: string;
-  id: string;
+export interface Collection extends Model {
   dataRealizacao: Date;
   dataChegada: Date;
   dataSaida: Date;
@@ -55,26 +50,20 @@ export interface Collection {
   diarioColetaId: string;
 }
 
-export interface Typology {
-  criadorId: string;
-  id: string;
+export interface Typology extends Model {
   nome: string;
   valor: number;
   ativo: boolean;
 }
 
-export interface SubTypology {
-  criadorId: string;
-  id: string;
+export interface SubTypology extends Model {
   nome: string;
   valor: number;
   ativo: boolean;
   tipologiaId: string;
 }
 
-export interface Triage {
-  criadorId: string;
-  id: string;
+export interface Triage extends Model {
   data: Date;
   tipo: "TOTAL" | "PARCIAL";
   volumeTotal: number;
@@ -84,9 +73,7 @@ export interface Triage {
   subtipologiaId: string;
 }
 
-export interface Pressing {
-  criadorId: string;
-  id: string;
+export interface Pressing extends Model {
   data: Date;
   volumeTotal: number;
   tipoOrigem: "DOACAO" | "COLETA";
@@ -94,25 +81,19 @@ export interface Pressing {
   subtipologiaId: string;
 }
 
-export interface InputMaterial {
-  criadorId: string;
-  id: string;
+export interface InputMaterial extends Model {
   quantidade: number;
   tipo: "DOACAO" | "COLETA";
   subtipologiaId: string;
 }
 
-export interface OutputMaterial {
-  criadorId: string;
-  id: string;
+export interface OutputMaterial extends Model {
   quantidade: number;
   notaFiscalId: string;
   subtipologiaId: string;
 }
 
-export interface Sale {
-  criadorId: string;
-  id: string;
+export interface Sale extends Model {
   comprador: string;
   data: Date;
   valor: number;

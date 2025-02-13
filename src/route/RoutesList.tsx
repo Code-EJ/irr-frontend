@@ -1,16 +1,18 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Login from "../pages/Login";
-import ManageUsers from "../pages/ManageUsers";
-import RegisterUserAdmin from "../pages/RegisterUserAdmin";
-import VehicleRegistration from "../pages/VehicleRegistration";
-import CollectionList from "../pages/CollectionsList";
-import LandingPage from "../pages/LandingPage";
-import TreatmentMenu from "../pages/TreatmentMenu";
-import ScreeningPage from "../pages/ScreeningPage";
-import EntryMenu from "../pages/EntryMenu";
-import DonationRegistration from "../pages/DonationRegistration";
-import CollectionRegistration from "../pages/CollectionRegister";
-import PressPage from "../pages/PressPage";
+import Login from "../pages/Login.tsx";
+import ManageUsers from "../pages/ManageUsers.jsx";
+import RegisterUserAdmin from "../pages/RegisterUserAdmin.jsx";
+import VehicleRegistration from "../pages/VehicleRegistration.jsx";
+import CollectionList from "../pages/CollectionsList.jsx";
+import LandingPage from "../pages/LandingPage.jsx";
+import TreatmentMenu from "../pages/TreatmentMenu.jsx";
+import ScreeningPage from "../pages/ScreeningPage.jsx";
+import EntryMenu from "../pages/EntryMenu.jsx";
+import DonationRegistration from "../pages/DonationRegistration.jsx";
+import CollectionRegistration from "../pages/CollectionRegister.jsx";
+import PressPage from "../pages/PressPage.jsx";
+import React from "react";
+import { DriverPage } from "../pages/DriverPoC.tsx";
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
 export const publicRoutes = createBrowserRouter([
@@ -81,5 +83,9 @@ export const privateRoutes = createBrowserRouter([
   {
     path: "/cadastro-veiculo",
     element: <PressPage />,
+  },
+  {
+    path: "/motoristas",
+    element: <DriverPage />,
   },
 ]);

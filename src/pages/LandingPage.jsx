@@ -22,8 +22,12 @@ const LandingPage = () => {
       title: "Lista de coletas",
       color: "#133D1A",
       link: "/lista-coletas",
-
     },
+    {
+      title: "Motoristas - poc",
+      color: "#133D1A",
+      link: "/motoristas",
+    }
   ];
 
   return (
