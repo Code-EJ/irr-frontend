@@ -7,11 +7,11 @@ import CollectionList from "../pages/CollectionsList";
 import LandingPage from "../pages/LandingPage";
 import TreatmentMenu from "../pages/TreatmentMenu";
 import ScreeningPage from "../pages/ScreeningPage";
-import EntryMenu from "../pages/EntryMenu";
 import DonationRegistration from "../pages/DonationRegistration";
 import CollectionRegistration from "../pages/CollectionRegister";
 import PressPage from "../pages/PressPage";
 import FilterTest from "../pages/FilterTest";
+import DistributionMenu from "../pages/DistributionMenu";
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
 export const publicRoutes = createBrowserRouter([
@@ -53,7 +53,7 @@ export const privateRoutes = createBrowserRouter([
   },
   {
     path: "/menu-entradas-saidas",
-    element: <EntryMenu />
+    element: <DistributionMenu />
   },
   {
     path: "/manejo-usuarios",
