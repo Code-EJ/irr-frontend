@@ -31,9 +31,11 @@ function CreateForm<E extends Model>({
         }
       } }
     >
-      <Form>
+      <Form className="flex flex-col gap-4 p-4 border border-gray-300 rounded bg-gray-50">
         { children }
-        <button type="submit">Criar</button>
+        <button 
+        type="submit" 
+        className="py-2 px-4 border-none rounded bg-blue-500 text-white hover:bg-blue-700">Criar</button>
       </Form>
     </Formik>
   )
