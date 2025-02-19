@@ -17,28 +17,36 @@ import api from "../../services/api/Api";
 function UpdateForm<E extends Model>({
   restService,
   id,
-  children
+  children,
+  initialValues
 }: UpdateFormProps<E>) {
-  const [data, setData] = useState<E>();
+  const [data, setData] = useState<E>(initialValues);
 
   useEffect(() => {
     async function getUpdatedData(id: string) {
+      console.log(id)
       const updatedData = await restService.get(id);
 
-      if (updatedData) setData(updatedData);
+      if (updatedData) {
+        setData(updatedData);
+        console.log(updatedData)
+      }
+
       // TODO: O backend já retorna essas mensagens. Trocar pelas mensagens do backend.
       else alert("Não foi possível recuperar o registro.");
     }
 
-    if (!data) getUpdatedData(id);
-  }, []);
+    getUpdatedData(id);
+  }, [id]);
 
   return (
     <Formik 
-      initialValues={ data || {} }
+      initialValues={ data }
+      enableReinitialize={ true }
       onSubmit={ data => {
         try {
-          restService.update(data)
+          restService.update(data);
+          console.log("registro alterado")
         } catch (e) {
           // TODO: podemos mostrar mensagens customizadas de erro para o usuário caso uma requisição não tenha funcionado.
           alert(e);
@@ -60,6 +68,7 @@ interface UpdateFormProps<E extends Model> {
   restService: BaseService<E>;
   id: string;
   children: any;
+  initialValues: E
 }
 
 interface IdProps {
@@ -68,7 +77,12 @@ interface IdProps {
 
 export function UpdateDriverForm({ id }: IdProps) {
   return (
-    <UpdateForm restService={api.driver} id={id}>
+    <UpdateForm restService={api.driver} id={id} initialValues={{
+      id: "",
+      criadorId: "",
+      nome: "",
+      cpf: ""
+    }}>
       <InputField label="Nome" id="nome" type="text" />
       <InputField label="CPF" id="cpf" type="text" />
     </UpdateForm>
