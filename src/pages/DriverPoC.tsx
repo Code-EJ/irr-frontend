@@ -12,13 +12,11 @@ export interface PageState {
 export function DriverPage() {
   const [state, setState] = useState<PageState>({ status: "list" });
 
-  const [id, setId] = useState<string>("");
-
   function render() {
     switch(state.status) {
       case "list": return <ListDriver setState={setState}/>;
       case "create": return <CreateDriverForm />;
-      case "update": return <UpdateDriverForm id={ id } />;
+      case "update": return <UpdateDriverForm id={ state.id! } />;
     } 
   }
 
