@@ -1,9 +1,10 @@
-import React from "react";
 import { Form, Formik } from "formik";
+
 import BaseService from "../../services/api/BaseService";
-import api from "../../services/api/Api";
 import { InputField } from "./InputField";
 import { Model } from "../../services/api/Entities";
+import React from "react";
+import api from "../../services/api/Api";
 
 /**
  * Formulário genérico para criação de entidades.
@@ -14,7 +15,7 @@ import { Model } from "../../services/api/Entities";
  * @param children é um campo do react. Serve para posicionar componentes em uma posição específica. Nesse caso, os componentes são do tipo InputField. {@link https://pt-br.react.dev/learn/passing-props-to-a-component#passing-jsx-as-children Documentação do react sobre children}
  * @returns o formulário de criação da entidade especificada nas propriedades do componente.
  */
-function CreateForm<E extends Model>({
+export function CreateForm<E extends Model>({
   restService,
   initialValues,
   children
@@ -50,27 +51,27 @@ interface CreateFormProps<E extends Model> {
   children: any;
 }
 
-/**
- * Exemplo de formulário para criar registros de motoristas no banco de dados.
- * A entidade motorista tem dois campos que precisam ser preenchidos, ``nome`` e ``cpf``.
- * Os campos ``id`` e ``criadorId`` são criados automaticamente para todas as entidades.
- * Todos os formulários de criação devem ter o formato apresentado.
- * @aviso esse componente não deve ser estilizado, todos os estilos devem ser feitos nos componentes ``CreateForm`` e ``InputField``.
- */
-export function CreateDriverForm() {
-  return (
-    <CreateForm restService={api.driver} initialValues={{
-      nome: "",
-      cpf: ""
-    }}>
-      <InputField label="Nome" id="nome" type="text" />
-      <InputField label="CPF" id="cpf" type="text" />
-    </CreateForm>
-  )
-}
+// /**
+//  * Exemplo de formulário para criar registros de motoristas no banco de dados.
+//  * A entidade motorista tem dois campos que precisam ser preenchidos, ``nome`` e ``cpf``.
+//  * Os campos ``id`` e ``criadorId`` são criados automaticamente para todas as entidades.
+//  * Todos os formulários de criação devem ter o formato apresentado.
+//  * @aviso esse componente não deve ser estilizado, todos os estilos devem ser feitos nos componentes ``CreateForm`` e ``InputField``.
+//  */
+// export function CreateDriverForm() {
+//   return (
+//     <CreateForm restService={api.driver} initialValues={{
+//       nome: "",
+//       cpf: ""
+//     }}>
+//       <InputField label="Nome" id="nome" type="text" />
+//       <InputField label="CPF" id="cpf" type="text" />
+//     </CreateForm>
+//   )
+// }
 
-function Example() {
-  return (
-    <CreateDriverForm />
-  )
-}
+// function Example() {
+//   return (
+//     <CreateDriverForm />
+//   )
+// }

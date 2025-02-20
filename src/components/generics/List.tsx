@@ -1,18 +1,18 @@
+import { Field, PageState } from "../Page";
 import { useEffect, useState } from "react";
-import { Model } from "../../services/api/Entities";
-import BaseService from "../../services/api/BaseService";
-import { toast } from "react-toastify";
-import React from "react";
-import api from "../../services/api/Api";
-import { PageState } from "../../pages/DriverPoC";
 
-function List<E extends Model>({
+import BaseService from "../../services/api/BaseService";
+import { Model } from "../../services/api/Entities";
+import React from "react";
+import { toast } from "react-toastify";
+
+export function List<E extends Model>({
   restService,
   fields,
   setState
 }: {
   restService: BaseService<E>,
-  fields: string[],
+  fields: Field[],
   setState: React.Dispatch<React.SetStateAction<PageState>>
 }) {
   const [objects, setObjects] = useState<E[]>();
@@ -30,21 +30,10 @@ function List<E extends Model>({
   }, []);
   return (
     <table className="table-fixed w-full">
-      <thead>
-
-        <tr className="border-collapse border-2 border-black">
-          {fields.map(field => <th className="border-2 border-black p-1" key={field}>{field}</th>)}
-          <th className="border-2 border-black p-1">
-            <button onClick={() => setState({
-              status: "create"
-            })} className="bg-blue-400 rounded select-none shadow p-2 text-white">Criar</button>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {objects?.map(object => <ListedObject key={object.id} object={object} fields={fields} setState={setState} />)}
-
-      </tbody>
+      <tr className="border-collapse border-2 border-black">
+       { fields.map(field => <th className="border-2 border-black p-1" key={field.identifier}>{field.label}</th>) }
+      </tr>
+      { objects?.map(object => <ListedObject key={object.id} object={object} fields={fields} setState={setState} />) }
     </table>
   )
 }
@@ -55,17 +44,17 @@ function ListedObject<E extends Model>({
   setState
 }: {
   object: E,
-  fields: string[],
+  fields: Field[],
   setState: React.Dispatch<React.SetStateAction<PageState>>
 }) {
   return (
     <tr className="border-collapse border-2 border-black">
-      {fields.map(field => <td key={field} className="border-2 border-black p-2">{object[field]}</td>)}
+      {fields.map(field => <td key={field.identifier} className="border-2 border-black p-2">{object[field.identifier]}</td>)}
       <td key={"edit"} className="p-2 flex flex-row  justify-around">
         <button
           className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16"
           onClick={() => setState({
-            status: "update",
+            status: "UPDATE",
             id: object.id
           })}
         >
@@ -75,7 +64,7 @@ function ListedObject<E extends Model>({
         <button
           className="p-1 bg-blue-400 rounded-md text-white shadow-md w-16"
           onClick={() => setState({
-            status: "view",
+            status: "VIEW",
             id: object.id
           })}
         >
@@ -83,15 +72,5 @@ function ListedObject<E extends Model>({
         </button>
       </td>
     </tr>
-  )
-}
-
-export function ListDriver({
-  setState
-}: {
-  setState: React.Dispatch<React.SetStateAction<PageState>>
-}) {
-  return (
-    <List restService={api.driver} fields={["nome", "cpf"]} setState={setState} />
   )
 }

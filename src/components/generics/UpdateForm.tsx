@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { Form, Formik } from "formik";
+import React, { useEffect, useState } from "react";
+
 import BaseService from "../../services/api/BaseService";
-import { Model } from "../../services/api/Entities";
 import { InputField } from "./InputField";
+import { Model } from "../../services/api/Entities";
 import api from "../../services/api/Api";
 
 /**
@@ -14,7 +15,7 @@ import api from "../../services/api/Api";
  * @param children é um campo do react. Serve para posicionar componentes em uma posição específica. Nesse caso, os componentes são do tipo InputField. {@link https://pt-br.react.dev/learn/passing-props-to-a-component#passing-jsx-as-children Documentação do react sobre children}
  * @returns o formulário de edição da entidade especificada nas propriedades do componente.
  */
-function UpdateForm<E extends Model>({
+export function UpdateForm<E extends Model>({
   restService,
   id,
   children,
@@ -75,22 +76,17 @@ interface IdProps {
   id: string;
 }
 
-export function UpdateDriverForm({ id }: IdProps) {
-  return (
-    <UpdateForm restService={api.driver} id={id} initialValues={{
-      id: "",
-      criadorId: "",
-      nome: "",
-      cpf: ""
-    }}>
-      <InputField label="Nome" id="nome" type="text" />
-      <InputField label="CPF" id="cpf" type="text" />
-    </UpdateForm>
-  )
-}
+// export function UpdateDriverForm({ id }: IdProps) {
+//   return (
+//     <UpdateForm restService={api.driver} id={id}>
+//       <InputField label="Nome" id="nome" type="text" />
+//       <InputField label="CPF" id="cpf" type="text" />
+//     </UpdateForm>
+//   )
+// }
 
-function Example() {
-  return (
-    <UpdateDriverForm id="0194f1e5-6061-7974-b89f-a1cbb35b4537" />
-  )
-}
+// function Example() {
+//   return (
+//     <UpdateDriverForm id="0194f1e5-6061-7974-b89f-a1cbb35b4537" />
+//   )
+// }

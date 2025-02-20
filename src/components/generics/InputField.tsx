@@ -26,5 +26,10 @@ export function InputField({
 interface InputFieldProps {
   label: string;
   id: string;
-  type: "email" | "text" | "password" | "checkbox" | "number" | "date" | "file";
+  type: FieldType;
+}
+
+export enum FieldType {
+  TEXT = "text",
+  NUMBER = "number",
 }
