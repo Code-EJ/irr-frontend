@@ -1,12 +1,12 @@
-import ButtonsMenu from "../components/ButtonsMenu";
+import ButtonsMenu from "../../components/ButtonsMenu";
 
 
 const DistributionMenu = () => {
   const menuItems = [
-    { title: "Nova Coleta", color: "#133D1A", link: "/cadastro-coleta" },
-    { title: "Nova Doação", color: "#133D1A", link: "/cadastro-doacao" },
-    { title: "Novo Veículo", color: "#133D1A", link: "/cadastro-veiculo" },
-    { title: "Novo Motorista", color: "#133D1A", link: "/cadastro-motorista" },
+    { title: "Coleta", color: "#133D1A", link: "/collection-list" },
+    { title: "Doação", color: "#133D1A", link: "/donation-list" },
+    { title: "Veículo", color: "#133D1A", link: "/vehicle-list" },
+    { title: "Motorista", color: "#133D1A", link: "/driver-list" },
   ];
 
   return (

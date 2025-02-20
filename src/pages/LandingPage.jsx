@@ -4,26 +4,14 @@ import { logout } from "../services/AuthServices";
 
 const LandingPage = () => {
   const menuItems = [
-    { title: "Cadastro de usuários", color: "#133D1A", link: "/cadastro-usuarios" },
-    { title: "Manejo de usuários", color: "#133D1A", link: "/manejo-usuarios" },
-    { title: "Tratamento", color: "#133D1A", link: "/menu-tratamentos" },
-    {
-      title: "Entradas e saídas",
-      color: "#133D1A",
-      link: "/menu-entradas-saidas",
-    },
-    // {
-    //   title: "Relatórios e visualização",
-    //   color: "#133D1A",
-    //   link: "/menu-relatorios",
-
-    // },
-    {
-      title: "Lista de coletas",
-      color: "#133D1A",
-      link: "/lista-coletas",
-
-    },
+    { title: "Usuários", color: "#133D1A", link: "/users-menu" },
+    { title: "Materiais", color: "#133D1A", link: "/materials-menu" },
+    { title: "Tratamento", color: "#133D1A", link: "/treatment-menu" },
+    { title: "Distribuição", color: "#133D1A", link: "/distribution-menu" },
+    { title: "Estoque", color: "#133D1A", link: "/stock-menu" },
+    //{ title: "Relatórios", color: "#133D1A", link: "reports-list" },
+    //{ title: "Mercado", color: "#133D1A", link: "sales-list" },
+    //{ title: "Perfil", color: "#133D1A", link: "profile" },
   ];
 
   return (
