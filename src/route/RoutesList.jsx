@@ -2,15 +2,13 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
 import ManageUsers from "../pages/ManageUsers";
 import RegisterUserAdmin from "../pages/RegisterUserAdmin";
-import VehicleRegistration from "../pages/VehicleRegistration";
-import CollectionList from "../pages/CollectionsList";
 import LandingPage from "../pages/LandingPage";
-import TreatmentMenu from "../pages/TreatmentMenu";
-import ScreeningPage from "../pages/ScreeningPage";
-import EntryMenu from "../pages/EntryMenu";
-import DonationRegistration from "../pages/DonationRegistration";
-import CollectionRegistration from "../pages/CollectionRegister";
-import PressPage from "../pages/PressPage";
+//import FilterTest from "../pages/FilterTest";
+import DistributionMenu from "../pages/MenuButtons/DistributionMenu";
+import MaterialsMenu from "../pages/MenuButtons/MaterialsMenu";
+import StockMenu from "../pages/MenuButtons/StockMenu";
+import TreatmentMenu from "../pages/MenuButtons/TreatmentMenu";
+import UsersMenu from "../pages/MenuButtons/UsersMenu";
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
 export const publicRoutes = createBrowserRouter([
@@ -35,51 +33,41 @@ export const privateRoutes = createBrowserRouter([
     element: <Navigate to="/login" />,
   },
   {
-    path: "/cadastro-usuarios",
-    element: <RegisterUserAdmin />,
-  },
-  {
-    path: "/cadastro-veiculo",
-    element: <VehicleRegistration />,
-  },
-  {
-    path: "/lista-coletas",
-    element: <CollectionList />,
-  },
-  {
     path: "/menu",
     element: <LandingPage />,
   },
+  /*
   {
-    path: "/menu-entradas-saidas",
-    element: <EntryMenu />
+    path: "/filtertest",
+    element: <FilterTest />,
+  },
+  */
+  {
+    path: "/users-menu",
+    element: <UsersMenu />,
   },
   {
-    path: "/manejo-usuarios",
-    element: <ManageUsers />,
+    path: "/distribution-menu",
+    element: <DistributionMenu />,
   },
   {
-    path: "/menu-tratamentos",
+    path: "/materials-menu",
+    element: <MaterialsMenu />,
+  },
+  {
+    path: "/stock-menu",
+    element: <StockMenu />,
+  },
+  {
+    path: "/treatment-menu",
     element: <TreatmentMenu />,
   },
   {
-    path: "/cadastro-triagens",
-    element: <ScreeningPage />,
+    path: "/users-register",
+    element: <RegisterUserAdmin />,
   },
   {
-    path: "/cadastro-prensagem",
-    element: <PressPage />,
-  },
-  {
-    path: "/cadastro-coleta",
-    element: <CollectionRegistration />,
-  },
-  {
-    path: "/cadastro-doacao",
-    element: <DonationRegistration />,
-  },
-  {
-    path: "/cadastro-veiculo",
-    element: <PressPage />,
+    path: "/users-management",
+    element: <ManageUsers />,
   },
 ]);
