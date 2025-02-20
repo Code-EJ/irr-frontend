@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "../components/Button";
 import { handleBack } from "../services/NavigationServices";
+import BackButton from "./BackButton";
 
 
 type MenuItem = {
@@ -15,7 +16,7 @@ type ButtonsMenuProps = {
   backDestination?: string;
 };
 
-const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton = true, backDestination = "menu" }) => {
+const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton = true}) => {
   return (
     <div className="flex w-full flex-col items-center bg-green-900 p-6 rounded-lg min-h-[5rem]">
       <div className="flex flex-1 gap-8 items-center justify-center">
@@ -36,12 +37,7 @@ const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton = true,
       </div>
       {showBackButton && (
         <div className="flex justify-center mt-6">
-          <Button
-            titulo="Voltar"
-            onClick={() => handleBack(backDestination)}
-            className="bg-red-900 text-white text-sm hover:shadow-2xl hover:bg-red-600 px-4 py-2 rounded-md"
-            type="button"
-          />
+          <BackButton />
         </div>
       )}
     </div>
