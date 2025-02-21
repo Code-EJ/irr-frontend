@@ -1,18 +1,21 @@
+import { FieldType } from "./InputField";
 import React from "react";
 
 export default function OutputField({
-  name,
-  value
+  label,
+  value,
+  type
 }: OutputFieldProps) {
   return (
     <div>
-      <span>{ name }</span>
+      <span className=" font-bold">{ label }: </span>
       <span>{ value }</span>
     </div>
   )
 }
 
 interface OutputFieldProps {
-  name: string;
+  label: string;
   value: string;
+  type: FieldType
 }

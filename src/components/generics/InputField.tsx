@@ -14,7 +14,7 @@ export function InputField({
 }: InputFieldProps) {
   return (
     <div>
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} className=" bg-amber-600">{label}</label>
       <Field id={id} name={id} type={type} />
     </div>
   );

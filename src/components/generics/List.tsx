@@ -30,10 +30,15 @@ export function List<E extends Model>({
   }, []);
   return (
     <table className="table-fixed w-full">
-      <tr className="border-collapse border-2 border-black">
-       { fields.map(field => <th className="border-2 border-black p-1" key={field.identifier}>{field.label}</th>) }
-      </tr>
-      { objects?.map(object => <ListedObject key={object.id} object={object} fields={fields} setState={setState} />) }
+      <thead>
+
+        <tr className="border-collapse border-2 border-black">
+          {fields.map(field => <th className="border-2 border-black p-1" key={field.identifier}>{field.label}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {objects?.map(object => <ListedObject key={object.id} object={object} fields={fields} setState={setState} />)}
+      </tbody>
     </table>
   )
 }
@@ -51,15 +56,7 @@ function ListedObject<E extends Model>({
     <tr className="border-collapse border-2 border-black">
       {fields.map(field => <td key={field.identifier} className="border-2 border-black p-2">{object[field.identifier]}</td>)}
       <td key={"edit"} className="p-2 flex flex-row  justify-around">
-        <button
-          className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16"
-          onClick={() => setState({
-            status: "UPDATE",
-            id: object.id
-          })}
-        >
-          Editar
-        </button>
+
 
         <button
           className="p-1 bg-blue-400 rounded-md text-white shadow-md w-16"

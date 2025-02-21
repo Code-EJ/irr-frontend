@@ -7,6 +7,7 @@ import { CreateForm } from "./generics/CreateForm";
 import { List } from "./generics/List";
 import { Model } from "../services/api/Entities";
 import { UpdateForm } from "./generics/UpdateForm";
+import { ViewForm } from "./generics/ViewForm";
 
 export function Page<E extends Model>({
   restService,
@@ -21,7 +22,7 @@ export function Page<E extends Model>({
     const initialValues = {};
 
     fields.forEach(field => {
-      initialValues[field.identifier] = null;
+      initialValues[field.identifier] = "";
     })
 
     return initialValues;
@@ -39,19 +40,13 @@ export function Page<E extends Model>({
       }
       case "CREATE": {
         return (
-          <CreateForm restService={restService} initialValues={fieldsToInitialValues(fields)}>
-            {fields.forEach(field => {
-              return (
-                <InputField label={field.label} id={field.identifier} type={field.type} />
-              )
-            })}
-          </CreateForm>
+          <CreateForm restService={restService} initialValues={fieldsToInitialValues(fields)} fields={fields} setState={setPageState} />
         );
       }
       case "UPDATE": {
         return (
-          <UpdateForm restService={restService} id={""}>
-            {fields.forEach(field => {
+          <UpdateForm restService={restService} id={pageState.id!} initialValues={fieldsToInitialValues(fields)} setState={setPageState}>
+            {fields.map(field => {
               return (
                 <InputField label={field.label} id={field.identifier} type={field.type} />
               )
@@ -60,18 +55,34 @@ export function Page<E extends Model>({
         )
       }
       case "VIEW": {
-        return <div>todo: view</div>;
+        return (
+          <ViewForm restService={restService} id={pageState.id!} fields={fields} setState={setPageState} />
+        );
       }
-      case "DELETE" : {
+      case "DELETE": {
         return <div>todo: delete</div>
       }
     }
   }
 
   return (
-    <Card className="rounded-[50px] shadow-lg d-flex flex-col w-full h-full"  width={undefined} bgColor={undefined} >
+    <Card className="rounded-[50px] shadow-lg d-flex flex-col w-full h-full" width={undefined} bgColor={undefined} >
       <h1 className="text-center select-none text-4xl">{name}</h1>
-      { render() }
+      {pageState.status !== "LIST" ? <button
+        className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16"
+        onClick={() => setPageState({
+          status: "LIST"
+        })}
+      >Voltar</button> : null}
+      {render()}
+      {
+        pageState.status === "LIST" ?
+          <th>
+            <button className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16" onClick={() => setPageState({
+              status: "CREATE"
+            })}>Criar</button>
+          </th> : null
+      }
     </Card>
   )
 }

@@ -1,10 +1,10 @@
 import { Form, Formik } from "formik";
 
 import BaseService from "../../services/api/BaseService";
+import { Field } from "../Page";
 import { InputField } from "./InputField";
 import { Model } from "../../services/api/Entities";
 import React from "react";
-import api from "../../services/api/Api";
 
 /**
  * Formulário genérico para criação de entidades.
@@ -18,25 +18,35 @@ import api from "../../services/api/Api";
 export function CreateForm<E extends Model>({
   restService,
   initialValues,
-  children
+  fields,
+  setState
 }: CreateFormProps<E>) {
   return (
-    <Formik 
-      initialValues={ initialValues }
-      onSubmit={ data => {
+    <Formik
+      initialValues={initialValues}
+      onSubmit={async data => {
         try {
-          restService.create(data)
+          await restService.create(data);
+          setState({
+            status: "LIST"
+          })
         } catch (e) {
           // TODO: podemos mostrar mensagens customizadas de erro para o usuário caso uma requisição não tenha funcionado.
           alert(e);
         }
-      } }
+      }}
     >
       <Form className="flex flex-col gap-4 p-4 border border-gray-300 rounded bg-gray-50">
-        { children }
-        <button 
-        type="submit" 
-        className="py-2 px-4 border-none rounded bg-blue-500 text-white hover:bg-blue-700">Criar</button>
+        {fields.map(field => {
+          console.log(field)
+          return (
+            <InputField label={field.label} id={field.identifier} type={field.type} key={field.identifier} />
+          )
+        })}
+        <button
+          type="submit"
+          className="py-2 px-4 border-none rounded bg-blue-500 text-white hover:bg-blue-700"
+        >Criar</button>
       </Form>
     </Formik>
   )
@@ -48,7 +58,8 @@ export function CreateForm<E extends Model>({
 interface CreateFormProps<E extends Model> {
   restService: BaseService<E>;
   initialValues: any;
-  children: any;
+  fields: Field[];
+  setState: any;
 }
 
 // /**

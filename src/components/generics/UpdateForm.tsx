@@ -19,7 +19,8 @@ export function UpdateForm<E extends Model>({
   restService,
   id,
   children,
-  initialValues
+  initialValues,
+  setState
 }: UpdateFormProps<E>) {
   const [data, setData] = useState<E>(initialValues);
 
@@ -48,6 +49,10 @@ export function UpdateForm<E extends Model>({
         try {
           restService.update(data);
           console.log("registro alterado")
+          setState({
+            status: "VIEW",
+            id
+          })
         } catch (e) {
           // TODO: podemos mostrar mensagens customizadas de erro para o usuário caso uma requisição não tenha funcionado.
           alert(e);
@@ -56,7 +61,7 @@ export function UpdateForm<E extends Model>({
     >
       <Form>
         { children }
-        <button type="submit">Atualizar</button>
+        <button className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16" type="submit">Atualizar</button>
       </Form>
     </Formik>
   )
@@ -69,11 +74,8 @@ interface UpdateFormProps<E extends Model> {
   restService: BaseService<E>;
   id: string;
   children: any;
-  initialValues: E
-}
-
-interface IdProps {
-  id: string;
+  initialValues: any;
+  setState: any;
 }
 
 // export function UpdateDriverForm({ id }: IdProps) {
