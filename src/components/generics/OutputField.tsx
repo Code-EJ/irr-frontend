@@ -8,8 +8,8 @@ export default function OutputField({
 }: OutputFieldProps) {
   return (
     <div>
-      <span className=" font-bold">{ label }: </span>
-      <span>{ value }</span>
+      <span className=" font-bold">{label}: </span>
+      <span>{value}</span>
     </div>
   )
 }

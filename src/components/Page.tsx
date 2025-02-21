@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import BaseService from "../services/api/BaseService";
 import Card from "./Card";
 import { CreateForm } from "./generics/CreateForm";
+import { DeleteForm } from "./generics/DeleteForm";
 import { List } from "./generics/List";
 import { Model } from "../services/api/Entities";
 import { UpdateForm } from "./generics/UpdateForm";
@@ -48,7 +49,7 @@ export function Page<E extends Model>({
           <UpdateForm restService={restService} id={pageState.id!} initialValues={fieldsToInitialValues(fields)} setState={setPageState}>
             {fields.map(field => {
               return (
-                <InputField label={field.label} id={field.identifier} type={field.type} />
+                <InputField label={field.label} id={field.identifier} type={field.type} key={field.identifier} />
               )
             })}
           </UpdateForm>
@@ -60,7 +61,7 @@ export function Page<E extends Model>({
         );
       }
       case "DELETE": {
-        return <div>todo: delete</div>
+        return <DeleteForm setState={setPageState} id={pageState.id!} restService={restService} />
       }
     }
   }

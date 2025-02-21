@@ -42,10 +42,10 @@ export function UpdateForm<E extends Model>({
   }, [id]);
 
   return (
-    <Formik 
-      initialValues={ data }
-      enableReinitialize={ true }
-      onSubmit={ data => {
+    <Formik
+      initialValues={data}
+      enableReinitialize={true}
+      onSubmit={data => {
         try {
           restService.update(data);
           console.log("registro alterado")
@@ -57,10 +57,10 @@ export function UpdateForm<E extends Model>({
           // TODO: podemos mostrar mensagens customizadas de erro para o usuário caso uma requisição não tenha funcionado.
           alert(e);
         }
-      } }
+      }}
     >
       <Form>
-        { children }
+        {children}
         <button className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16" type="submit">Atualizar</button>
       </Form>
     </Formik>
