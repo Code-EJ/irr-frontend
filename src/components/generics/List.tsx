@@ -1,8 +1,9 @@
-import { Field, PageState } from "../Page";
 import { useEffect, useState } from "react";
 
 import BaseService from "../../services/api/BaseService";
+import { Field } from "./InputField";
 import { Model } from "../../services/api/Entities";
+import { PageState } from "../Page";
 import React from "react";
 import { toast } from "react-toastify";
 

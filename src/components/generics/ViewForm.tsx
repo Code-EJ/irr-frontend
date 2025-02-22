@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import BaseService from "../../services/api/BaseService";
-import { Field } from "../Page";
+import { Field } from "./InputField";
 import { Model } from "../../services/api/Entities";
 import OutputField from "./OutputField";
-import api from "../../services/api/Api";
 
 export function ViewForm<E extends Model>({
   restService,
@@ -63,21 +62,3 @@ export function ViewForm<E extends Model>({
     </div>
   )
 }
-
-// export function ViewDriverForm({
-//   id
-// }: {
-//   id: string;
-// }) {
-//   return (
-//     <ViewForm id={id} restService={api.driver}>
-//       <OutputField name="Nome" value={""} />
-//     </ViewForm>
-//   )
-// }
-
-// function Example() {
-//   return (
-//     <ViewDriverForm id="" />
-//   )
-// }

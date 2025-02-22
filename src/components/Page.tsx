@@ -1,4 +1,4 @@
-import { FieldType, InputField } from "./generics/InputField";
+import { Field, FieldType, InputField } from "./generics/InputField";
 import React, { useState } from "react";
 
 import BaseService from "../services/api/BaseService";
@@ -78,11 +78,11 @@ export function Page<E extends Model>({
       {render()}
       {
         pageState.status === "LIST" ?
-          <th>
+         
             <button className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16" onClick={() => setPageState({
               status: "CREATE"
             })}>Criar</button>
-          </th> : null
+        : null
       }
     </Card>
   )
@@ -94,13 +94,7 @@ interface PageProps<E extends Model> {
   name: string
 }
 
-export interface Field {
-  label: string;
-  identifier: string;
-  type: FieldType,
-  identity?: boolean;
-  canEdit?: boolean;
-}
+
 
 export interface PageState {
   status: "LIST" | "CREATE" | "UPDATE" | "VIEW" | "DELETE";

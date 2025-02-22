@@ -3,7 +3,6 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import CollectionList from "../pages/CollectionsList.jsx";
 import CollectionRegistration from "../pages/CollectionRegister.jsx";
 import DonationRegistration from "../pages/DonationRegistration.jsx";
-import { DriverPage } from "../pages/DriverPoC.tsx";
 import EntryMenu from "../pages/EntryMenu.jsx";
 import { FieldType } from "../components/generics/InputField.tsx";
 import LandingPage from "../pages/LandingPage.jsx";
@@ -40,54 +39,54 @@ export const privateRoutes = createBrowserRouter([
     path: "*",
     element: <Navigate to="/login" />,
   },
-  {
-    path: "/cadastro-usuarios",
-    element: <RegisterUserAdmin />,
-  },
-  {
-    path: "/cadastro-veiculo",
-    element: <VehicleRegistration />,
-  },
-  {
-    path: "/lista-coletas",
-    element: <CollectionList />,
-  },
+  // {
+  //   path: "/cadastro-usuarios",
+  //   element: <RegisterUserAdmin />,
+  // },
+  // {
+  //   path: "/cadastro-veiculo",
+  //   element: <VehicleRegistration />,
+  // },
+  // {
+  //   path: "/lista-coletas",
+  //   element: <CollectionList />,
+  // },
   {
     path: "/menu",
     element: <LandingPage />,
   },
-  {
-    path: "/menu-entradas-saidas",
-    element: <EntryMenu />
-  },
-  {
-    path: "/manejo-usuarios",
-    element: <ManageUsers />,
-  },
-  {
-    path: "/menu-tratamentos",
-    element: <TreatmentMenu />,
-  },
-  {
-    path: "/cadastro-triagens",
-    element: <ScreeningPage />,
-  },
-  {
-    path: "/cadastro-prensagem",
-    element: <PressPage />,
-  },
-  {
-    path: "/cadastro-coleta",
-    element: <CollectionRegistration />,
-  },
-  {
-    path: "/cadastro-doacao",
-    element: <DonationRegistration />,
-  },
-  {
-    path: "/cadastro-veiculo",
-    element: <PressPage />,
-  },
+  // {
+  //   path: "/menu-entradas-saidas",
+  //   element: <EntryMenu />
+  // },
+  // {
+  //   path: "/manejo-usuarios",
+  //   element: <ManageUsers />,
+  // },
+  // {
+  //   path: "/menu-tratamentos",
+  //   element: <TreatmentMenu />,
+  // },
+  // {
+  //   path: "/cadastro-triagens",
+  //   element: <ScreeningPage />,
+  // },
+  // {
+  //   path: "/cadastro-prensagem",
+  //   element: <PressPage />,
+  // },
+  // {
+  //   path: "/cadastro-coleta",
+  //   element: <CollectionRegistration />,
+  // },
+  // {
+  //   path: "/cadastro-doacao",
+  //   element: <DonationRegistration />,
+  // },
+  // {
+  //   path: "/cadastro-veiculo",
+  //   element: <PressPage />,
+  // },
   {
     path: "/motoristas",
     element: <Page name="Motoristas" restService={api.driver} fields={[
@@ -103,4 +102,54 @@ export const privateRoutes = createBrowserRouter([
       },
     ]} />,
   },
+  {
+    path: "/veiculos",
+    element: <Page name="Veículos" restService={api.vehicle} fields={[
+      {
+        label: "Modelo",
+        identifier: "modelo",
+        type: FieldType.TEXT
+      },
+      {
+        label: "Placa",
+        identifier: "placa",
+        type: FieldType.TEXT
+      },
+    ]} />,
+  },
+  {
+    path: "/doadores",
+    element: <Page name="Doadores" restService={api.donator} fields={[
+      {
+        label: "Nome",
+        identifier: "nome",
+        type: FieldType.TEXT
+      },
+      {
+        label: "Endereço",
+        identifier: "endereco",
+        type: FieldType.TEXT
+      },
+      {
+        label: "Cadastro nacional (CPF/CNPJ)",
+        identifier: "cadastroNacional",
+        type: FieldType.TEXT
+      },
+      {
+        label: "Tipo",
+        identifier: "tipo",
+        type: FieldType.SELECT,
+        options: [
+          {
+            value: "Pessoa física",
+            identifier: "PESSOA_FISICA"
+          },
+          {
+            value: "Pessoa jurídica",
+            identifier: "PESSOA_JURIDICA"
+          }
+        ]
+      },
+    ]} />,
+  }
 ]);

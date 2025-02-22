@@ -24,9 +24,14 @@ const LandingPage = () => {
       link: "/lista-coletas",
     },
     {
-      title: "Motoristas - poc",
+      title: "Motoristas",
       color: "#133D1A",
       link: "/motoristas",
+    },
+    {
+      title: "Veículos",
+      color: "#133D1A",
+      link: "/veiculos",
     }
   ];
 
