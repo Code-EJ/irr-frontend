@@ -1,7 +1,7 @@
+
 import { Field, Form, Formik} from "formik";
-import React from "react";
-import BaseService from "../services/api/BaseService";
-import api from "../services/api/Api";
+import BaseService from "../bases/BaseService";
+import {DriverService} from "../services";
 
 /**
  * Formulário genérico para criação de entidades.
@@ -87,7 +87,7 @@ interface InputFieldProps {
  */
 function CreateDriverForm() {
   return (
-    <CreateForm restService={api.driver} initialValues={{
+    <CreateForm restService={DriverService} initialValues={{
       nome: "",
       cpf: ""
     }}>
