@@ -7,7 +7,7 @@ import { deleteToken, handleAuth } from "../services/AuthServices";
 import { Navigate } from "react-router-dom";
 import SimpleForm from "../components/SimpleForm";
 import { useEffect } from "react";
-import LoginImage from "../assets/background.png"
+import LoginImage from "../assets/background.png";
 
 
 const Login = () => {
