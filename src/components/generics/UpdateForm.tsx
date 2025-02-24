@@ -59,9 +59,9 @@ export function UpdateForm<E extends Model>({
         }
       }}
     >
-      <Form>
+      <Form className="flex flex-col gap-6 p-6 border border-gray-300 rounded-lg shadow-lg bg-white max-w-lg mx-auto">
         {children}
-        <button className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16" type="submit">Atualizar</button>
+        <button className="p-2 bg-green-500 hover:bg-green-600 rounded-md text-white shadow-md mr-2 w-24" type="submit">Atualizar</button>
       </Form>
     </Formik>
   )

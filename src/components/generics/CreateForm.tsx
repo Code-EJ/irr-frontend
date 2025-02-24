@@ -1,8 +1,8 @@
 import { Form, Formik } from "formik";
 
 import BaseService from "../../services/api/BaseService";
-import { Field } from "../Page";
-import { InputField } from "./InputField";
+// import { Field } from "../Page";
+import { Field ,InputField } from "./InputField";
 import { Model } from "../../services/api/Entities";
 import React from "react";
 
@@ -36,7 +36,7 @@ export function CreateForm<E extends Model>({
         }
       }}
     >
-      <Form className="flex flex-col gap-4 p-4 border border-gray-300 rounded bg-gray-50">
+      <Form className=" flex flex-col gap-6 p-6 border border-gray-300 rounded-lg shadow-lg bg-white max-w-lg mx-auto">
         {fields.map(field => {
           console.log(field)
           return (
@@ -44,8 +44,8 @@ export function CreateForm<E extends Model>({
           )
         })}
         <button
-          type="submit"
-          className="py-2 px-4 border-none rounded bg-blue-500 text-white hover:bg-blue-700"
+          type="submit" 
+          className=" p-2 bg-green-500 hover:bg-green-600 rounded-md text-white shadow-md mr-2 w-24"
         >Criar</button>
       </Form>
     </Formik>

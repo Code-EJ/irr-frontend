@@ -31,34 +31,37 @@ export function ViewForm<E extends Model>({
   }, []);
 
   return (
-    <div>
-
-      {
-        value ?
-          fields.map(field => {
-            return (
-              <OutputField label={field.label} value={value[field.identifier]} type={field.type} key={field.identifier} />
-            )
-          }) : null
-      }
-      <button
-        className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16"
-        onClick={() => setState({
-          status: "UPDATE",
-          id: id
-        })}
-      >
-        Editar
-      </button>
-      <button
-        className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16"
-        onClick={() => setState({
-          status: "DELETE",
-          id: id
-        })}
-      >
-        Remover
-      </button>
+    <div className="flex justify-center items-center p-4">
+      <div className="w-full max-w-lg rounded-md shadow-md p-6">
+        {
+          value ?
+            fields.map(field => {
+              return (
+                <OutputField label={field.label} value={value[field.identifier]} type={field.type} key={field.identifier} />
+              )
+            }) : null
+        }
+        <div className="flex justify-end mt-4">
+          <button
+            className="p-2 bg-green-500 hover:bg-green-600 rounded-md text-white shadow-md mr-2 w-24"
+            onClick={() => setState({
+              status: "UPDATE",
+              id: id
+            })}
+          >
+            Editar
+          </button>
+          <button
+            className="p-2 bg-red-500 hover:bg-red-600 rounded-md text-white shadow-md w-24"
+            onClick={() => setState({
+              status: "DELETE",
+              id: id
+            })}
+          >
+            Remover
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

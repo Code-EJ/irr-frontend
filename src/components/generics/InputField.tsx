@@ -17,30 +17,29 @@ export function InputField({
     switch (type) {
       case FieldType.TEXT:
       case FieldType.NUMBER: {
-        return <Field id={id} name={id} type={type} />
+        return <Field id={id} name={id} type={type} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
       }
       case FieldType.SELECT: {
-        return <Field as="select" id={id} name={id} type={type}>
+        return <Field as="select" id={id} name={id} type={type} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
           {
-            options?.map(option => <option value={option.identifier}>{option.value}</option>)
+            options?.map(option => <option key={option.identifier} value={option.identifier}>{option.value}</option>)
           }
         </Field>
       }
       case FieldType.FILE: {
-        return <div>
-          <span>{label}</span>
-          <input type="file" name={id} />
+        return <div className="flex flex-col">
+          <span className="mb-2">{label}</span>
+          <input type="file" name={id} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
         </div>
       }
     }
   }
 
   return (
-    <div>
-      <label htmlFor={id} className=" bg-amber-600">{label}</label>
+    <div className="mb-4">
+      <label htmlFor={id} className="block text-sm font-medium text-green-700 mb-1">{label}</label>
       {
         getInput()
-        
       }
     </div>
   );

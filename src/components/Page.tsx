@@ -94,8 +94,6 @@ interface PageProps<E extends Model> {
   name: string
 }
 
-
-
 export interface PageState {
   status: "LIST" | "CREATE" | "UPDATE" | "VIEW" | "DELETE";
   id?: string;
