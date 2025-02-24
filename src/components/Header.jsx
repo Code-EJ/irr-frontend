@@ -1,9 +1,7 @@
 import { logout } from "../services/AuthServices";
 import Button from "./Button";
-import InputText from "./InputText";
 import Logo from "./Logo";
 import MenuIcon from "./MenuIcon";
-import SimpleForm from "./SimpleForm";
 
 const Header = () => {
   return (
