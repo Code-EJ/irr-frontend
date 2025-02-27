@@ -16,6 +16,11 @@ import ScreeningPage from "../pages/ScreeningPage.jsx";
 import TreatmentMenu from "../pages/TreatmentMenu.jsx";
 import VehicleRegistration from "../pages/VehicleRegistration.jsx";
 import api from "../services/api/Api.ts";
+import UsersMenu from "../pages/MenuButtons/UsersMenu.jsx";
+import DistributionMenu from "../pages/MenuButtons/DistributionMenu.jsx";
+import MaterialsMenu from "../pages/MenuButtons/MaterialsMenu.jsx";
+import StockMenu from "../pages/MenuButtons/StockMenu.jsx";
+
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
 export const publicRoutes = createBrowserRouter([
@@ -39,54 +44,44 @@ export const privateRoutes = createBrowserRouter([
     path: "*",
     element: <Navigate to="/login" />,
   },
-  // {
-  //   path: "/cadastro-usuarios",
-  //   element: <RegisterUserAdmin />,
-  // },
-  // {
-  //   path: "/cadastro-veiculo",
-  //   element: <VehicleRegistration />,
-  // },
-  // {
-  //   path: "/lista-coletas",
-  //   element: <CollectionList />,
-  // },
   {
     path: "/menu",
     element: <LandingPage />,
   },
-  // {
-  //   path: "/menu-entradas-saidas",
-  //   element: <EntryMenu />
-  // },
-  // {
-  //   path: "/manejo-usuarios",
-  //   element: <ManageUsers />,
-  // },
-  // {
-  //   path: "/menu-tratamentos",
-  //   element: <TreatmentMenu />,
-  // },
-  // {
-  //   path: "/cadastro-triagens",
-  //   element: <ScreeningPage />,
-  // },
-  // {
-  //   path: "/cadastro-prensagem",
-  //   element: <PressPage />,
-  // },
-  // {
-  //   path: "/cadastro-coleta",
-  //   element: <CollectionRegistration />,
-  // },
-  // {
-  //   path: "/cadastro-doacao",
-  //   element: <DonationRegistration />,
-  // },
-  // {
-  //   path: "/cadastro-veiculo",
-  //   element: <PressPage />,
-  // },
+  /*
+  {
+    path: "/filtertest",
+    element: <FilterTest />,
+  },
+  */
+  {
+    path: "/users-menu",
+    element: <UsersMenu />,
+  },
+  {
+    path: "/distribution-menu",
+    element: <DistributionMenu />,
+  },
+  {
+    path: "/materials-menu",
+    element: <MaterialsMenu />,
+  },
+  {
+    path: "/stock-menu",
+    element: <StockMenu />,
+  },
+  {
+    path: "/treatment-menu",
+    element: <TreatmentMenu />,
+  },
+  {
+    path: "/users-register",
+    element: <RegisterUserAdmin />,
+  },
+  {
+    path: "/users-management",
+    element: <ManageUsers />,
+  },
   {
     path: "/motoristas",
     element: <Page name="Motoristas" restService={api.driver} fields={[
