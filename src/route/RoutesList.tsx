@@ -1,20 +1,12 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-
-import CollectionList from "../pages/CollectionsList.jsx";
-import CollectionRegistration from "../pages/CollectionRegister.jsx";
-import DonationRegistration from "../pages/DonationRegistration.jsx";
-import EntryMenu from "../pages/EntryMenu.jsx";
 import { FieldType } from "../components/generics/InputField.tsx";
 import LandingPage from "../pages/LandingPage.jsx";
 import Login from "../pages/Login.tsx";
 import ManageUsers from "../pages/ManageUsers.jsx";
 import { Page } from "../components/Page.tsx";
-import PressPage from "../pages/PressPage.jsx";
 import React from "react";
 import RegisterUserAdmin from "../pages/RegisterUserAdmin.jsx";
-import ScreeningPage from "../pages/ScreeningPage.jsx";
-import TreatmentMenu from "../pages/TreatmentMenu.jsx";
-import VehicleRegistration from "../pages/VehicleRegistration.jsx";
+import TreatmentMenu from "../pages/MenuButtons/TreatmentMenu.jsx";
 import api from "../services/api/Api.ts";
 import UsersMenu from "../pages/MenuButtons/UsersMenu.jsx";
 import DistributionMenu from "../pages/MenuButtons/DistributionMenu.jsx";
