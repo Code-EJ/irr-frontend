@@ -1,8 +1,7 @@
-import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import AppRouter from "./route/Router";
-import BackgroundImage from "./components/BackgroundImage";
+import React from "react";
 
 function App() {
   return (

@@ -1,14 +1,12 @@
 import axios from "axios";
 import { API_HOST } from "../../config/consts";
 
-let token;
-
-const getToken = () => token;
-const setToken = (t: string) => {
-  token = t;
-  apiClient.defaults.headers.Authorization = `Bearer ${t}`;
+const getToken = () => localStorage.getItem("token");
+const setToken = (token: string) => {
+  localStorage.setItem("token", token);
+  apiClient.defaults.headers.Authorization = `Bearer ${token}`;
 };
-const deleteToken = () => token = null;
+const deleteToken = () => localStorage.removeItem("token");
 
 const apiClient = axios.create({
   baseURL: `${API_HOST}`,
