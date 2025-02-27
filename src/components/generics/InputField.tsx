@@ -73,5 +73,7 @@ export enum FieldType {
   TEXT = "text",
   NUMBER = "number",
   SELECT = "select",
-  FILE = "file"
+  FILE = "file",
+  REFERENCE = "reference",
+  DATE = "date"
 }
