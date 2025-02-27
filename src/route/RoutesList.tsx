@@ -12,6 +12,7 @@ import UsersMenu from "../pages/MenuButtons/UsersMenu.jsx";
 import DistributionMenu from "../pages/MenuButtons/DistributionMenu.jsx";
 import MaterialsMenu from "../pages/MenuButtons/MaterialsMenu.jsx";
 import StockMenu from "../pages/MenuButtons/StockMenu.jsx";
+import FilterTest from '../pages/FilterTest';
 
 
 // Aqui ficarão as rotas que podem ser acessada SEM LOGAR
@@ -40,12 +41,10 @@ export const privateRoutes = createBrowserRouter([
     path: "/menu",
     element: <LandingPage />,
   },
-  /*
   {
     path: "/filtertest",
     element: <FilterTest />,
   },
-  */
   {
     path: "/users-menu",
     element: <UsersMenu />,
