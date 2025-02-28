@@ -74,7 +74,7 @@ export const privateRoutes = createBrowserRouter([
     element: <ManageUsers />,
   },
   {
-    path: "/motoristas",
+    path: "/driver-list",
     element: <Page name="Motoristas" restService={api.driver} fields={[
       {
         label: "Nome",
@@ -89,7 +89,7 @@ export const privateRoutes = createBrowserRouter([
     ]} />,
   },
   {
-    path: "/veiculos",
+    path: "/vehicle-list",
     element: <Page name="Veículos" restService={api.vehicle} fields={[
       {
         label: "Modelo",
@@ -104,7 +104,7 @@ export const privateRoutes = createBrowserRouter([
     ]} />,
   },
   {
-    path: "/doadores",
+    path: "/donator-list",
     element: <Page name="Doadores" restService={api.donator} fields={[
       {
         label: "Nome",

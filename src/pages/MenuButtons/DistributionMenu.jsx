@@ -5,6 +5,7 @@ const DistributionMenu = () => {
   const menuItems = [
     { title: "Coleta", color: "#133D1A", link: "/collection-list" },
     { title: "Doação", color: "#133D1A", link: "/donation-list" },
+    { title: "Doador", color: "#133D1A", link: "/donator-list" },
     { title: "Veículo", color: "#133D1A", link: "/vehicle-list" },
     { title: "Motorista", color: "#133D1A", link: "/driver-list" },
   ];
