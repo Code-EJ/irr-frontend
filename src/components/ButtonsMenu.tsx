@@ -1,6 +1,4 @@
-import React from "react";
-import Button from "../components/Button";
-import { handleBack } from "../services/NavigationServices";
+import Button from "./Button";
 import BackButton from "./BackButton";
 
 

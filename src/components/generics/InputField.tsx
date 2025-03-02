@@ -1,5 +1,4 @@
 import { Field } from "formik";
-import React from "react";
 
 /**
  * Componente que serve para definir os campos de valores do formulário.
