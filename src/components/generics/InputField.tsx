@@ -1,5 +1,7 @@
 import { Field } from "formik";
 import React from "react";
+import { Model } from "../../services/api/Entities";
+import BaseService from "../../services/api/BaseService";
 
 /**
  * Componente que serve para definir os campos de valores do formulário.
@@ -9,18 +11,30 @@ import React from "react";
  * @param id é o nome do campo dentro do banco de dados. Acesse o arquivo src/services/api/Entities.ts para consultar o nome dos campos de uma entidade.
  * @param type é o tipo do valor aceito na tag input do html. {@link https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/input#type Lista de valores aceitos}.
  */
-export function InputField({
-  label, id, type, options
-}: InputFieldProps) {
+export function InputField<M extends Model = Model>({
+  label, 
+  identifier, 
+  type, 
+  options,
+  referenceConfig
+}: Field<M>) {
+
+  async function getReferenceOptions() {
+    if (!referenceConfig) return;
+
+    const { restService, identity } = referenceConfig;
+    const references = await restService.getAll();
+    return references?.map(reference => <option key={reference.id} value={reference.id}>{reference[identity]}</option>)
+  }
 
   function getInput() {
     switch (type) {
       case FieldType.TEXT:
       case FieldType.NUMBER: {
-        return <Field id={id} name={id} type={type} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+        return <Field id={identifier} name={identifier} type={type} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
       }
       case FieldType.SELECT: {
-        return <Field as="select" id={id} name={id} type={type} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+        return <Field as="select" id={identifier} name={identifier} type={type} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
           {
             options?.map(option => <option key={option.identifier} value={option.identifier}>{option.value}</option>)
           }
@@ -29,30 +43,28 @@ export function InputField({
       case FieldType.FILE: {
         return <div className="flex flex-col">
           <span className="mb-2">{label}</span>
-          <input type="file" name={id} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+          <input type="file" name={identifier} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
         </div>
+      }
+      case FieldType.REFERENCE: {
+        return (
+          <Field as="select" id={identifier} name={identifier} type={type} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+          { getReferenceOptions() }
+          </Field>
+        )
+
       }
     }
   }
 
   return (
     <div className="mb-4">
-      <label htmlFor={id} className="block text-sm font-medium text-green-700 mb-1">{label}</label>
+      <label htmlFor={identifier} className="block text-sm font-medium text-green-700 mb-1">{label}</label>
       {
         getInput()
       }
     </div>
   );
-}
-/**
- * Propriedades aceitas no componente ``InputField``.
- * @aviso nem todos os valores possíveis do campo ``type`` foram preenchidos. {@link https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/input#type Vide documentação}.
- */
-interface InputFieldProps {
-  label: string;
-  id: string;
-  type: FieldType;
-  options?: Option[]
 }
 
 interface Option {
@@ -60,13 +72,20 @@ interface Option {
   identifier: string;
 }
 
-export interface Field {
+export interface Field<M extends Model> {
   label: string;
   identifier: string;
   type: FieldType,
-  identity?: boolean;
+  isIdentity?: boolean;
   canEdit?: boolean;
-  options?: Option[]
+  required?: boolean;
+  options?: Option[];
+  referenceConfig?: ReferenceConfig<M>;
+}
+
+interface ReferenceConfig<M extends Model> {
+  restService: BaseService<M>;
+  identity: string;
 }
 
 export enum FieldType {
