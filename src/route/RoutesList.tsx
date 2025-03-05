@@ -1,17 +1,16 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import { FieldType } from "../components/generics/InputField.tsx";
-import LandingPage from "../pages/LandingPage.jsx";
-import Login from "../pages/Login.tsx";
-import ManageUsers from "../pages/ManageUsers.jsx";
-import { Page } from "../components/Page.tsx";
-import React from "react";
-import RegisterUserAdmin from "../pages/RegisterUserAdmin.jsx";
-import TreatmentMenu from "../pages/MenuButtons/TreatmentMenu.jsx";
-import api from "../services/api/Api.ts";
-import UsersMenu from "../pages/MenuButtons/UsersMenu.jsx";
-import DistributionMenu from "../pages/MenuButtons/DistributionMenu.jsx";
-import MaterialsMenu from "../pages/MenuButtons/MaterialsMenu.jsx";
-import StockMenu from "../pages/MenuButtons/StockMenu.jsx";
+import { FieldType } from "../components/generics/InputField";
+import LandingPage from "../pages/LandingPage";
+import Login from "../pages/Login";
+import ManageUsers from "../pages/ManageUsers";
+import { Page } from "../components/Page";
+import RegisterUserAdmin from "../pages/RegisterUserAdmin";
+import TreatmentMenu from "../pages/MenuButtons/TreatmentMenu";
+import {DriverService, VehicleService, DonatorService} from "../services";
+import UsersMenu from "../pages/MenuButtons/UsersMenu";
+import DistributionMenu from "../pages/MenuButtons/DistributionMenu";
+import MaterialsMenu from "../pages/MenuButtons/MaterialsMenu";
+import StockMenu from "../pages/MenuButtons/StockMenu";
 import FilterTest from '../pages/FilterTest';
 
 
@@ -75,7 +74,7 @@ export const privateRoutes = createBrowserRouter([
   },
   {
     path: "/driver-list",
-    element: <Page name="Motoristas" restService={api.driver} fields={[
+    element: <Page name="Motoristas" restService={DriverService} fields={[
       {
         label: "Nome",
         identifier: "nome",
@@ -90,7 +89,7 @@ export const privateRoutes = createBrowserRouter([
   },
   {
     path: "/vehicle-list",
-    element: <Page name="Veículos" restService={api.vehicle} fields={[
+    element: <Page name="Veículos" restService={VehicleService} fields={[
       {
         label: "Modelo",
         identifier: "modelo",
@@ -105,7 +104,7 @@ export const privateRoutes = createBrowserRouter([
   },
   {
     path: "/donator-list",
-    element: <Page name="Doadores" restService={api.donator} fields={[
+    element: <Page name="Doadores" restService={DonatorService} fields={[
       {
         label: "Nome",
         identifier: "nome",

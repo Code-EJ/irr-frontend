@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import BaseService from "../../services/api/BaseService";
+import BaseService from "../../bases/BaseService";
 import { Field } from "./InputField";
-import { Model } from "../../services/api/Entities";
+import { Model } from "../../models/Entities";
 import OutputField from "./OutputField";
 
 export function ViewForm<E extends Model>({

@@ -1,10 +1,9 @@
 import { Form, Formik } from "formik";
 
-import BaseService from "../../services/api/BaseService";
+import BaseService from "../../bases/BaseService";
 // import { Field } from "../Page";
 import { Field ,InputField } from "./InputField";
-import { Model } from "../../services/api/Entities";
-import React from "react";
+import { Model } from "../../models/Entities";
 
 /**
  * Formulário genérico para criação de entidades.

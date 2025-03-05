@@ -1,6 +1,4 @@
 import { FieldConfig, useField, useFormikContext } from "formik";
-import React from "react";
-
 
 const applyMask = (value, mask) => {
   let maskedValue = "";

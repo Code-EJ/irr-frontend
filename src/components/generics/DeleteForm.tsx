@@ -1,6 +1,5 @@
-import BaseService from "../../services/api/BaseService";
-import { Model } from "../../services/api/Entities";
-import React from "react";
+import BaseService from "../../bases/BaseService";
+import { Model } from "../../models/Entities";
 
 export function DeleteForm<E extends Model>(
   { setState,

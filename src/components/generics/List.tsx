@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 
-import BaseService from "../../services/api/BaseService";
+import BaseService from "../../bases/BaseService";
 import { Field } from "./InputField";
-import { Model } from "../../services/api/Entities";
+import { Model } from "../../models/Entities";
 import { PageState } from "../Page";
-import React from "react";
 import { toast } from "react-toastify";
 
 export function List<E extends Model>({
