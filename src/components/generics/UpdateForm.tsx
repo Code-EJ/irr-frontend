@@ -1,10 +1,9 @@
 import { Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import BaseService from "../../services/api/BaseService";
+import BaseService from "../../bases/BaseService";
 import { InputField } from "./InputField";
-import { Model } from "../../services/api/Entities";
-import api from "../../services/api/Api";
+import { Model } from "../../models/Entities";
 
 /**
  * Formulário genérico para edição de entidades.

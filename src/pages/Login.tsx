@@ -1,20 +1,19 @@
 import Button from "../components/Button";
 import Card from "../components/Card";
 import InputText from "../components/InputText";
-import { deleteToken, handleAuth } from "../services/AuthServices";
+import { deleteToken, handleAuth } from "../config/security/AuthServices";
 import { useNavigate } from "react-router-dom";
 import SimpleForm from "../components/SimpleForm";
 import { useEffect } from "react";
-import LoginImage from "../assets/background.png";
-import React from "react";
-import api from "../services/api/Api";
+import LoginImage from "../assets/imgs/background.png";
+import {AuthService} from "../services";
 import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (values) => {
-    const res = await api.auth.login({
+    const res = await AuthService.login({
       email: values.email,
       senha: values.password
     })

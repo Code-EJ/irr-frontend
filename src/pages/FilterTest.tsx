@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FilterDropdown from "../components/FilterDropdown";
-import { useFilterStore } from "../services/FilterState";
+import { useFilterStore } from "../utils/FilterState";
 import { ChevronDown } from 'lucide-react';
 
 const dataModels: { [key: string]: string[] } = {

@@ -1,11 +1,10 @@
 import { RouterProvider } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { publicRoutes, privateRoutes } from "./RoutesList";
-import { getToken } from "../services/ApiClient";
+import { getToken } from "../config/security/ApiClient";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BackgroundImage from "../components/BackgroundImage";
-import React from "react";
 
 const AppRouter = () => {
   // Rotas se tornam publicas no inicio

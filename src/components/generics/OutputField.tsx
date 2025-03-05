@@ -1,5 +1,4 @@
 import { FieldType } from "./InputField";
-import React from "react";
 
 export default function OutputField({
   label,

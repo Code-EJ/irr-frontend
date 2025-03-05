@@ -1,12 +1,12 @@
 import { Field, FieldType, InputField } from "./generics/InputField";
-import React, { useState } from "react";
+import { useState } from "react";
 
-import BaseService from "../services/api/BaseService";
+import BaseService from "../bases/BaseService";
 import Card from "./Card";
 import { CreateForm } from "./generics/CreateForm";
 import { DeleteForm } from "./generics/DeleteForm";
 import { List } from "./generics/List";
-import { Model } from "../services/api/Entities";
+import { Model } from "../models/Entities";
 import { UpdateForm } from "./generics/UpdateForm";
 import { ViewForm } from "./generics/ViewForm";
 
