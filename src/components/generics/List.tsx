@@ -12,7 +12,7 @@ export function List<E extends Model>({
   setState
 }: {
   restService: BaseService<E>,
-  fields: Field[],
+  fields: Field<E>[],
   setState: React.Dispatch<React.SetStateAction<PageState>>
 }) {
   const [objects, setObjects] = useState<E[]>();
@@ -51,12 +51,12 @@ function ListedObject<E extends Model>({
   setState
 }: {
   object: E,
-  fields: Field[], 
+  fields: Field<E>[], 
   setState: React.Dispatch<React.SetStateAction<PageState>>
 }) {
   return (
     <tr className=" hover:bg-gray-50">
-      {fields.map(field => <td key={field.identifier} className="px-4 py-2 border-b border-gray-200 text-sm text-gray-700">{object[field.identifier]}</td>)}
+      {fields?.map(field => <td key={field.identifier} className="px-4 py-2 border-b border-gray-200 text-sm text-gray-700">{object[field.identifier]}</td>)}
       <td key={"edit"} className="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 flex">
         <button
           className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-md"

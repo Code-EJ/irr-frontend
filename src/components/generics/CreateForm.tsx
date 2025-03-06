@@ -39,7 +39,7 @@ export function CreateForm<E extends Model>({
         {fields.map(field => {
           console.log(field)
           return (
-            <InputField label={field.label} id={field.identifier} type={field.type} key={field.identifier} />
+            <InputField label={field.label} identifier={field.identifier} type={field.type} key={field.identifier} options={field.options} />
           )
         })}
         <button
@@ -57,7 +57,7 @@ export function CreateForm<E extends Model>({
 interface CreateFormProps<E extends Model> {
   restService: BaseService<E>;
   initialValues: any;
-  fields: Field[];
+  fields: Field<E>[];
   setState: any;
 }
 

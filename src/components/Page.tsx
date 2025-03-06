@@ -1,4 +1,4 @@
-import { Field, FieldType, InputField } from "./generics/InputField";
+import { Field, InputField } from "./generics/InputField";
 import { useState } from "react";
 
 import BaseService from "../bases/BaseService";
@@ -19,8 +19,8 @@ export function Page<E extends Model>({
     status: "LIST"
   });
 
-  function fieldsToInitialValues(fields: Field[]) {
-    const initialValues = {};
+  function fieldsToInitialValues(fields: Field<E>[]) {
+    const initialValues: any = {};
 
     fields.forEach(field => {
       initialValues[field.identifier] = "";
@@ -49,7 +49,7 @@ export function Page<E extends Model>({
           <UpdateForm restService={restService} id={pageState.id!} initialValues={fieldsToInitialValues(fields)} setState={setPageState}>
             {fields.map(field => {
               return (
-                <InputField label={field.label} id={field.identifier} type={field.type} key={field.identifier} />
+                <InputField label={field.label} identifier={field.identifier} type={field.type} key={field.identifier} options={field.options} />
               )
             })}
           </UpdateForm>
@@ -78,11 +78,11 @@ export function Page<E extends Model>({
       {render()}
       {
         pageState.status === "LIST" ?
-         
-            <button className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16" onClick={() => setPageState({
-              status: "CREATE"
-            })}>Criar</button>
-        : null
+
+          <button className="p-1 bg-blue-400 rounded-md text-white shadow-md mr-2 w-16" onClick={() => setPageState({
+            status: "CREATE"
+          })}>Criar</button>
+          : null
       }
     </Card>
   )
@@ -90,7 +90,7 @@ export function Page<E extends Model>({
 
 interface PageProps<E extends Model> {
   restService: BaseService<E>,
-  fields: Field[],
+  fields: Field<E>[],
   name: string
 }
 

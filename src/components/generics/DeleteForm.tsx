@@ -2,13 +2,15 @@ import BaseService from "../../bases/BaseService";
 import { Model } from "../../models/Entities";
 
 export function DeleteForm<E extends Model>(
-  { setState,
+  {
+    setState,
     id,
-    restService }: {
-      setState: any;
-      id: string;
-      restService: BaseService<E>
-    }
+    restService
+  }: {
+    setState: any;
+    id: string;
+    restService: BaseService<E>
+  }
 ) {
   return (
     <div className=" p-4 bg-beige-100 rounded-md shadow-md">

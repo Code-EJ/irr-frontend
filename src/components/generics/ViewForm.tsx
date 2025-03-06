@@ -13,7 +13,7 @@ export function ViewForm<E extends Model>({
 }: {
   restService: BaseService<E>;
   id: string;
-  fields: Field[],
+  fields: Field<E>[],
   setState: any
 }) {
   const [value, setValue] = useState<any>();
