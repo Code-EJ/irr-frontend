@@ -14,20 +14,21 @@ const AppRouter = () => {
   // Checa se o usuario e valido pelo token
   // Se é válido, troca as rotas para privadas
   const checkUserIsValid = async () => {
-    try {
-      await apiClient.post("/login/validate", {
-        login: getToken(),
-      });
-      setRoutes(privateRoutes);
-    } catch (err) {
-      deleteToken();
-      setRoutes(publicRoutes);
-    }
+    // try {
+    //   await apiClient.post("/login/validate", {
+    //     login: getToken(),
+    //   });
+    //   setRoutes(privateRoutes);
+    // } catch (err) {
+    //   deleteToken();
+    //   setRoutes(publicRoutes);
+    // }
     setValidToken(true);
   };
 
   useEffect(() => {
     checkUserIsValid();
+    setRoutes(publicRoutes);
   }, []);
 
   // Enquanto as rotas nao validaram, mantém um Skeleton

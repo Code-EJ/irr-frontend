@@ -1,18 +1,8 @@
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
-import { Formik, Form, Field } from "formik";
-import Header from "../components/Header"; 
-
-const handleAuth = async (data) => {
-    console.log("Enviando dados para o servidor:", data);
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (data.doador) resolve("Dados enviados com sucesso!");
-            else reject(new Error("Erro no envio de dados."));
-        }, 1000);
-    });
-};
+import { Formik, Form } from "formik";
+import InputText from "../components/InputText";
 
 const DonationForm = () => {
     const navigate = useNavigate();
@@ -44,9 +34,8 @@ const DonationForm = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-[#2E4F2F]">
-            <Header />
 
-            <Card className="w-[48rem] h-auto rounded-[30px] shadow-lg bg-white p-6 text-black mt-10"> 
+            <Card className="w-[48rem] h-auto rounded-[30px] shadow-lg bg-white p-6 text-black mt-10">
                 <h2 className="text-[#133D1A] uppercase text-2xl font-semibold sz-[32px] pb-10">
                     Cadastro de <br /> Doação
                 </h2>
@@ -71,7 +60,7 @@ const DonationForm = () => {
                                 >
                                     Doador
                                 </label>
-                                <Field
+                                <InputText
                                     id="doador"
                                     name="doador"
                                     placeholder="Nome do Doador"
@@ -87,7 +76,7 @@ const DonationForm = () => {
                                 >
                                     PJ
                                 </label>
-                                <Field
+                                <InputText
                                     id="pj"
                                     name="pj"
                                     placeholder="Pessoa Jurídica"
@@ -103,7 +92,7 @@ const DonationForm = () => {
                                 >
                                     Tipo de Material
                                 </label>
-                                <Field
+                                <InputText
                                     id="tipoMaterial"
                                     name="tipoMaterial"
                                     placeholder="Tipo de Material"
@@ -119,7 +108,7 @@ const DonationForm = () => {
                                 >
                                     Subtipo
                                 </label>
-                                <Field
+                                <InputText
                                     id="subtipo"
                                     name="subtipo"
                                     placeholder="Subtipo de Material"
@@ -135,7 +124,7 @@ const DonationForm = () => {
                                 >
                                     Pesagem
                                 </label>
-                                <Field
+                                <InputText
                                     id="pesagem"
                                     name="pesagem"
                                     placeholder="Pesagem"
@@ -144,16 +133,8 @@ const DonationForm = () => {
                                 />
                             </div>
 
-                            {/* <div className="w-full text-left">
-                                <InputCheckbox
-                                    id="relatorioFeito"
-                                    name="relatorioFeito"
-                                    titulo="Relatório do mês já ocorreu."
-                                />
-                            </div> */}
-
                             <div className="w-full text-left">
-                                <Field
+                                <InputText
                                     id="relatorioFeito"
                                     name="relatorioFeito"
                                     className="w-5 h-5 mr-2 bg-white border-2 border-[#133D1A] rounded-md checked:bg-[#133D1A] checked:border-[#133D1A] focus:ring-2 focus:ring-[#133D1A]"

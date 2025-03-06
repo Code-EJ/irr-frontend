@@ -5,7 +5,7 @@ const InputText = ({ onChange, titulo, ...props }) => {
   const { setFieldValue } = useFormikContext();
 
   return (
-    <div className="text-black flex flex-col mt-3.5">
+    <div className=" flex flex-col mt-3.5">
       <div className="w-full flex mb-3.5">
           <b className="text-3.5 font-bold">{titulo}</b>
       </div>
