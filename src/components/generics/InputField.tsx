@@ -115,4 +115,5 @@ export enum FieldType {
   REFERENCE = "reference",
   DATE = "date",
   EMAIL = "email", 
+  BOOLEAN = "boolean",
 }

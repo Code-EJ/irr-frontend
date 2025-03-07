@@ -3,8 +3,8 @@ import ButtonsMenu from "../../components/generics/ButtonsMenu";
 
 const StockMenu = () => {
   const menuItems = [
-    { title: "Material de Entrada", color: "#133D1A", link: "/entry-material-list" },
-    { title: "Material de Saída", color: "#133D1A", link: "/exit-material-list" }
+    { title: "Material de Entrada", color: "#133D1A", link: "/input-material-list" },
+    { title: "Material de Saída", color: "#133D1A", link: "/output-material-list" }
   ];
 
   return (
