@@ -17,7 +17,7 @@ export  function InputField<M extends Model = Model>({
   identifier,
   type,
   options,
-  referenceConfig
+  referenceConfig,
 }: Field<M>) {
   const [references, setRef] = useState<any>(null);
 
@@ -57,10 +57,16 @@ export  function InputField<M extends Model = Model>({
         </Field>
       }
       case FieldType.FILE: {
-        return <div className="flex flex-col">
-          <span className="mb-2">{label}</span>
-          <input type="file" name={identifier} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
-        </div>
+        return (
+          <div className="flex flex-col">
+            <span className="mb-2">{label}</span>
+            <input
+              type="file"
+              name={identifier}
+              className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+        );
       }
       case FieldType.REFERENCE: {
         console.log(references)
@@ -74,6 +80,8 @@ export  function InputField<M extends Model = Model>({
       case FieldType.DATE: {
         return <Field id={identifier} name={identifier} type={type} className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
       }
+      default:
+        return null;
     }
   }
 
@@ -93,7 +101,7 @@ interface Option {
 export interface Field<M extends Model> {
   label: string;
   identifier: string;
-  type: FieldType,
+  type: FieldType;
   isIdentity?: boolean;
   canEdit?: boolean;
   required?: boolean;
@@ -112,6 +120,7 @@ export enum FieldType {
   SELECT    = "select",
   FILE      = "file",
   REFERENCE = "reference",
-  DATE      = "date",
-  BOOLEAN   = "checkbox"
+  DATE = "date",
+  EMAIL = "email", 
+  BOOLEAN = "boolean",
 }
