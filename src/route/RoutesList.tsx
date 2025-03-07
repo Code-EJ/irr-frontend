@@ -8,7 +8,7 @@ import RegisterUserAdmin from "../pages/RegisterUserAdmin";
 import TreatmentMenu from "../pages/MenuButtons/TreatmentMenu";
 import {
   DriverService, VehicleService, DonatorService, TypologyService, CollectionService, DonationService, InputMaterialService,
-  OutputMaterialService, SaleService, PressingService, SubTypologyService, TriageService, UserService
+  OutputMaterialService, SaleService, PressingService, SubTypologyService, TriageService
 } from "../services";
 import UsersMenu from "../pages/MenuButtons/UsersMenu";
 import DistributionMenu from "../pages/MenuButtons/DistributionMenu";

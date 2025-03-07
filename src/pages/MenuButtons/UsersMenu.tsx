@@ -2,7 +2,7 @@ import ButtonsMenu from "../../components/generics/ButtonsMenu";
 
 const UsersMenu = () => {
   const menuItems = [
-    { title: "Criação de usuários", color: "#133D1A", link: "/users-register" },
+    { title: "Cadastro de Usuários", color: "#133D1A", link: "/users-register" },
     { title: "Manejo de usuários", color: "#133D1A", link: "/users-management" }
   ];
 
