@@ -129,7 +129,7 @@ const ManageUsers = () => {
         </Card>
       </div>
       <div className="flex gap-16 justify-between">
-        <BackButton route="menu" />
+        <BackButton path={"/users-menu"}  />
       </div>
     </Card>
   );

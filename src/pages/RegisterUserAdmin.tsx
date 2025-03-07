@@ -61,7 +61,7 @@ const RegisterUserAdmin = () => {
               titulo="Senha"
               name="senha"
             />
-            <BackButton route="menu" />
+            <BackButton path={"/users-menu"} />
             <Button
               titulo="Cadastrar"
               type="submit"
