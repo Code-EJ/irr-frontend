@@ -2,10 +2,11 @@ import { apiClient, deleteToken, setToken } from "../config/security/Client";
 
 const login = async (data: Login): Promise<boolean> => {
   const res = await apiClient.post("/auth/login", data);
-
+  
   if (res.status === 200) {
     const data: LoginResponse = res.data;
     setToken(data.access_token);
+    console.log("Token salvo");
     return true;
   } else {
     return false;

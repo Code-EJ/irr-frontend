@@ -1,10 +1,11 @@
 import { RouterProvider } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { publicRoutes, privateRoutes } from "./RoutesList";
-import { getToken } from "../config/security/ApiClient";
+import { apiClient, getToken } from "../config/security/ApiClient";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BackgroundImage from "../components/BackgroundImage";
+import { deleteToken } from "../config/security/Client";
 
 const AppRouter = () => {
   // Rotas se tornam publicas no inicio
@@ -14,20 +15,16 @@ const AppRouter = () => {
   // Checa se o usuario e valido pelo token
   // Se é válido, troca as rotas para privadas
   const checkUserIsValid = async () => {
-    // try {
-    //   await apiClient.post("/login/validate", {
-    //     login: getToken(),
-    //   });
-    //   setRoutes(privateRoutes);
-    // } catch (err) {
-    //   deleteToken();
-    //   setRoutes(publicRoutes);
-    // }
+    try {
+      setRoutes(privateRoutes);
+    } catch (err) {
+      deleteToken();
+      setRoutes(privateRoutes);
+    }
     if (getToken()) {
       setRoutes(privateRoutes)
     }
     else {
-      // setRoutes(publicRoutes)
       setRoutes(privateRoutes)
     }
     setValidateToken(true);
