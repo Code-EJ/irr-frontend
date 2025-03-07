@@ -1,6 +1,6 @@
 import Button from "../components/Button";
 import Card from "../components/Card";
-import { logout } from "../config/security/AuthServices";
+import { AuthService } from "../services";
 
 const LandingPage = () => {
   const menuItems = [
@@ -34,7 +34,7 @@ const LandingPage = () => {
       <div className="flex justify-center mt-10">
         <Button
           titulo="Sair"
-          onClick={() => logout()}
+          onClick={() => AuthService.logout()}
           className="bg-red-700 text-white text-sm hover:bg-[#5e0b12]"
         />
       </div>

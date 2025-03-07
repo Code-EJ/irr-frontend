@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { MenuIcon } from 'lucide-react';
+import React from 'react';  
 
 interface SidebarProps {
   isOpen: boolean;
@@ -7,63 +7,54 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  const navigate = useNavigate();
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
+  const menuItems = [
+    { label: 'Cadastro de Usuários', link: '/users-register' },
+    { label: 'Manejo de Usuários', link: '/users-management' },
+    { label: 'Tipologia', link: '/typology-list' },
+    { label: 'Subtipologia', link: '/subtypology-list' },
+    { label: 'Triagem', link: '/triage-list' },
+    { label: 'Prensagem', link: '/pressing-list' },
+    { label: 'Coleta', link: '/collection-list' },
+    { label: 'Doação', link: '/donation-list' },
+    { label: 'Doador', link: '/donator-list' },
+    { label: 'Veículo', link: '/vehicle-list' },
+    { label: 'Motorista', link: '/driver-list' },
+    { label: 'Material de Entrada', link: '/input-material-list' },
+    { label: 'Material de Saída', link: '/output-material-list' },
+    { label: 'Mercado', link: '/sale-list' },
+    { label: 'Perfil', link: '/profile' },
+  ];
+
+  const handleMenuItemClick = (link: string) => {
+    // Altere o comportamento para não fechar a sidebar ao clicar em um item do menu
+    window.location.href = link;
   };
 
   return (
-    <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-      <button className="close-btn" onClick={onClose}>
-        X
+    <div
+      className={`fixed top-0 left-0 w-64 h-full bg-white shadow-md p-4 ${isOpen ? 'block' : 'hidden'}`}
+      aria-hidden={!isOpen}
+    >
+      <button
+        className="absolute top-4 right-4 text-3xl text-gray-700" // Alterei para text-3xl para aumentar o tamanho
+        onClick={onClose}
+        aria-label="Fechar sidebar"
+      >
+        <MenuIcon onClick={onClose} />
       </button>
-      <ul className="sidebar-menu">
-        <li>
-          <button onClick={() => handleNavigation('/users-register')}>Cadastro de Usuários</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/users-management')}>Manejo de Usuários</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/typology-list')}>Tipologia</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/subtypology-list')}>Subtipologia</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/triage-list')}>Triagem</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/pressing-list')}>Prensagem</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/collection-list')}>Coleta</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/donation-list')}>Doação</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/donator-list')}>Doador</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/vehicle-list')}>Veículo</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/driver-list')}>Motorista</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/input-material-list')}>Material de Entrada</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/output-material-list')}>Material de Saída</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/sale-list')}>Mercado</button>
-        </li>
-        <li>
-          <button onClick={() => handleNavigation('/profile')}>Perfil</button>
-        </li>
+      <ul className="p-0 m-0 mt-12 space-y-2">
+        {menuItems.map((item, index) => (
+          <li key={index} className="border-b border-gray-300">
+            <button
+              onClick={() => handleMenuItemClick(item.link)}
+              aria-label={`Ir para ${item.label}`}
+              className="w-full text-left p-2 text-gray-700 hover:bg-gray-100 focus:outline-none"
+            >
+              {item.label}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   );

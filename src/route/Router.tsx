@@ -16,19 +16,16 @@ const AppRouter = () => {
   // Se é válido, troca as rotas para privadas
   const checkUserIsValid = async () => {
     try {
-      await apiClient.post("/login/validate", {
-        login: getToken(),
-      });
       setRoutes(privateRoutes);
     } catch (err) {
       deleteToken();
-      setRoutes(publicRoutes);
+      setRoutes(privateRoutes);
     }
     if (getToken()) {
       setRoutes(privateRoutes)
     }
     else {
-      setRoutes(publicRoutes)
+      setRoutes(privateRoutes)
     }
     setValidateToken(true);
   };

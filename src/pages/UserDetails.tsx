@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserService } from '../services';
 import { jwtDecode } from 'jwt-decode';
 import BackButton from '../components/BackButton';
+import { getToken } from '../config/security/Client';
 
 interface User {
   id: string;
@@ -16,7 +17,7 @@ const UserDetails = () => {
   const navigate = useNavigate();
 
   const getUserIdFromToken = () => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
     if (!token) {
       navigate('/login');
       return null;

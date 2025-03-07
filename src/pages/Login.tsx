@@ -1,26 +1,25 @@
 import Button from "../components/Button";
 import Card from "../components/Card";
 import InputText from "../components/InputText";
-import { deleteToken, handleAuth } from "../config/security/AuthServices";
 import { useNavigate } from "react-router-dom";
 import SimpleForm from "../components/SimpleForm";
 import { useEffect } from "react";
 import LoginImage from "../assets/imgs/background.png";
 import {AuthService} from "../services";
 import { toast } from "react-toastify";
+import { deleteToken } from "../config/security/Client";
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: { email: any; password: any; }) => {
     const res = await AuthService.login({
       email: values.email,
       senha: values.password
     })
 
     if (!res) toast.error("Usuário invalido");
-
-    console.log("Login realizado com sucesso.");
+    
     navigate("/menu");
   };
 
@@ -44,7 +43,7 @@ const Login = () => {
               <InputText titulo="Senha" name="password" onChange={undefined} className={undefined} titleStyle={undefined} mask={undefined} />
               <div className="flex flex-col justify-between  w-full">
                 <div className="flex flex-row justify-between w-full pt-4 pb-14">
-                  <a style={{ fontSize: "15px", cursor: "pointer" }}>
+                  <a style={{ fontSize: "15px", cursor: "pointer", paddingRight: "10px" }}>
                     {" "}
                     Lembre-se de mim
                   </a>
