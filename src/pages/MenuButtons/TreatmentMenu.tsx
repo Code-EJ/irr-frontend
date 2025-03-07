@@ -1,4 +1,4 @@
-import ButtonsMenu from "../../components/ButtonsMenu";
+import ButtonsMenu from "../../components/generics/ButtonsMenu";
 
 const TreatmentMenu = () => {
   const menuItems = [
@@ -9,7 +9,7 @@ const TreatmentMenu = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-4xl font-bold text-white mb-4">TRATAMENTO</h1>
-      <ButtonsMenu items={menuItems} showBackButton={true} backDestination="menu" />
+      <ButtonsMenu items={menuItems} showBackButton={true} backDestination="/menu" />
     </div>
   );
 }

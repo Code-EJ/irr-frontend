@@ -1,5 +1,5 @@
-import Button from "./Button";
-import BackButton from "./BackButton";
+import Button from "../Button";
+import BackButton from "../BackButton";
 
 
 type MenuItem = {
@@ -14,7 +14,7 @@ type ButtonsMenuProps = {
   backDestination?: string;
 };
 
-const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton = true}) => {
+const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton, backDestination}) => {
   return (
     <div className="flex w-full flex-col items-center bg-green-900 p-6 rounded-lg min-h-[5rem]">
       <div className="flex flex-1 gap-8 items-center justify-center">
@@ -35,7 +35,7 @@ const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton = true}
       </div>
       {showBackButton && (
         <div className="flex justify-center mt-6">
-          <BackButton />
+          <BackButton path={backDestination || "/menu"} />
         </div>
       )}
     </div>
