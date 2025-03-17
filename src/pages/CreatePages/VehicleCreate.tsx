@@ -1,10 +1,10 @@
-import Card from "../components/Card";
-import InputText from "../components/InputText";
-import SimpleForm from "../components/SimpleForm";
-import Button from "../components/Button";
-import { get } from "../utils/LodashAlternatives";
-import { createVehicle } from "../services-antigos/VehicleServices";
-import BackButton from "../components/BackButton";
+import Card from "../../components/Card";
+import InputText from "../../components/InputText";
+import SimpleForm from "../../components/SimpleForm";
+import Button from "../../components/Button";
+import { get } from "../../utils/LodashAlternatives";
+import { createVehicle } from "../../services-antigos/VehicleServices";
+import BackButton from "../../components/BackButton";
 import { toast } from "react-toastify";
 
 const VehicleRegistration = () => {

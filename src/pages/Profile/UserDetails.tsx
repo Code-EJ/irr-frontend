@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserService } from '../services';
+import { UserService } from '../../services';
 import { jwtDecode } from 'jwt-decode';
-import BackButton from '../components/BackButton';
-import { getToken } from '../config/security/Client';
+import BackButton from '../../components/BackButton';
+import { getToken } from '../../config/security/Client';
 
 interface User {
   id: string;

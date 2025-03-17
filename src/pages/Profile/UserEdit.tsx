@@ -1,9 +1,9 @@
 import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { UserService } from "../services";
-import { InputField, FieldType } from "../components/generics/InputField";
-import { User } from "../models/Entities";
+import { UserService } from "../../services";
+import { InputField, FieldType } from "../../components/generics/InputField";
+import { User } from "../../models/Entities";
 
 const userFields = [
   { label: "Nome", identifier: "nome", type: FieldType.TEXT },
