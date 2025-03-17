@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Card from "../components/Card";
-import { apiClient } from "../config/security/ApiClient";
-import Button from "../components/Button";
-import BackButton from "../components/BackButton";
+import Card from "../../components/Card";
+import { apiClient } from "../../config/security/ApiClient";
+import Button from "../../components/Button";
+import BackButton from "../../components/BackButton";
 import { toast } from "react-toastify";
 
 const CollectionList = () => {

@@ -1,11 +1,11 @@
-import Button from "../components/Button";
-import Card from "../components/Card";
-import InputText from "../components/InputText";
-import SimpleForm from "../components/SimpleForm";
-import { createTriagem } from "../services-antigos/TriagemServices";
-import { get } from "../utils/LodashAlternatives";
-import BackButton from "../components/BackButton";
-import InputList from "../components/InputList";
+import Button from "../../components/Button";
+import Card from "../../components/Card";
+import InputText from "../../components/InputText";
+import SimpleForm from "../../components/SimpleForm";
+import { createTriagem } from "../../services-antigos/TriagemServices";
+import { get } from "../../utils/LodashAlternatives";
+import BackButton from "../../components/BackButton";
+import InputList from "../../components/InputList";
 import { toast } from "react-toastify";
 
 const ScreeningPage = () => {

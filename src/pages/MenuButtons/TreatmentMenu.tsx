@@ -2,7 +2,7 @@ import ButtonsMenu from "../../components/generics/ButtonsMenu";
 
 const TreatmentMenu = () => {
   const menuItems = [
-    { title: "Triagem", color: "#133D1A", link: "/triage-list" },
+    { title: "Triagem", color: "#133D1A", link: "/screening-list" },
     { title: "Prensagem", color: "#133D1A", link: "/pressing-list" }
   ];
 

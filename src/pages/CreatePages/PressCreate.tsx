@@ -1,9 +1,9 @@
-import BackButton from "../components/BackButton";
-import Button from "../components/Button";
-import Card from "../components/Card";
-import InputText from "../components/InputText";
-import SimpleForm from "../components/SimpleForm";
-import { get } from "../utils/LodashAlternatives";
+import BackButton from "../../components/BackButton";
+import Button from "../../components/Button";
+import Card from "../../components/Card";
+import InputText from "../../components/InputText";
+import SimpleForm from "../../components/SimpleForm";
+import { get } from "../../utils/LodashAlternatives";
 import { toast } from "react-toastify";
 
 const PressPage = () => {
