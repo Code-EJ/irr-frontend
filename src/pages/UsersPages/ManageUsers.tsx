@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Card from "../components/Card";
-import InputText from "../components/InputText";
-import InputList from "../components/InputList";
-import Button from "../components/Button";
-import SimpleForm from "../components/SimpleForm";
-import { apiClient } from "../config/security/ApiClient";
-import { logout } from "../config/security/AuthServices";
-import BackButton from "../components/BackButton";
+import Card from "../../components/Card";
+import InputText from "../../components/InputText";
+import InputList from "../../components/InputList";
+import Button from "../../components/Button";
+import SimpleForm from "../../components/SimpleForm";
+import { apiClient } from "../../config/security/ApiClient";
+import { logout } from "../../config/security/AuthServices";
+import BackButton from "../../components/BackButton";
 import { toast } from "react-toastify";
 
 const ManageUsers = () => {
