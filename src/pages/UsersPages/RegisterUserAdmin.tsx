@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import Card from "../components/Card";
-import InputText from "../components/InputText";
-import Button from "../components/Button";
-import SimpleForm from "../components/SimpleForm";
-import { apiClient } from "../config/security/ApiClient";
-import LogoImg from "../assets/imgs/logo_IRR.png";
-import BackButton from "../components/BackButton";
-import InputList from "../components/InputList";
+import Card from "../../components/Card";
+import InputText from "../../components/InputText";
+import Button from "../../components/Button";
+import SimpleForm from "../../components/SimpleForm";
+import { apiClient } from "../../config/security/Client";
+import LogoImg from "../../assets/imgs/logo_IRR.png";
+import BackButton from "../../components/BackButton";
+import InputList from "../../components/InputList";
 import { toast } from "react-toastify";
 
 const RegisterUserAdmin = () => {

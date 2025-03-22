@@ -10,7 +10,9 @@ import MaterialsMenu from "../pages/MenuButtons/MaterialsMenu";
 import StockMenu from "../pages/MenuButtons/StockMenu";
 import FilterTest from "../pages/FilterTest";
 import UserDetails from "../pages/Profile/UserDetails";
+import TriageMenu from "../pages/TriagePages/TriageMenu";
 import { UserEdit } from "../pages/Profile/UserEdit";
+import TriageList from "../pages/TriagePages/TriageList";
 
 // Rotas comuns (ex: login)
 const commonRoutes = [
@@ -31,6 +33,8 @@ const privateRoutesList = [
   { path: "/users-management", element: <ManageUsers /> },
   { path: "/profile", element: <UserDetails /> },
   { path: "/edit/:id", element: <UserEdit /> },
+  { path: "/triage-menu", element: <TriageMenu /> },
+  { path: "/triage-list", element: <TriageList /> },
 ];
 
 

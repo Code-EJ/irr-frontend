@@ -24,13 +24,18 @@ class BaseService<E extends Model> {
     }
   }
 
-  async getAll(): Promise<E[] | undefined> {
-    const res = await apiClient.get(`/${this.route}`);
+  async getAll(page: number | null): Promise<E[] | undefined> {
+    // Ternario meio generico que deve ser alterado depois
+    // Para pegar filtros também
+    const params = page !== null ? { page } : {};
+
+    const res = await apiClient.get(`/${this.route}`, { params });
 
     if (res.status === 200) {
-      return res.data;
+        return res.data;
     }
-  }
+}
+
 
   async delete(id: string): Promise<E | undefined> {
     const res = await apiClient.delete(`/${this.route}/${id}`);

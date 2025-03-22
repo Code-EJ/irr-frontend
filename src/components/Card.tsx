@@ -1,4 +1,12 @@
-const Card = ({ children, width, className, bgColor, ...rest }) => {
+type CardPropsType = {
+  children: any;
+  width: number;
+  className: string | null;
+  bgColor: string | null;
+}
+
+
+const Card = ({ children, width, className, bgColor, ...rest }: CardPropsType) => {
   // PADRAO DE BORDAS: rounded-[40px]
   return (
     <div
