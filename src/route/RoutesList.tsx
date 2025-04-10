@@ -8,13 +8,11 @@ import UsersMenu from "../pages/MenuButtons/UsersMenu";
 import DistributionMenu from "../pages/MenuButtons/DistributionMenu";
 import MaterialsMenu from "../pages/MenuButtons/MaterialsMenu";
 import StockMenu from "../pages/MenuButtons/StockMenu";
-import FilterTest from "../pages/FilterTest";
 import UserDetails from "../pages/Profile/UserDetails";
-import TriageMenu from "../pages/TriagePages/TriageMenu";
 import { UserEdit } from "../pages/Profile/UserEdit";
 import TriageList from "../pages/TriagePages/TriageList";
-import ScreeningPage from "../pages/CreatePages/ScreeningCreate";
-import ScreeningUpdate from "../pages/TriagePages/ScreeningUpdate"; 
+import TriageCreate from '../pages/TriagePages/TriageCreate';
+import TriageUpdate from '../pages/TriagePages/TriageUpdate';
 
 // Rotas comuns (ex: login)
 const commonRoutes = [
@@ -25,7 +23,6 @@ const commonRoutes = [
 // Rotas privadas (ex: acessíveis após autenticação)
 const privateRoutesList = [
   { path: "/menu", element: <LandingPage /> },
-  { path: "/filtertest", element: <FilterTest /> },
   { path: "/users-menu", element: <UsersMenu /> },
   { path: "/distribution-menu", element: <DistributionMenu /> },
   { path: "/materials-menu", element: <MaterialsMenu /> },
@@ -35,10 +32,9 @@ const privateRoutesList = [
   { path: "/users-management", element: <ManageUsers /> },
   { path: "/profile", element: <UserDetails /> },
   { path: "/edit/:id", element: <UserEdit /> },
-  { path: "/triage-menu", element: <TriageMenu /> },
   { path: "/triage-list", element: <TriageList /> },
-  { path: "/triage-create", element: <ScreeningPage /> },
-  { path: "/triage-update/:id", element: <ScreeningUpdate /> }
+  { path: "/triage-create", element: <TriageCreate /> },
+  { path: "/triage-update/:id", element: <TriageUpdate /> }
 ];
 
 
