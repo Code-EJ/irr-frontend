@@ -28,11 +28,19 @@ const TriageList = () => {
         fetchData(page);
     }, [page]);
 
+    const handleCreate = () => {
+        navigate("/triage-create");
+    };
+
     return (
         <Card className="rounded-[50px] p-6 w-[1000px]">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Triagem</h2>
-                <Button titulo={"Criar nova Triagem"} className="bg-green-600 text-white" />
+                <Button
+                    titulo={"Criar nova Triagem"}
+                    className="bg-green-600 text-white"
+                    onClick={handleCreate}
+                    type={undefined} disabled={undefined}                />
             </div>
            
             <TableComponent 

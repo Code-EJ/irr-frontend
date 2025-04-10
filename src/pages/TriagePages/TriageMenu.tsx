@@ -2,7 +2,7 @@ import ButtonsMenu from "../../components/generics/ButtonsMenu";
 
 const TriageMenu = () => {
   const menuItems = [
-    { title: "Cadastro de Triágem", color: "#133D1A", link: "/users-register" },
+    { title: "Cadastro de Triágem", color: "#133D1A", link: "/triage-create" },
     { title: "Listagem de Triágem", color: "#133D1A", link: "/triage-list" }
   ];
 
