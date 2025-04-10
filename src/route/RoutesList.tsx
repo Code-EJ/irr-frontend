@@ -13,6 +13,7 @@ import { UserEdit } from "../pages/Profile/UserEdit";
 import TriageList from "../pages/TriagePages/TriageList";
 import TriageCreate from '../pages/TriagePages/TriageCreate';
 import TriageUpdate from '../pages/TriagePages/TriageUpdate';
+import DonorListing from '../pages/DonorListing';
 
 // Rotas comuns (ex: login)
 const commonRoutes = [
@@ -34,7 +35,8 @@ const privateRoutesList = [
   { path: "/edit/:id", element: <UserEdit /> },
   { path: "/triage-list", element: <TriageList /> },
   { path: "/triage-create", element: <TriageCreate /> },
-  { path: "/triage-update/:id", element: <TriageUpdate /> }
+  { path: "/triage-update/:id", element: <TriageUpdate /> },
+  { path: "/donorListing", element: <DonorListing /> },
 ];
 
 
