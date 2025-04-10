@@ -17,7 +17,7 @@ const TriageList = () => {
     };
 
     const handleBack = () => {
-        navigate("/triage-menu");
+        navigate("/treatment-menu");
     };
 
     useEffect(() => {
