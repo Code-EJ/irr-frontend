@@ -14,6 +14,8 @@ import TriageList from "../pages/TriagePages/TriageList";
 import TriageCreate from '../pages/TriagePages/TriageCreate';
 import TriageUpdate from '../pages/TriagePages/TriageUpdate';
 import DonorListing from '../pages/DonorListing';
+import DonationList from "../pages/DonationPages/DonationList";
+import DriverList from "../pages/DriverPages/DriverList";
 
 // Rotas comuns (ex: login)
 const commonRoutes = [
@@ -36,7 +38,9 @@ const privateRoutesList = [
   { path: "/triage-list", element: <TriageList /> },
   { path: "/triage-create", element: <TriageCreate /> },
   { path: "/triage-update/:id", element: <TriageUpdate /> },
-  { path: "/donorListing", element: <DonorListing /> },
+  { path: "/donor-list", element: <DonorListing /> },
+  { path: "/donation-list", element: <DonationList /> },
+  { path: "/driver-list", element: <DriverList /> },
 ];
 
 

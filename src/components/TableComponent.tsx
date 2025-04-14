@@ -9,7 +9,7 @@ const mockData = [
 ];
 
 type TableProps = {
-    columns: [];
+    columns: string[];
     data: any;
 }
 
