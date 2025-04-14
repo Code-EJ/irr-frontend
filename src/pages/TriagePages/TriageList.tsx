@@ -45,6 +45,7 @@ const TriageList = () => {
            
             <TableComponent 
                 columns={[
+                    'id',
                     'data',
                     'tipo',
                     'volumeTotal',
