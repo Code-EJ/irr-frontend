@@ -9,7 +9,7 @@ import InputText from "../../components/InputText";
 import { TriageService, SubTypologyService } from "../../services";
 import { toast } from "react-toastify";
 
-const TriageCreate = () => {
+const TriageDriversCreate = () => {
   const navigate = useNavigate();
   const [subtypologies, setSubtypologies] = useState<{ name: string; value: string }[]>([]);
 
@@ -125,4 +125,4 @@ const TriageCreate = () => {
   );
 };
 
-export default TriageCreate;
+export default TriageDriversCreate;

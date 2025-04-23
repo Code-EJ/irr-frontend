@@ -5,7 +5,7 @@ import { TriageService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 
-const TriageList = () => {
+const TriageDriversList = () => {
         const navigate = useNavigate();
         const [page, setPage] = useState<number>(1);
         const [data, setData] = useState<Array<any>>([]);
@@ -40,14 +40,14 @@ const TriageList = () => {
                     titulo={"Criar nova Triagem"}
                     className="bg-green-600 text-white"
                     onClick={handleCreate}
-                    type={undefined} disabled={undefined}                />
+                    type={undefined} disabled={undefined}/>
             </div>
            
             <TableComponent 
                 columns={[
                     'id',
                     'nome',
-                    'cpd'
+                    'cpf'
                 ]}
                 data={data}
                 />
@@ -72,4 +72,4 @@ const TriageList = () => {
     );
 };
 
-export default TriageList;
+export default TriageDriversList;

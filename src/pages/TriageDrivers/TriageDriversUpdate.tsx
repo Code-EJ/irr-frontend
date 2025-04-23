@@ -9,7 +9,7 @@ import InputText from "../../components/InputText";
 import { TriageService, SubTypologyService } from "../../services";
 import { toast } from "react-toastify";
 
-const TriageUpdate = () => {
+const TriageDriversUpdate = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // Pega o id da URL
   const [subtypologies, setSubtypologies] = useState<{ name: string; value: string }[]>([]);
