@@ -5,7 +5,7 @@ import { TriageService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 
-const TriageList = () => {
+const TriageVehicleList = () => {
         const navigate = useNavigate();
         const [page, setPage] = useState<number>(1);
         const [data, setData] = useState<Array<any>>([]);
@@ -72,4 +72,4 @@ const TriageList = () => {
     );
 };
 
-export default TriageList;
+export default TriageVehicleList;
