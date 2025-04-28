@@ -1,9 +1,11 @@
 import AuthService from "./AuthService";
 import CollectionService from "./CollectionService";
+import DocumentService from "./DocumentService";
 import DonationService from "./DonationService";
 import DonatorService from "./DonatorService";
 import DriverService from "./DriverService";
 import InputMaterialService from "./InputMaterialService";
+import MediaService from "./MediaService";
 import OutputMaterialService from "./OutputMaterialService";
 import PressingService from "./PressingService";
 import SaleService from "./SaleService";
@@ -27,5 +29,7 @@ export {
   PressingService,
   InputMaterialService,
   OutputMaterialService,
-  SaleService
+  SaleService,
+  DocumentService,
+  MediaService
 }

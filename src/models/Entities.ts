@@ -102,3 +102,24 @@ export interface Sale extends Model {
   mtrTransportadorId: string;
   mtrDestinadorId: string;
 }
+
+export interface Media extends Model {
+  dados: string;
+}
+
+export interface Document extends Model {
+  nome: string;
+  dataDocumento: Date;
+  dataInsercao: Date;
+  tipo: "NOTA_FISCAL" | "MTR_GERADOR" | "MTR_TRANSPORTADOR" | "MTR_DESTINADOR" | "DIARIO_COLETA";
+  mediaId: string;
+  coletasMTRGerador: string;
+  coletasMTRDestinador: string;
+  coletasMTRTransportador: string;
+  coletasDiarioColota: string;
+  materialSaida: string;
+  notaFiscalVenda: string;
+  mtrGeradorVenda: string;
+  mtrTransportadorVenda: string;
+  mtrDestinadorVenda: string;
+}
