@@ -10,6 +10,7 @@ const LandingPage = () => {
     { title: "Distribuição", color: "#133D1A", link: "/distribution-menu" },
     { title: "Estoque", color: "#133D1A", link: "/stock-menu" },
     { title: "Mercado", color: "#133D1A", link: "/sale-list" },
+    { title: "Documento", color: "#133D1A", link: "/document-menu" },
     { title: "Perfil", color: "#133D1A", link: "/profile" },
   ];
 
