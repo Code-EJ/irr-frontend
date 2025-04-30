@@ -9,7 +9,7 @@ import InputText from "../../components/InputText";
 import { SubTypologyService, TypologyService } from "../../services"; // Corrigido
 import { toast } from "react-toastify";
 
-const SubtypologyUpdate = () => {
+const SubTypologyUpdate = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // Pega o id da URL
   const [typologies, setTypologies] = useState<{ name: string; value: string }[]>([]);
@@ -136,4 +136,4 @@ const SubtypologyUpdate = () => {
   );
 };
 
-export default SubtypologyUpdate;
+export default SubTypologyUpdate;

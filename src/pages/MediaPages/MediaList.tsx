@@ -17,7 +17,7 @@ const MediaList = () => {
     };
 
     const handleBack = () => {
-        navigate("/treatment-menu"); // Você pode mudar a rota se quiser outra página inicial
+        navigate("/document-menu"); // Você pode mudar a rota se quiser outra página inicial
     };
 
     useEffect(() => {

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Card from "../components/Card";
-import Button from "../components/Button";
-import { TriageService } from "../services";
+import Card from "../../components/Card";
+import Button from "../../components/Button";
+import { TriageService } from "../../services";
 import { useNavigate } from 'react-router-dom';
-import TableComponent from "../components/TableComponent";
+import TableComponent from "../../components/TableComponent";
 
-const DonorListing = () => {
+const DonatorList = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [data, setData] = useState<Array<any>>([]);
@@ -23,11 +23,11 @@ const DonorListing = () => {
   };
 
   const handleBack = () => {
-    navigate("/treatment-menu");
+    navigate("/distribution-menu");
   };
 
   const handleCreate = () => {
-    navigate("/triage-create");
+    navigate("/donator-create");
   };
 
   useEffect(() => {
@@ -91,4 +91,4 @@ const DonorListing = () => {
   );
 };
 
-export default DonorListing;
+export default DonatorList;

@@ -17,7 +17,7 @@ const SubTypologyList = () => {
     };
 
     const handleBack = () => {
-        navigate("/tipology-menu");  // Assuming there's a "tipology-menu" page to go back to.
+        navigate("/materials-menu");  // Assuming there's a "tipology-menu" page to go back to.
     };
 
     useEffect(() => {
