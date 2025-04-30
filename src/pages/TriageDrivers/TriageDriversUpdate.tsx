@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; 
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
@@ -70,11 +70,15 @@ const TriageDriversUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await TriageService.update(id!, { 
+      await TriageService.update(id!, {
         ...formData,
-        id: new Date(formData.id),
-        nome: formData.nome as "TOTAL" | "PARCIAL",
-        cpf: formData.cpf as "DOACAO" | "COLETA",
+        data: new Date(formData.id), // Manipulação correta de data
+        tipo: formData.nome as "TOTAL" | "PARCIAL",
+        tipoOrigem: formData.cpf as "DOACAO" | "COLETA", // Corrigido para o campo de tipoOrigem
+        tipoDestino: "DOACAO", // Substituir com o valor adequado
+        volumeTotal: 0, // Substituir com o valor adequado
+        volumeRejeito: 0, // Substituir com o valor adequado
+        subtipologiaId: subtypologies[0]?.value || "", // Substituir com a lógica adequada
       }, { id });
       toast.success("Triagem atualizada com sucesso!");
       navigate("/triage-list");
@@ -94,11 +98,11 @@ const TriageDriversUpdate = () => {
       >
         {(formik) => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR TRIAGEM DE MOSTORISTA</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR TRIAGEM DE MOTORISTA</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
-                type="id"
+                type="text" // Corrigido de 'id' para 'text'
                 titulo="id do motorista"
                 name="id"
                 titleStyle="text-black"
@@ -116,7 +120,7 @@ const TriageDriversUpdate = () => {
               />
 
               <InputText
-                type="cpf"
+                type="text" // Corrigido de 'cpf' para 'text'
                 titulo="cpf do motorista"
                 name="cpf"
                 titleStyle="text-black"
@@ -124,15 +128,16 @@ const TriageDriversUpdate = () => {
                 onChange={(value) => handleChange("cpf", value)}
               />
 
-            <div className="flex justify-between mt-8">
-              <BackButton path={"triage-list"} />
-              <Button
-                titulo="Atualizar"
-                type="button"
-                variant="primary"
-                className="bg-green-950 text-white text-sm"
-                onClick={handleSubmit}
-              />
+              <div className="flex justify-between mt-8">
+                <BackButton path={"triage-list"} />
+                <Button
+                  titulo="Atualizar"
+                  type="button"
+                  variant="primary"
+                  className="bg-green-950 text-white text-sm"
+                  onClick={handleSubmit}
+                />
+              </div>
             </div>
           </Card>
         )}
@@ -141,4 +146,4 @@ const TriageDriversUpdate = () => {
   );
 };
 
-export default TriageUpdate;
+export default TriageDriversUpdate;

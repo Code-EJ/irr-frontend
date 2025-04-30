@@ -7,7 +7,7 @@ import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
 import { toast } from "react-toastify";
 import InputList from "../../components/InputList";
-import { CollectionService, VehicleService, DriverService, DocumentoService } from "../../services";
+import { CollectionService, VehicleService, DriverService, DocumentService } from "../../services";
 
 const CollectionCreate = () => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const CollectionCreate = () => {
         const [veiculosRes, motoristasRes, documentosRes] = await Promise.all([
           VehicleService.getAll(1, 9999),
           DriverService.getAll(1, 9999),
-          DocumentoService.getAll(1, 9999),
+          DocumentService.getAll(1, 9999),
         ]);
         setVeiculos(veiculosRes.data);
         setMotoristas(motoristasRes.data);

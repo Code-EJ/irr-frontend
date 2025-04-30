@@ -53,7 +53,6 @@ const MediaCreate = () => {
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("dados", value)}
               />
-              />
             </div>
 
             <div className="flex justify-between mt-8">

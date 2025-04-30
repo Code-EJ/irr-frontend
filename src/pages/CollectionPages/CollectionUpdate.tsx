@@ -6,7 +6,7 @@ import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
 import InputList from "../../components/InputList";
-import { CollectionService, VehicleService, DriverService, DocumentoService } from "../../services";
+import { CollectionService, VehicleService, DriverService, DocumentService } from "../../services";
 import { toast } from "react-toastify";
 
 const ColetaUpdate = () => {
@@ -37,7 +37,7 @@ const ColetaUpdate = () => {
         const [veic, mot, docs] = await Promise.all([
           VehicleService.getAll(1, 9999),
           DriverService.getAll(1, 9999),
-          DocumentoService.getAll(1, 9999),
+          DocumentService.getAll(1, 9999),
         ]);
         setVeiculos(veic.data.map((v) => ({ name: v.placa, value: v.id })));
         setMotoristas(mot.data.map((m) => ({ name: m.nome, value: m.id })));

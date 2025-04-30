@@ -6,7 +6,7 @@ import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputList from "../../components/InputList";
 import InputText from "../../components/InputText";
-import { OutputMaterialService, SubTypologyService, DocumentoService } from "../../services";
+import { OutputMaterialService, SubTypologyService, DocumentService } from "../../services";
 import { toast } from "react-toastify";
 
 const OutputMaterialCreate = () => {
@@ -45,7 +45,7 @@ const OutputMaterialCreate = () => {
 
     const fetchNotaFiscais = async () => {
       try {
-        const response = await DocumentoService.getAll(1, 9999); 
+        const response = await DocumentService.getAll(1, 9999); 
         const notaFiscais = response?.data ?? [];
         const mapped = notaFiscais?.map((item: { numero: string; id: string }) => ({
           name: item.numero,
