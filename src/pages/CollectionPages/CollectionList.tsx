@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { CollectionService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
+import { handleExport } from "../../utils/ExportService";
 
 const CollectionList = () => {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const CollectionList = () => {
     const fetchData = async (page: number | null) => {
         const response = await collectionService.getAll(page);
         setData(response?.data);
+        return response?.data;
     };
 
     const handleBack = () => {
@@ -66,6 +68,7 @@ const CollectionList = () => {
                 <div>
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
                     <Button titulo="Gerar Relatórios" className="bg-green-600 text-white ml-2" />
+                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "colections")} />
                 </div>
                 <div className="flex items-center">
                     <b 

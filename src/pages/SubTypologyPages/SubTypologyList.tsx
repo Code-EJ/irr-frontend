@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { SubTypologyService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
+import { handleExport } from "../../utils/ExportService";
 
 const SubTypologyList = () => {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const SubTypologyList = () => {
     const fetchData = async (page: number | null) => {
         const response = await subTypologyService.getAll(page);
         setData(response?.data);
+        return response?.data
     };
 
     const handleBack = () => {
@@ -56,7 +58,7 @@ const SubTypologyList = () => {
             <div className="flex justify-between items-center mt-4">
                 <div>
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
-                    <Button titulo="Gerar Relatórios" className="bg-green-600 text-white ml-2" />
+                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "sub-tipologia")} />
                 </div>
                 <div className="flex items-center">
                     <b 

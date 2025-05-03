@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { DriverService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
+import { handleExport } from "../../utils/ExportService";
 
 
 const DriverList = () => {
@@ -15,6 +16,7 @@ const DriverList = () => {
     const fetchData = async (page: number | null) => {
         const response = await driverService.getAll(page);
         setData(response?.data)
+        return response?.data;
     };
 
     const handleBack = () => {
@@ -58,6 +60,7 @@ const DriverList = () => {
                 <div>
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white"></Button>
                     <Button titulo="Gerar Relatórios" className="bg-green-600 text-white ml-2"></Button>
+                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "motoristas")} />
                 </div>
                 <div className="flex items-center">
                     <b 
