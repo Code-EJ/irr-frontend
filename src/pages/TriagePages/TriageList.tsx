@@ -4,6 +4,8 @@ import Button from "../../components/Button";
 import { TriageService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
+import { handleExport } from "../../utils/ExportService";
+
 
 const TriageList = () => {
         const navigate = useNavigate();
@@ -14,6 +16,7 @@ const TriageList = () => {
     const fetchData = async (page: number | null) => {
         const response = await triageService.getAll(page);
         setData(response?.data)
+        return response?.data
     };
 
     const handleBack = () => {
@@ -60,6 +63,7 @@ const TriageList = () => {
                 <div>
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white"></Button>
                     <Button titulo="Gerar Relatórios" className="bg-green-600 text-white ml-2"></Button>
+                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "triagem")} />
                 </div>
                 <div className="flex items-center">
                     <b 

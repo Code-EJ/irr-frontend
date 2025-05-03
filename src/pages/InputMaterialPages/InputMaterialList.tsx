@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { InputMaterialService, SubTypologyService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
+import { handleExport } from "../../utils/ExportService";
 
 const InputMaterialList = () => {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ const InputMaterialList = () => {
                 value: item.id,
             }));
             setSubtipologias(mapped);
+            return mapped;
         } catch (error) {
             console.error("Erro ao carregar subtipologias:", error);
         }
@@ -78,7 +80,7 @@ const InputMaterialList = () => {
             <div className="flex justify-between items-center mt-4">
                 <div>
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white"></Button>
-                    <Button titulo="Gerar Relatórios" className="bg-green-600 text-white ml-2"></Button>
+                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "material-entrada")} />
                 </div>
                 <div className="flex items-center">
                     <b 

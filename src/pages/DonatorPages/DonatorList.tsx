@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { TriageService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
+import { handleExport } from "../../utils/ExportService";
 
 const DonatorList = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const DonatorList = () => {
       "Cadastro Nacional": item.cadastroNacional
     }));
     setData(transformedData);
+    return transformedData;
   };
 
   const handleBack = () => {
@@ -64,7 +66,7 @@ const DonatorList = () => {
       <div className="flex justify-between items-center mt-4">
         <div>
           <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
-          <Button titulo="Gerar Relatórios" className="bg-green-600 text-white ml-2" />
+          <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "Doadores")} />
         </div>
         <div className="flex items-center">
           <b

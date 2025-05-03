@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { OutputMaterialService, SubTypologyService } from "../../services"; // Alteração no serviço
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
+import { handleExport } from "../../utils/ExportService";
 
 const OutputMaterialList = () => { // Nome da página alterado para OutputMaterial
     const navigate = useNavigate();
@@ -32,6 +33,7 @@ const OutputMaterialList = () => { // Nome da página alterado para OutputMateri
         try {
             const response = await outputMaterialService.getAll(page); // Alteração para OutputMaterialService
             setData(response?.data);
+            return response?.data
         } catch (error) {
             console.error("Erro ao buscar materiais de saída:", error);
         }
@@ -78,7 +80,7 @@ const OutputMaterialList = () => { // Nome da página alterado para OutputMateri
             <div className="flex justify-between items-center mt-4">
                 <div>
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white"></Button>
-                    <Button titulo="Gerar Relatórios" className="bg-green-600 text-white ml-2"></Button>
+                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "material-saida")} />
                 </div>
                 <div className="flex items-center">
                     <b 
