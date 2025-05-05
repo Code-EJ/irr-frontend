@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SimpleForm from "../components/SimpleForm";
 import { useEffect } from "react";
 import LoginImage from "../assets/imgs/background.png";
-import {AuthService} from "../services";
+import { AuthService } from "../services";
 import { toast } from "react-toastify";
 import { deleteToken } from "../config/security/Client";
 
@@ -19,7 +19,7 @@ const Login = () => {
     })
 
     if (!res) toast.error("Usuário invalido");
-    
+
     navigate("/menu");
   };
 
@@ -34,21 +34,19 @@ const Login = () => {
         password: ""
       }} autoSetErrors={undefined} submitOnChange={undefined}>
         {() => (
-          <Card className="w-[500px] h-[650px] flex flex-row rounded-l-[40px]" width={undefined} bgColor={undefined}>
-            <div className="flex flex-col">
-              <h2 className="text-2xl text-[#133d1b] font-bold py-2.5 m-0 "> 
+          <Card className="w-full min-w-[400px] h-[474.5px] flex flex-row rounded-[40px] border-[1px] border-[#ccc] md:rounded-r-[0px]">
+            <div className="flex flex-col w-full">
+              <h2 className="text-2xl text-[#133d1b] font-bold py-2.5 m-0">
                 Login
               </h2>
               <InputText titulo="E-mail" name="email" onChange={undefined} className={undefined} titleStyle={undefined} mask={undefined} />
               <InputText titulo="Senha" name="password" onChange={undefined} className={undefined} titleStyle={undefined} mask={undefined} />
-              <div className="flex flex-col justify-between  w-full">
+              <div className="flex flex-col justify-between w-full">
                 <div className="flex flex-row justify-between w-full pt-4 pb-14">
                   <a style={{ fontSize: "15px", cursor: "pointer", paddingRight: "10px" }}>
-                    {" "}
                     Lembre-se de mim
                   </a>
                   <a style={{ fontSize: "15px", cursor: "pointer" }}>
-                    {" "}
                     Esqueci minha senha
                   </a>
                 </div>
@@ -63,14 +61,16 @@ const Login = () => {
           </Card>
         )}
       </SimpleForm>
-      <div className="w-[500px] h-[650px]">
+
+      <div className="w-full max-w-[500px] h-auto">
         <img
           src={LoginImage}
           alt="Imagem de login"
-          className="rounded-r-[40px] w-[500px] h-[650px]"
+          className="rounded-r-[40px] w-full h-[474.5px] object-cover hidden md:block"
         />
       </div>
     </>
+
   );
 };
 export default Login;
