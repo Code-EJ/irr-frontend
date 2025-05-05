@@ -19,7 +19,7 @@ const SalesList = () => {
     };
 
     const handleBack = () => {
-        navigate("/treatment-menu"); // Você pode mudar a rota se quiser outra página inicial
+        navigate("/menu"); // Você pode mudar a rota se quiser outra página inicial
     };
 
     useEffect(() => {
@@ -35,36 +35,36 @@ const SalesList = () => {
     };
 
     return (
-        <Card className="rounded-[50px] p-6 w-[1000px]">
-            <div className="flex justify-between items-center mb-4">
+        <Card className="rounded-[50px] p-4 sm:p-6 w-full max-w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Vendas</h2>
                 <Button
                     titulo={"Criar nova Venda"}
                     className="bg-green-600 text-white"
                     onClick={handleCreate}
-                    type={undefined}
-                    disabled={undefined}
                 />
             </div>
             
-            <TableComponent 
-                columns={[
-                    'id',
-                    'comprador',
-                    'data',
-                    'valor',
-                    'notaFiscalId',
-                    'mtrGeradorId',
-                    'mtrTransportadorId',
-                    'mtrDestinadorId',
-                ]}
-                data={data}
-            />
+            <div className="overflow-x-auto">
+                <TableComponent 
+                    columns={[
+                        'id',
+                        'comprador',
+                        'data',
+                        'valor',
+                        'notaFiscalId',
+                        'mtrGeradorId',
+                        'mtrTransportadorId',
+                        'mtrDestinadorId',
+                    ]}
+                    data={data}
+                />
+            </div>
             
-            <div className="flex justify-between items-center mt-4">
-                <div>
-                    <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
-                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "vendas")} />
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-4 flex-wrap">
+                <div className="flex mb-2 sm:mb-0">
+                    <Button titulo="Excluir selecionados" className="bg-red-600 text-white mr-2" />
+                    <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "vendas")} />
                 </div>
                 <div className="flex items-center">
                     <b 

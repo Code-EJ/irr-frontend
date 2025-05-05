@@ -34,13 +34,27 @@ const Login = () => {
         password: ""
       }} autoSetErrors={undefined} submitOnChange={undefined}>
         {() => (
-          <Card className="w-full min-w-[400px] h-[474.5px] flex flex-row rounded-[40px] border-[1px] border-[#ccc] md:rounded-r-[0px]">
+          <Card className="w-full min-w-[400px] h-[476.5px] flex flex-row rounded-[40px] border-[1px] border-[#ccc] md:rounded-r-[0px]">
             <div className="flex flex-col w-full">
               <h2 className="text-2xl text-[#133d1b] font-bold py-2.5 m-0">
                 Login
               </h2>
-              <InputText titulo="E-mail" name="email" onChange={undefined} className={undefined} titleStyle={undefined} mask={undefined} />
-              <InputText titulo="Senha" name="password" onChange={undefined} className={undefined} titleStyle={undefined} mask={undefined} />
+              <InputText
+                titulo="E-mail"
+                name="email"
+                onChange={undefined}
+                className="pl-2" 
+                titleStyle={undefined}
+                mask={undefined}
+              />
+              <InputText
+                titulo="Senha"
+                name="password"
+                onChange={undefined}
+                className="pl-2"
+                titleStyle={undefined}
+                mask={undefined}
+              />
               <div className="flex flex-col justify-between w-full">
                 <div className="flex flex-row justify-between w-full pt-4 pb-14">
                   <a style={{ fontSize: "15px", cursor: "pointer", paddingRight: "10px" }}>
@@ -66,7 +80,7 @@ const Login = () => {
         <img
           src={LoginImage}
           alt="Imagem de login"
-          className="rounded-r-[40px] w-full h-[474.5px] object-cover hidden md:block"
+          className="rounded-r-[40px] w-full h-[476.5px] object-cover hidden md:block"
         />
       </div>
     </>

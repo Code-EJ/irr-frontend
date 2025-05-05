@@ -6,21 +6,20 @@ import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
 
-
 const DonationList = () => {
-        const navigate = useNavigate();
-        const [page, setPage] = useState<number>(1);
-        const [data, setData] = useState<Array<any>>([]);
-        const donationService = DonationService;
+    const navigate = useNavigate();
+    const [page, setPage] = useState<number>(1);
+    const [data, setData] = useState<Array<any>>([]);
+    const donationService = DonationService;
         
     const fetchData = async (page: number | null) => {
         const response = await donationService.getAll(page);
-        setData(response?.data)
+        setData(response?.data);
         return response?.data;
     };
 
     const handleBack = () => {
-        navigate("/treatment-menu");
+        navigate("/distribution-menu");
     };
 
     useEffect(() => {
@@ -36,37 +35,41 @@ const DonationList = () => {
     };
 
     return (
-        <Card className="rounded-[50px] p-6 w-[1000px]">
-            <div className="flex justify-between items-center mb-4">
+        <Card className="rounded-[30px] p-4 sm:p-6 w-full max-w-full overflow-x-hidden">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4">
                 <h2 className="text-2xl font-bold">Doação</h2>
                 <Button
                     titulo={"Criar nova doação"}
                     className="bg-green-600 text-white"
                     onClick={handleCreate}
-                    type={undefined} disabled={undefined}
+                    type={undefined}
+                    disabled={undefined}
                 />
             </div>
-           
-            <TableComponent 
-                columns={[
-                    "id",
-                    "tipologiaId",
-                    "subtipologiaId",
-                    "pesagem",
-                    "doadorId",
-                    "criadorId",
-                ]}
-                data={data}
+
+            <div className="overflow-x-auto">
+                <TableComponent 
+                    columns={[
+                        "id",
+                        "tipologiaId",
+                        "subtipologiaId",
+                        "pesagem",
+                        "doadorId",
+                        "criadorId",
+                    ]}
+                    data={data}
                 />
-            <div className="flex justify-between items-center mt-4">
-                <div>
-                    <Button titulo="Excluir selecionados" className="bg-red-600 text-white"></Button>
-                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "doadores")} />
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-4">
+                <div className="flex flex-wrap gap-2">
+                    <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
+                    <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "doadores")} />
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                     <b 
                         className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4" 
-                        onClick={() => handleBack()}
+                        onClick={handleBack}
                     > 
                         Voltar
                     </b>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { VehicleService } from "../../services"; // Alterado o serviço para VehicleService
+import { VehicleService } from "../../services"; // Atualizado para VehicleService
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
@@ -10,7 +10,7 @@ const VehicleList = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [data, setData] = useState<Array<any>>([]);
-  const vehicleService = VehicleService; // Atualizado para usar o serviço VehicleService
+  const vehicleService = VehicleService;
 
   const fetchData = async (page: number | null) => {
     const response = await vehicleService.getAll(page);
@@ -27,7 +27,7 @@ const VehicleList = () => {
   };
 
   const handleCreate = () => {
-    navigate("/vehicle-create"); // Alterado para a rota de criação de veículo
+    navigate("/vehicle-create");
   };
 
   useEffect(() => {
@@ -39,30 +39,27 @@ const VehicleList = () => {
   }, [page]);
 
   return (
-    <Card className="rounded-[50px] p-6 w-[1000px]">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Veículos</h2> {/* Alterado para "Veículos" */}
+    <Card className="rounded-[50px] p-4 sm:p-6 w-full max-w-full">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Veículos</h2>
         <Button
-          titulo={"Criar novo Veículo"} // Alterado para criar novo veículo
+          titulo={"Criar novo Veículo"}
           className="bg-green-600 text-white"
           onClick={handleCreate}
-          type={undefined}
-          disabled={undefined}
         />
       </div>
 
-      <TableComponent
-        columns={[
-          'Placa',
-          'Modelo',
-        ]}
-        data={data}
-      />
+      <div className="overflow-x-auto">
+        <TableComponent
+          columns={['Placa', 'Modelo']}
+          data={data}
+        />
+      </div>
 
-      <div className="flex justify-between items-center mt-4">
-        <div>
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-4 flex-wrap">
+        <div className="flex mb-4 sm:mb-0">
           <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
-          <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "veiculos")} />
+          <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "veiculos")} />
         </div>
         <div className="flex items-center">
           <b
