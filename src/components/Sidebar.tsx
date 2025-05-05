@@ -9,6 +9,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const menuItems = [
+    { label: 'Menu', link: '/menu' },
     { label: 'Cadastro de Usuários', link: '/users-register' },
     { label: 'Manejo de Usuários', link: '/users-management' },
     { label: 'Tipologia', link: '/typology-list' },
@@ -22,7 +23,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { label: 'Motorista', link: '/driver-list' },
     { label: 'Material de Entrada', link: '/input-material-list' },
     { label: 'Material de Saída', link: '/output-material-list' },
-    { label: 'Mercado', link: '/sale-list' },
+    { label: 'Documento', link: '/document-list' },
+    { label: 'Mercado', link: '/sales-list' },
     { label: 'Perfil', link: '/profile' },
   ];
 

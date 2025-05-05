@@ -35,46 +35,49 @@ const CollectionList = () => {
     };
 
     return (
-        <Card className="rounded-[50px] p-6 w-[1000px]">
-            <div className="flex justify-between items-center mb-4">
+        <Card className="rounded-[30px] p-4 sm:p-6 w-full max-w-full overflow-x-hidden">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4">
                 <h2 className="text-2xl font-bold">Coletas</h2>
                 <Button
                     titulo={"Criar nova Coleta"}
                     className="bg-green-600 text-white"
                     onClick={handleCreate}
-                    type={undefined} disabled={undefined}
+                    type={undefined}
+                    disabled={undefined}
                 />
             </div>
 
-            <TableComponent 
-                columns={[
-                    'id',
-                    'dataRealizacao',
-                    'dataChegada',
-                    'dataSaida',
-                    'pesagem',
-                    'quilometragem',
-                    'veiculo.placa',
-                    'motorista.nome',
-                    'mtrGerador.numero',
-                    'mtrDestinador.numero',
-                    'mtrTransportador.numero',
-                    'diarioColeta.numero'
-                ]}
-                data={data}
-            />
+            <div className="overflow-x-auto">
+                <TableComponent 
+                    columns={[
+                        'id',
+                        'dataRealizacao',
+                        'dataChegada',
+                        'dataSaida',
+                        'pesagem',
+                        'quilometragem',
+                        'veiculo.placa',
+                        'motorista.nome',
+                        'mtrGerador.numero',
+                        'mtrDestinador.numero',
+                        'mtrTransportador.numero',
+                        'diarioColeta.numero'
+                    ]}
+                    data={data}
+                />
+            </div>
 
-            <div className="flex justify-between items-center mt-4">
-                <div>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-4">
+                <div className="flex flex-wrap gap-2">
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
-                    <Button titulo="Gerar Relatórios" className="bg-green-600 text-white ml-2" />
-                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "colections")} />
+                    <Button titulo="Gerar Relatórios" className="bg-green-600 text-white" />
+                    <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "colections")} />
                 </div>
-                <div className="flex items-center">
-                    <b 
-                        className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4" 
-                        onClick={() => handleBack()}
-                    > 
+                <div className="flex items-center gap-2">
+                    <b
+                        className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4"
+                        onClick={handleBack}
+                    >
                         Voltar
                     </b>
                     <Button className="text-white" titulo="<" onClick={() => setPage(page - 1)} disabled={page === 1} />

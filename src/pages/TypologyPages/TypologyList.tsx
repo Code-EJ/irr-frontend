@@ -15,11 +15,11 @@ const TipologyList = () => {
     const fetchData = async (page: number | null) => {
         const response = await typologyService.getAll(page);
         setData(response?.data);
-        return response?.data
+        return response?.data;
     };
 
     const handleBack = () => {
-        navigate("/materials-menu"); 
+        navigate("/materials-menu");
     };
 
     useEffect(() => {
@@ -35,8 +35,8 @@ const TipologyList = () => {
     };
 
     return (
-        <Card className="rounded-[50px] p-6 w-[1000px]">
-            <div className="flex justify-between items-center mb-4">
+        <Card className="rounded-[50px] p-6 w-full max-w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Tipologias</h2>
                 <Button
                     titulo={"Criar nova Tipologia"}
@@ -44,20 +44,18 @@ const TipologyList = () => {
                     onClick={handleCreate}
                 />
             </div>
-            
-            <TableComponent 
-                columns={[
-                    'id',
-                    'nome',
-                    'valor'
-                ]}
-                data={data}
-            />
 
-            <div className="flex justify-between items-center mt-4">
-                <div>
+            <div className="overflow-x-auto">
+                <TableComponent 
+                    columns={['id', 'nome', 'valor']}
+                    data={data}
+                />
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-4 flex-wrap">
+                <div className="mb-2 sm:mb-0">
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
-                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "Tipologia")} />
+                    <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "Tipologia")} />
                 </div>
                 <div className="flex items-center">
                     <b 

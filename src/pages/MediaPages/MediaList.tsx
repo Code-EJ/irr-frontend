@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { MediaService } from "../../services"; // Alterado para MediaService
+import { MediaService } from "../../services"; 
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
@@ -19,7 +19,7 @@ const MediaList = () => {
     };
 
     const handleBack = () => {
-        navigate("/document-menu"); // Você pode mudar a rota se quiser outra página inicial
+        navigate("/document-menu"); 
     };
 
     useEffect(() => {
@@ -31,19 +31,17 @@ const MediaList = () => {
     }, [page]);
 
     const handleCreate = () => {
-        navigate("/media-create"); // Atualizado para rota de criar Mídia
+        navigate("/media-create"); 
     };
 
     return (
-        <Card className="rounded-[50px] p-6 w-[1000px]">
-            <div className="flex justify-between items-center mb-4">
+        <Card className="rounded-[50px] p-4 sm:p-6 w-full max-w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Mídias</h2>
                 <Button
                     titulo={"Criar nova Mídia"}
                     className="bg-green-600 text-white"
                     onClick={handleCreate}
-                    type={undefined}
-                    disabled={undefined}
                 />
             </div>
             
@@ -55,10 +53,10 @@ const MediaList = () => {
                 data={data}
             />
             
-            <div className="flex justify-between items-center mt-4">
-                <div>
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
+                <div className="mb-4 sm:mb-0">
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
-                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "media")} />
+                    <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "media")} />
                 </div>
                 <div className="flex items-center">
                     <b 

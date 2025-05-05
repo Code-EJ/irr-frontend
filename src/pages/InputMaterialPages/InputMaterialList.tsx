@@ -57,8 +57,8 @@ const InputMaterialList = () => {
     };
 
     return (
-        <Card className="rounded-[50px] p-6 w-[1000px]">
-            <div className="flex justify-between items-center mb-4">
+        <Card className="rounded-[30px] p-4 sm:p-6 w-full max-w-full overflow-x-hidden">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4">
                 <h2 className="text-2xl font-bold">Materiais de Entrada</h2>
                 <Button
                     titulo={"Criar novo Material de Entrada"}
@@ -67,31 +67,42 @@ const InputMaterialList = () => {
                 />
             </div>
 
-            <TableComponent 
-                columns={[
-                    'id',
-                    'quantidade',
-                    'tipo',
-                    'subtipologiaId'
-                ]}
-                data={data}
-            />
+            <div className="overflow-x-auto">
+                <TableComponent 
+                    columns={[
+                        'id',
+                        'quantidade',
+                        'tipo',
+                        'subtipologiaId'
+                    ]}
+                    data={data}
+                />
+            </div>
 
-            <div className="flex justify-between items-center mt-4">
-                <div>
-                    <Button titulo="Excluir selecionados" className="bg-red-600 text-white"></Button>
-                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "material-entrada")} />
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-4">
+                <div className="flex flex-wrap gap-2">
+                    <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
+                    <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "material-entrada")} />
                 </div>
-                <div className="flex items-center">
-                    <b 
-                        className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4" 
-                        onClick={() => handleBack()}
-                    > 
+                <div className="flex items-center gap-2">
+                    <b
+                        className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4"
+                        onClick={handleBack}
+                    >
                         Voltar
                     </b>
-                    <Button className="text-white" titulo="<" onClick={() => setPage(page - 1)} disabled={page === 1} />
+                    <Button
+                        className="text-white"
+                        titulo="<"
+                        onClick={() => setPage(page - 1)}
+                        disabled={page === 1}
+                    />
                     <span className="mx-2">{page}</span>
-                    <Button className="text-white" titulo=">" onClick={() => setPage(page + 1)} />
+                    <Button
+                        className="text-white"
+                        titulo=">"
+                        onClick={() => setPage(page + 1)}
+                    />
                 </div>
             </div>
         </Card>

@@ -57,12 +57,12 @@ const OutputMaterialList = () => { // Nome da página alterado para OutputMateri
     };
 
     return (
-        <Card className="rounded-[50px] p-6 w-[1000px]">
-            <div className="flex justify-between items-center mb-4">
+        <Card className="rounded-[50px] p-6 w-full max-w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Materiais de Saída</h2>
                 <Button
                     titulo={"Criar novo Material de Saída"} // Alterado para Material de Saída
-                    className="bg-green-600 text-white"
+                    className="bg-green-600 text-white mt-4 sm:mt-0"
                     onClick={handleCreate}
                 />
             </div>
@@ -77,15 +77,15 @@ const OutputMaterialList = () => { // Nome da página alterado para OutputMateri
                 data={data}
             />
 
-            <div className="flex justify-between items-center mt-4">
-                <div>
-                    <Button titulo="Excluir selecionados" className="bg-red-600 text-white"></Button>
-                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "material-saida")} />
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
+                <div className="flex flex-wrap gap-2">
+                    <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
+                    <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "material-saida")} />
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center mt-4 sm:mt-0">
                     <b 
                         className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4" 
-                        onClick={() => handleBack()}
+                        onClick={handleBack}
                     > 
                         Voltar
                     </b>

@@ -15,11 +15,11 @@ const SubTypologyList = () => {
     const fetchData = async (page: number | null) => {
         const response = await subTypologyService.getAll(page);
         setData(response?.data);
-        return response?.data
+        return response?.data;
     };
 
     const handleBack = () => {
-        navigate("/materials-menu");  // Assuming there's a "tipology-menu" page to go back to.
+        navigate("/materials-menu");
     };
 
     useEffect(() => {
@@ -35,8 +35,8 @@ const SubTypologyList = () => {
     };
 
     return (
-        <Card className="rounded-[50px] p-6 w-[1000px]">
-            <div className="flex justify-between items-center mb-4">
+        <Card className="rounded-[50px] p-4 sm:p-6 w-full max-w-full">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Subtipologias</h2>
                 <Button
                     titulo={"Criar nova Subtipologia"}
@@ -50,17 +50,17 @@ const SubTypologyList = () => {
                     'id',
                     'nome',
                     'valor',
-                    'tipologiaId' // Consider including the tipologiaId for reference
+                    'tipologiaId'
                 ]}
                 data={data}
             />
 
-            <div className="flex justify-between items-center mt-4">
-                <div>
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-4 sm:flex-wrap">
+                <div className="flex flex-wrap gap-2">
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
-                    <Button titulo="Exportar CSV"  onClick={() => handleExport(fetchData, page, "sub-tipologia")} />
+                    <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "sub-tipologia")} />
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center mt-2 sm:mt-0">
                     <b 
                         className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4" 
                         onClick={() => handleBack()}
