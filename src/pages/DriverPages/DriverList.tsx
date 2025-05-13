@@ -51,6 +51,7 @@ const DriverList = () => {
         <TableComponent
           columns={["id", "nome", "cpf"]}
           data={data}
+          editUrl={"driver-update"}
         />
       </div>
 
