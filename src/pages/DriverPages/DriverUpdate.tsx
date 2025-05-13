@@ -5,42 +5,33 @@ import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
-import InputList from "../../components/InputList";
-import { DriverService, UserService } from "../../services";
+import { DriverService } from "../../services";
 import { toast } from "react-toastify";
 
 const DriverUpdate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [usuarios, setUsuarios] = useState([]);
-
   const [formData, setFormData] = useState({
     nome: "",
-    cpf: "",
-    criadorId: ""
+    cpf: ""
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [userRes, driverRes] = await Promise.all([
-          UserService.getAll(1, 9999),
-          DriverService.get(id!)
-        ]);
-        setUsuarios(userRes.data);
-
+        const driverRes = await DriverService.get(id!);
         const data = driverRes ?? {};
         setFormData({
           nome: data.nome ?? "",
-          cpf: data.cpf ?? "",
-          criadorId: data.criadorId ?? ""
+          cpf: data.cpf ?? ""
         });
       } catch (error) {
-        toast.error("Erro ao carregar dados do motorista.");
+        toast.error("Erro ao carregar dados.");
         console.error(error);
       }
     };
+
     fetchData();
   }, [id]);
 
@@ -58,9 +49,6 @@ const DriverUpdate = () => {
       console.error(error);
     }
   };
-
-  const mapToOptions = (list: any[], labelKey = "nomeCompleto", valueKey = "id") =>
-    list.map((item) => ({ name: item[labelKey], value: item[valueKey] }));
 
   return (
     <Card className="rounded-[50px] shadow-lg d-flex flex-col w-3/4 max-w-4x1 mx-auto p-4">
@@ -81,13 +69,6 @@ const DriverUpdate = () => {
                 name="cpf"
                 value={formData.cpf}
                 onChange={(value) => handleChange("cpf", value)}
-              />
-              <InputList
-                titulo="Criador"
-                name="criadorId"
-                value={formData.criadorId}
-                onChange={(value) => handleChange("criadorId", value)}
-                options={mapToOptions(usuarios)}
               />
             </div>
 

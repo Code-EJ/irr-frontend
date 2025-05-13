@@ -6,58 +6,66 @@ import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
 import InputList from "../../components/InputList";
+import InputFile from "../../components/InputFile";
 import { toast } from "react-toastify";
-import { DocumentService, MediaService } from "../../services";
+import { DocumentService } from "../../services";
 
 const DocumentCreate = () => {
   const navigate = useNavigate();
-  const [midias, setMidias] = useState([]);
   const [formData, setFormData] = useState({
     nome: "",
     dataDocumento: "",
-    dataInsercao: new Date().toISOString().split("T")[0],
-    tipo: "",
-    mediaId: "",
+    dataInsercao: new Date().toISOString(),
+    tipo: "NOTA_FISCAL",
+    arquivo: null,
   });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const midiasRes = await MediaService.getAll(1, 9999);
-        setMidias(midiasRes.data);
-      } catch (error) {
-        toast.error("Erro ao carregar mídias.");
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async () => {
+    if (!formData.nome || !formData.dataDocumento || !formData.tipo) {
+      toast.error('Preencha todos os campos obrigatórios!');
+      return;
+    }
+
+    if (!formData.arquivo) {
+      toast.error('Você deve enviar um arquivo.');
+      return;
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    if (!allowedTypes.includes(formData.arquivo.type)) {
+      toast.error('Tipo de arquivo não permitido! Por favor, envie uma imagem ou PDF.');
+      return;
+    }
+
+    const dataDocumentoFormatted = `${formData.dataDocumento}T00:00:00.000Z`;
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("nome", formData.nome);
+    formDataToSend.append("dataDocumento", dataDocumentoFormatted);
+    formDataToSend.append("dataInsercao", formData.dataInsercao);
+    formDataToSend.append("tipo", formData.tipo);
+    formDataToSend.append("arquivo", formData.arquivo);
+
     try {
-      await DocumentService.create(formData);
+      await DocumentService.create(formDataToSend);
       toast.success("Documento criado com sucesso!");
-      navigate("/documento-list");
+      navigate("/document-list");
     } catch (error) {
       toast.error("Erro ao criar documento. Verifique os dados.");
       console.error(error);
     }
   };
 
-  const mapToOptions = (list, labelKey = "nome", valueKey = "id") =>
-    list.map((item) => ({ name: item[labelKey], value: item[valueKey] }));
-
   const tiposDocumento = [
-    "MTR-GERADOR",
-    "MTR-DESTINADOR",
-    "MTR-TRANSPORTADOR",
-    "DIARIO-COLETA",
-    "NOTA-FISCAL",
-    "OUTRO",
+    "NOTA_FISCAL",
+    "MTR_GERADOR",
+    "MTR_TRANSPORTADOR",
+    "MTR_DESTINADOR",
+    "DIARIO_COLETA",
   ];
 
   return (
@@ -95,16 +103,15 @@ const DocumentCreate = () => {
                 }))}
                 onChange={(value) => handleChange("tipo", value)}
               />
-              <InputList
-                titulo="Mídia"
-                name="mediaId"
-                options={mapToOptions(midias)}
-                onChange={(value) => handleChange("mediaId", value)}
+              <InputFile
+                titulo="Arquivo"
+                name="arquivo"
+                onChange={(file) => handleChange("arquivo", file)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path="/documento-list" />
+              <BackButton path="/document-list" />
               <Button
                 titulo="Criar"
                 type="button"

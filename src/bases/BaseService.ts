@@ -27,7 +27,7 @@ class BaseService<E extends Model> {
   async getAll(page: number | null, limit: number = 10): Promise<{ data: E[]; total: number } | undefined> {
     const params = page !== null ? { page, limit } : {};
     const res = await apiClient.get(`/${this.route}`, { params });
-  
+
     if (res.status === 200) {
       return res.data;
     }
@@ -42,8 +42,8 @@ class BaseService<E extends Model> {
     }
   }
 
-  async update(p0: string, p1: { data: Date; tipo: "TOTAL" | "PARCIAL"; tipoOrigem: "DOACAO" | "COLETA"; tipoDestino: "DOACAO" | "COLETA"; volumeTotal: number; volumeRejeito: number; subtipologiaId: string; }, data: Partial<E>): Promise<E | undefined> {
-    const res = await apiClient.patch(`/${this.route}/${data.id}`, data);
+  async update(p0: string, data: Partial<E>): Promise<E | undefined> {
+    const res = await apiClient.patch(`/${this.route}/${p0}`, data);
 
     if (res.status === 200 || res.status === 201) {
       return res.data;

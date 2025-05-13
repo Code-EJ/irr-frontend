@@ -10,13 +10,11 @@ import MaterialsMenu from "../pages/MenuButtons/MaterialsMenu";
 import StockMenu from "../pages/MenuButtons/StockMenu";
 import UserDetails from "../pages/Profile/UserDetails";
 import { UserEdit } from "../pages/Profile/UserEdit";
-import DocumentMenu from "../pages/MenuButtons/DocumentMenu";
 import CollectionList from "../pages/CollectionPages/CollectionList";
 import DocumentList from "../pages/DocumentPages/DocumentList";
 import DonationList from "../pages/DonationPages/DonationList";
 import DriverList from "../pages/DriverPages/DriverList";
 import InputMaterialList from "../pages/InputMaterialPages/InputMaterialList";
-import MediaList from "../pages/MediaPages/MediaList";
 import OutputMaterialList from "../pages/OutputMaterialPages/OutputMaterialList";
 import PressingList from "../pages/PressingPages/PressingList";
 import SalesList from "../pages/SalesPages/SalesList";
@@ -27,24 +25,22 @@ import VehicleList from "../pages/VehiclePages/VehicleList";
 import TypologyList from "../pages/TypologyPages/TypologyList";
 import CollectionCreate from "../pages/CollectionPages/CollectionCreate";
 import DocumentCreate from "../pages/DocumentPages/DocumentCreate";
-import DonationCreate from "../pages/PagesAntigas/DonationCreate";
+import DonationCreate from "../pages/DonationPages/DonationCreate";
 import DriverCreate from "../pages/DriverPages/DriverCreate";
 import InputMaterialCreate from "../pages/InputMaterialPages/InputMaterialCreate";
-import MediaCreate from "../pages/MediaPages/MediaCreate";
 import OutputMaterialCreate from "../pages/OutputMaterialPages/OutputMaterialCreate";
 import PressingCreate from "../pages/PressingPages/PressingCreate";
 import SalesCreate from "../pages/SalesPages/SalesCreate";
 import SubTypologyCreate from "../pages/SubTypologyPages/SubTypologyCreate";
 import TypologyCreate from "../pages/TypologyPages/TypologyCreate";
 import TriageCreate from "../pages/TriagePages/TriageCreate";
-import VehicleCreate from "../pages/PagesAntigas/VehicleCreate";
+import VehicleCreate from "../pages/VehiclePages/VehicleCreate";
 import DonatorCreate from "../pages/DonatorPages/DonatorCreate";
 import CollectionUpdate from "../pages/CollectionPages/CollectionUpdate";
 import DocumentUpdate from "../pages/DocumentPages/DocumentUpdate";
 import DonationUpdate from "../pages/DonationPages/DonationUpdate";
 import DriverUpdate from "../pages/DriverPages/DriverUpdate";
 import InputMaterialUpdate from "../pages/InputMaterialPages/InputMaterialUpdate";
-import MediaUpdate from "../pages/MediaPages/MediaUpdate";
 import OutputMaterialUpdate from "../pages/OutputMaterialPages/OutputMaterialUpdate";
 import PressingUpdate from "../pages/PressingPages/PressingUpdate";
 import SalesUpdate from "../pages/SalesPages/SalesUpdate";
@@ -69,52 +65,48 @@ const privateRoutesList = [
   { path: "/materials-menu", element: <MaterialsMenu /> },
   { path: "/stock-menu", element: <StockMenu /> },
   { path: "/treatment-menu", element: <TreatmentMenu /> },
-  { path: "/document-menu", element: <DocumentMenu /> },
   // Rotas de listagem
-  { path: "/collection-list", element: <CollectionList/> },
-  { path: "/document-list", element: <DocumentList/> },
-  { path: "/donation-list", element: <DonationList/> },
-  { path: "/driver-list", element: <DriverList/> },
-  { path: "/input-material-list", element: <InputMaterialList/> },
-  { path: "/media-list", element: <MediaList/> },
-  { path: "/output-material-list", element: <OutputMaterialList/> },
-  { path: "/pressing-list", element: <PressingList/> },
-  { path: "/sales-list", element: <SalesList/> },
-  { path: "/subtypology-list", element: <SubTypologyList/> },
-  { path: "/typology-list", element: <TypologyList/> },
-  { path: "/triage-list", element: <TriageList/> },
-  { path: "/vehicle-list", element: <VehicleList/> },
-  { path: "/donator-list", element: <DonatorList/> },
+  { path: "/collection-list", element: <CollectionList /> },
+  { path: "/document-list", element: <DocumentList /> },
+  { path: "/donation-list", element: <DonationList /> },
+  { path: "/driver-list", element: <DriverList /> },
+  { path: "/input-material-list", element: <InputMaterialList /> },
+  { path: "/output-material-list", element: <OutputMaterialList /> },
+  { path: "/pressing-list", element: <PressingList /> },
+  { path: "/sales-list", element: <SalesList /> },
+  { path: "/subtypology-list", element: <SubTypologyList /> },
+  { path: "/typology-list", element: <TypologyList /> },
+  { path: "/triage-list", element: <TriageList /> },
+  { path: "/vehicle-list", element: <VehicleList /> },
+  { path: "/donator-list", element: <DonatorList /> },
   // Rotas de criação
-  { path: "/collection-create", element: <CollectionCreate/> },
-  { path: "/document-create", element: <DocumentCreate/> },
-  { path: "/donation-create", element: <DonationCreate/> },
-  { path: "/driver-create", element: <DriverCreate/> },
-  { path: "/input-material-create", element: <InputMaterialCreate/> },
-  { path: "/media-create", element: <MediaCreate/> },
-  { path: "/output-material-create", element: <OutputMaterialCreate/> },
-  { path: "/pressing-create", element: <PressingCreate/> },
-  { path: "/sales-create", element: <SalesCreate/> },
-  { path: "/subtypology-create", element: <SubTypologyCreate/> },
-  { path: "/typology-create", element: <TypologyCreate/> },
-  { path: "/triage-create", element: <TriageCreate/> },
-  { path: "/vehicle-create", element: <VehicleCreate/> },
-  { path: "/donator-create", element: <DonatorCreate/> },
-  // Rotas de atualização
-  { path: "/collection-update", element: <CollectionUpdate/> },
-  { path: "/document-update", element: <DocumentUpdate/> },
-  { path: "/donation-update", element: <DonationUpdate/> },
-  { path: "/driver-update", element: <DriverUpdate/> },
-  { path: "/input-material-update", element: <InputMaterialUpdate/> },
-  { path: "/media-update", element: <MediaUpdate/> },
-  { path: "/output-material-update", element: <OutputMaterialUpdate/> },
-  { path: "/pressing-update", element: <PressingUpdate/> },
-  { path: "/sales-update", element: <SalesUpdate/> },
-  { path: "/subtypology-update", element: <SubTypologyUpdate/> },
-  { path: "/typology-update", element: <TypologyUpdate/> },
-  { path: "/triage-update", element: <TriageUpdate/> },
-  { path: "/vehicle-update", element: <VehicleUpdate/> },
-  { path: "/donator-update", element: <DonatorUpdate/> },
+  { path: "/collection-create", element: <CollectionCreate /> },
+  { path: "/document-create", element: <DocumentCreate /> },
+  { path: "/donation-create", element: <DonationCreate /> },
+  { path: "/driver-create", element: <DriverCreate /> },
+  { path: "/input-material-create", element: <InputMaterialCreate /> },
+  { path: "/output-material-create", element: <OutputMaterialCreate /> },
+  { path: "/pressing-create", element: <PressingCreate /> },
+  { path: "/sales-create", element: <SalesCreate /> },
+  { path: "/subtypology-create", element: <SubTypologyCreate /> },
+  { path: "/typology-create", element: <TypologyCreate /> },
+  { path: "/triage-create", element: <TriageCreate /> },
+  { path: "/vehicle-create", element: <VehicleCreate /> },
+  { path: "/donator-create", element: <DonatorCreate /> },
+  // Rotas de atualização com parâmetro de ID
+  { path: "/collection-update/:id", element: <CollectionUpdate /> },
+  { path: "/document-update/:id", element: <DocumentUpdate /> },
+  { path: "/donation-update/:id", element: <DonationUpdate /> },
+  { path: "/driver-update/:id", element: <DriverUpdate /> },
+  { path: "/input-material-update/:id", element: <InputMaterialUpdate /> },
+  { path: "/output-material-update/:id", element: <OutputMaterialUpdate /> },
+  { path: "/pressing-update/:id", element: <PressingUpdate /> },
+  { path: "/sales-update/:id", element: <SalesUpdate /> },
+  { path: "/subtypology-update/:id", element: <SubTypologyUpdate /> },
+  { path: "/typology-update/:id", element: <TypologyUpdate /> },
+  { path: "/triage-update/:id", element: <TriageUpdate /> },
+  { path: "/vehicle-update/:id", element: <VehicleUpdate /> },
+  { path: "/donator-update/:id", element: <DonatorUpdate /> },
   // Rotas de Manipulação de Usuários
   { path: "/users-register", element: <RegisterUserAdmin /> },
   { path: "/users-management", element: <ManageUsers /> },

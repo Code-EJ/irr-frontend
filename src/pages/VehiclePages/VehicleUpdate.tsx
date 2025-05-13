@@ -13,7 +13,6 @@ const VehicleUpdate = () => {
   const { id } = useParams(); // Pega o ID da URL
 
   const [formData, setFormData] = useState({
-    id: "",
     placa: "",
     modelo: "",
   });
@@ -23,7 +22,6 @@ const VehicleUpdate = () => {
       try {
         const response = await VehicleService.get(id!); // Substitua com o serviço real para buscar o Vehicle
         setFormData({
-          id: response?.id ?? "",
           placa: response?.placa ?? "",
           modelo: response?.modelo ?? "",
         });
@@ -45,9 +43,9 @@ const VehicleUpdate = () => {
       await VehicleService.update(id!, {
         placa: formData.placa,
         modelo: formData.modelo,
-      }); // Substitua com o serviço real para atualizar o veículo
+      });
       toast.success("Veículo atualizado com sucesso!");
-      navigate("/vehicle-list"); // Atualize para a rota de listagem de veículos
+      navigate("/vehicle-list");
     } catch (error) {
       toast.error("Erro ao atualizar veículo. Verifique os dados e tente novamente.");
       console.error(error);
@@ -67,16 +65,6 @@ const VehicleUpdate = () => {
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR VEÍCULO</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-              <InputText
-                type="text"
-                titulo="ID"
-                name="id"
-                value={formData.id}
-                titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                onChange={(value) => handleChange("id", value)}
-                disabled
-              />
 
               <InputText
                 type="text"

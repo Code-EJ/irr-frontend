@@ -3,7 +3,7 @@ import { Media } from "../models/Entities";
 
 class MediaService extends BaseService<Media> {
   constructor() {
-    super("media");
+    super("documentos");
   }
 }
 

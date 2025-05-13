@@ -19,7 +19,7 @@ const DocumentList = () => {
     };
 
     const handleBack = () => {
-        navigate("/document-menu");
+        navigate("/menu");
     };
 
     useEffect(() => {
@@ -50,21 +50,11 @@ const DocumentList = () => {
             <div className="overflow-x-auto">
                 <TableComponent
                     columns={[
-                        'id',
                         'nome',
                         'dataDocumento',
                         'dataInsercao',
                         'tipo',
                         'mediaId',
-                        'coletasMTRGerador',
-                        'coletasMTRDestinador',
-                        'coletasMTRTransportador',
-                        'coletasDiarioColota',
-                        'MaterialSaida',
-                        'notaFiscalVenda',
-                        'mtrGeradorVenda',
-                        'mtrTransportadorVenda',
-                        'mtrDestinadorVenda',
                     ]}
                     data={data}
                 />

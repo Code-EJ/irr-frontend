@@ -49,7 +49,7 @@ const DriverList = () => {
 
       <div className="overflow-x-auto">
         <TableComponent
-          columns={["id", "nome", "cpf", "criadorId"]}
+          columns={["id", "nome", "cpf"]}
           data={data}
         />
       </div>
