@@ -6,60 +6,58 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BackgroundImage from "../components/BackgroundImage";
 import { deleteToken } from "../config/security/Client";
+import { API_HOST } from "../consts";
 
 const AppRouter = () => {
-  // Rotas se tornam publicas no inicio
   const [routes, setRoutes] = useState(publicRoutes);
-  const [validToken, setValidateToken] = useState(false); // Significa q a validaçao ocorreu
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
 
-  // Checa se o usuario e valido pelo token
-  // Se é válido, troca as rotas para privadas
+  useEffect(() => {
+    window.addEventListener("user-logged-in", checkUserIsValid);
+    return () => window.removeEventListener("user-logged-in", checkUserIsValid);
+  }, []);
+
+  
   const checkUserIsValid = async () => {
+    const token = getToken();
+
+    if (!token) {
+      setRoutes(publicRoutes);
+      setIsAuthChecked(true);
+      return;
+    }
+
     try {
+      // Call your API to validate token
+      await apiClient.get(`${API_HOST}/auth/validate-token`); // adjust the endpoint as needed
       setRoutes(privateRoutes);
     } catch (err) {
       deleteToken();
-      setRoutes(privateRoutes);
+      setRoutes(publicRoutes);
     }
-    if (getToken()) {
-      setRoutes(privateRoutes)
-    }
-    else {
-      setRoutes(privateRoutes)
-    }
-    setValidateToken(true);
+
+    setIsAuthChecked(true);
   };
 
   useEffect(() => {
     checkUserIsValid();
   }, []);
 
-  // Enquanto as rotas nao validaram, mantém um Skeleton
-  // Depois que validaram, setam as rotas
-  if (validToken) {
-    if (routes == privateRoutes) {
-      return (
-        <>
-          <Header />
-          <BackgroundImage>
-            <RouterProvider router={routes} />
-          </BackgroundImage>
-          <Footer />
-        </>
-      )
-    } else {
-      return (
-        <>
-          <BackgroundImage>
-            <RouterProvider router={routes} />
-          </BackgroundImage>
-          <Footer />
-        </>
-      )
-    }
-  } else {
-    return <>carregando...</>;
+  if (!isAuthChecked) {
+    return <>Carregando...</>;
   }
+
+  const isPrivate = routes === privateRoutes;
+
+  return (
+    <>
+      {isPrivate && <Header />}
+      <BackgroundImage>
+        <RouterProvider router={routes} />
+      </BackgroundImage>
+      <Footer />
+    </>
+  );
 };
 
 export default AppRouter;
