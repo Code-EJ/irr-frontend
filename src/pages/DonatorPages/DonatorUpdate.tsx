@@ -5,6 +5,7 @@ import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
+import InputList from "../../components/InputList";
 import { DonatorService } from "../../services";
 import { toast } from "react-toastify";
 
@@ -13,22 +14,25 @@ const DonatorUpdate = () => {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    id: "",
     nome: "",
     endereco: "",
-    tipo: "",
+    tipo: "PESSOA_FISICA",
     cadastroNacional: "",
   });
+
+  const tiposDoador = [
+    "PESSOA_FISICA",
+    "PESSOA_JURIDICA"
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await DonatorService.get(id!);
         setFormData({
-          id: response?.id ?? "",
           nome: response?.nome ?? "",
           endereco: response?.endereco ?? "",
-          tipo: response?.tipo ?? "",
+          tipo: response?.tipo ?? "PESSOA_FISICA",
           cadastroNacional: response?.cadastroNacional ?? "",
         });
       } catch (error) {
@@ -46,13 +50,7 @@ const DonatorUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await DonatorService.update(id!, {
-        nome: formData.nome,
-        endereco: formData.endereco,
-        tipo: formData.tipo,
-        cadastroNacional: formData.cadastroNacional,
-      }, { id });
-
+      await DonatorService.update(id!, formData);
       toast.success("Doador atualizado com sucesso!");
       navigate("/donator-list");
     } catch (error) {
@@ -71,7 +69,7 @@ const DonatorUpdate = () => {
       >
         {(formik) => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR DOADOR</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">Atualizar Doador</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
@@ -79,6 +77,8 @@ const DonatorUpdate = () => {
                 titulo="Nome"
                 name="nome"
                 value={formData.nome}
+                titleStyle="text-black"
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("nome", value)}
               />
               <InputText
@@ -86,12 +86,17 @@ const DonatorUpdate = () => {
                 titulo="Endereço"
                 name="endereco"
                 value={formData.endereco}
+                titleStyle="text-black"
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("endereco", value)}
               />
-              <InputText
-                type="text"
-                titulo="Tipo"
+              <InputList
+                titulo="Tipo de Doador"
                 name="tipo"
+                options={tiposDoador.map((tipo) => ({
+                  name: tipo,
+                  value: tipo,
+                }))}
                 value={formData.tipo}
                 onChange={(value) => handleChange("tipo", value)}
               />
@@ -100,6 +105,8 @@ const DonatorUpdate = () => {
                 titulo="Cadastro Nacional"
                 name="cadastroNacional"
                 value={formData.cadastroNacional}
+                titleStyle="text-black"
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("cadastroNacional", value)}
               />
             </div>

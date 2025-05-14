@@ -5,19 +5,24 @@ import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
-import { DonatorService } from "../../services"; // <-- Altere ou crie esse service
+import { DonatorService } from "../../services";
 import { toast } from "react-toastify";
+import InputList from   "../../components/InputList";
 
 const DonatorCreate = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    id: "",
     nome: "",
     endereco: "",
-    tipo: "",
+    tipo: "PESSOA_FISICA",
     cadastroNacional: "",
   });
+
+  const tiposDoador = [
+    "PESSOA_FISICA",
+    "PESSOA_JURIDICA"
+  ]
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -25,9 +30,9 @@ const DonatorCreate = () => {
 
   const handleSubmit = async () => {
     try {
-      await DonatorService.create(formData); // Certifique-se de ter esse service
+      await DonatorService.create(formData); 
       toast.success("Doador criado com sucesso!");
-      navigate("/donator-list"); // Altere para a rota correta da listagem
+      navigate("/donator-list"); 
     } catch (error) {
       toast.error("Erro ao criar doador. Verifique os dados e tente novamente.");
       console.error(error);
@@ -47,14 +52,6 @@ const DonatorCreate = () => {
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">Cadastrar Doador</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-              <InputText
-                type="text"
-                titulo="ID"
-                name="id"
-                titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                onChange={(value) => handleChange("id", value)}
-              />
 
               <InputText
                 type="text"
@@ -74,12 +71,13 @@ const DonatorCreate = () => {
                 onChange={(value) => handleChange("endereco", value)}
               />
 
-              <InputText
-                type="text"
-                titulo="Tipo"
+              <InputList
+                titulo="Tipo de Doador"
                 name="tipo"
-                titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                options={tiposDoador.map((tipo) => ({
+                  name: tipo,
+                  value: tipo,
+                }))}
                 onChange={(value) => handleChange("tipo", value)}
               />
 
