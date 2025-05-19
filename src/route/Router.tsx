@@ -1,57 +1,46 @@
 import { RouterProvider } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { publicRoutes, privateRoutes } from "./RoutesList";
-import { apiClient, getToken } from "../config/security/ApiClient";
+import { getToken } from "../config/security/ApiClient";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BackgroundImage from "../components/BackgroundImage";
-import { deleteToken } from "../config/security/Client";
-import { API_HOST } from "../consts";
+import { toast } from "react-toastify";
 
 const AppRouter = () => {
-  const [routes, setRoutes] = useState(publicRoutes);
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
+
+  const [routes, setRoutes] = useState( 
+    getToken() ? privateRoutes : publicRoutes
+  );
 
   useEffect(() => {
-    window.addEventListener("user-logged-in", checkUserIsValid);
-    return () => window.removeEventListener("user-logged-in", checkUserIsValid);
-  }, []);
+    const handleLogin = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const message = customEvent.detail?.message;
 
-  
-  const checkUserIsValid = async () => {
-    const token = getToken();
+      if (message) {
+        console.log("mensagem recebida.", message);
+      };
+      
 
-    if (!token) {
-      setRoutes(publicRoutes);
-      setIsAuthChecked(true);
-      return;
-    }
+      if (getToken()) {
+        console.log(getToken())
+        setRoutes(privateRoutes);
+        console.log(routes === privateRoutes)
+        window.location.href = "/menu";
+      }
 
-    try {
-      // Call your API to validate token
-      await apiClient.get(`${API_HOST}/auth/validate-token`); // adjust the endpoint as needed
-      setRoutes(privateRoutes);
-    } catch (err) {
-      deleteToken();
-      setRoutes(publicRoutes);
-    }
-
-    setIsAuthChecked(true);
   };
 
-  useEffect(() => {
-    checkUserIsValid();
+    window.addEventListener("user-logged-in", handleLogin);
+    return () =>{
+      window.removeEventListener("user-logged-in", handleLogin);
+    } 
   }, []);
-
-  if (!isAuthChecked) {
-    return <>Carregando...</>;
-  }
-
-  const isPrivate = routes === privateRoutes;
 
   return (
     <>
-      {isPrivate && <Header />}
+      {routes === privateRoutes && <Header />}
       <BackgroundImage>
         <RouterProvider router={routes} />
       </BackgroundImage>

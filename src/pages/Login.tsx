@@ -1,31 +1,33 @@
 import Button from "../components/Button";
 import Card from "../components/Card";
 import InputText from "../components/InputText";
-import { useNavigate } from "react-router-dom";
 import SimpleForm from "../components/SimpleForm";
-import { useEffect } from "react";
 import LoginImage from "../assets/imgs/background.png";
 import { AuthService } from "../services";
 import { toast } from "react-toastify";
-import { deleteToken } from "../config/security/Client";
 
 const Login = () => {
-  const navigate = useNavigate();
-
   const onSubmit = async (values: { email: any; password: any; }) => {
     const res = await AuthService.login({
       email: values.email,
       senha: values.password
     })
 
-    if (!res) toast.error("Usuário invalido");
+    if (res.status === 200 ) {
+      const event = new CustomEvent("user-logged-in", {
+        detail: { mesage: "Login realizado com sucesso."}
+      })
+      window.dispatchEvent(event);
 
-    navigate("/menu");
+      return;
+
+    } else {
+      toast.error(res.error);
+
+      return;
+    }
+
   };
-
-  useEffect(() => {
-    deleteToken();
-  }, []);
 
   return (
     <>
@@ -54,7 +56,8 @@ const Login = () => {
                 className="pl-2"
                 titleStyle={undefined}
                 mask={undefined}
-              />
+                type="password"
+                />
               <div className="flex flex-col justify-between w-full">
                 <div className="flex flex-row justify-between w-full pt-4 pb-14">
                   <a style={{ fontSize: "15px", cursor: "pointer", paddingRight: "10px" }}>
