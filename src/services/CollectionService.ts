@@ -1,9 +1,9 @@
 import BaseService from "../bases/BaseService";
-import { Vehicle } from "../models/Entities";
+import { Collection } from "../models/Entities";
 
-class CollectionService extends BaseService<Vehicle> {
+class CollectionService extends BaseService<Collection> {
   constructor() {
-    super("veiculos");
+    super("coletas");
   }
 }
 
