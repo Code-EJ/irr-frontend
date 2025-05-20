@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { SubTypologyService } from "../../services";
+import { SubTypologyService, TypologyService } from "../../services"; 
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
@@ -10,25 +10,46 @@ const SubTypologyList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
     const [data, setData] = useState<Array<any>>([]);
-    const subTypologyService = SubTypologyService;
+    const [typologies, setTypologies] = useState<{ id: string; nome: string }[]>([]);
+
+    const fetchTypologies = async () => {
+        try {
+            const response = await TypologyService.getAll(1, 9999);
+            setTypologies(response?.data || []);
+        } catch (error) {
+            console.error("Erro ao carregar tipologias", error);
+        }
+    };
 
     const fetchData = async (page: number | null) => {
-        const response = await subTypologyService.getAll(page);
-        setData(response?.data);
-        return response?.data;
+        const response = await SubTypologyService.getAll(page);
+        let subtipologias = response?.data || [];
+
+        const subtipologiasComNome = subtipologias.map((item: any) => {
+            const tipologia = typologies.find(t => t.id === item.tipologiaId);
+            return {
+                ...item,
+                tipologia: tipologia ? tipologia.nome : "Desconhecida"
+            };
+        });
+
+        setData(subtipologiasComNome);
+        return subtipologiasComNome;
     };
+
+    useEffect(() => {
+        fetchTypologies();
+    }, []);
+
+    useEffect(() => {
+        if (typologies.length > 0) {
+            fetchData(page);
+        }
+    }, [typologies, page]);
 
     const handleBack = () => {
         navigate("/materials-menu");
     };
-
-    useEffect(() => {
-        fetchData(page);
-    }, []);
-
-    useEffect(() => {
-        fetchData(page);
-    }, [page]);
 
     const handleCreate = () => {
         navigate("/subtypology-create");
@@ -47,10 +68,9 @@ const SubTypologyList = () => {
             
             <TableComponent 
                 columns={[
-                    'id',
                     'nome',
                     'valor',
-                    'tipologiaId'
+                    'tipologia' 
                 ]}
                 data={data}
             />

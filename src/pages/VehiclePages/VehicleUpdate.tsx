@@ -40,10 +40,15 @@ const VehicleUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await VehicleService.update(id!, {
-        placa: formData.placa,
-        modelo: formData.modelo,
-      });
+      await VehicleService.update(
+        id!,
+        { nome: "", valor: 0 }, 
+        { id },
+        {
+          placa: formData.placa,
+          modelo: formData.modelo,
+        }
+      );
       toast.success("Veículo atualizado com sucesso!");
       navigate("/vehicle-list");
     } catch (error) {

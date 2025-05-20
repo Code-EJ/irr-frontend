@@ -50,7 +50,15 @@ const DonatorUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await DonatorService.update(id!, formData);
+      await DonatorService.update(
+        id!,
+        { nome: formData.nome, valor: 0 },
+        { id },
+        {
+          ...formData,
+          tipo: formData.tipo as "PESSOA_FISICA" | "PESSOA_JURIDICA",
+        }
+      );
       toast.success("Doador atualizado com sucesso!");
       navigate("/donator-list");
     } catch (error) {

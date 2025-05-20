@@ -15,11 +15,11 @@ const TriageCreate = () => {
 
   const [formData, setFormData] = useState({
     data: "",
-    tipo: "",
+    tipo: "TOTAL",
     volumeTotal: "",
     volumeRejeito: "",
-    tipoOrigem: "",
-    tipoDestino: "",
+    tipoOrigem: "DOACAO",
+    tipoDestino: "DOACAO",
     subtipologiaId: "",
   });
 
@@ -43,6 +43,12 @@ const TriageCreate = () => {
           value: item.id,
         })) ?? [];
         setSubtypologies(mapped);
+        if (mapped.length > 0 && !formData.subtipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            subtipologiaId: mapped[0].value,
+          }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
         console.error(error);
@@ -65,6 +71,7 @@ const TriageCreate = () => {
         tipoDestino: formData.tipoDestino as "DOACAO" | "COLETA",
         volumeTotal: Number(formData.volumeTotal),
         volumeRejeito: Number(formData.volumeRejeito),
+        subtipologiaId: formData.subtipologiaId,
       });
       toast.success("Triagem criada com sucesso!");
       navigate("/triage-list");
@@ -146,13 +153,14 @@ const TriageCreate = () => {
                 name="subtipologiaId"
                 options={subtypologies}
                 titleStyle="text-black"
+                value={formData.subtipologiaId}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("subtipologiaId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"triage-list"} />
+              <BackButton path={"/triage-list"} />
               <Button
                 titulo="Criar"
                 type="button"

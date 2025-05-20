@@ -42,8 +42,8 @@ class BaseService<E extends Model> {
     }
   }
 
-  async update(p0: string, data: Partial<E>): Promise<E | undefined> {
-    const res = await apiClient.patch(`/${this.route}/${p0}`, data);
+  async update(id: string, payload: { nome: string; valor: number; }, options: { id: string | undefined; }, data: Partial<E>): Promise<E | undefined> {
+    const res = await apiClient.patch(`/${this.route}/${id}`, data);
 
     if (res.status === 200 || res.status === 201) {
       return res.data;

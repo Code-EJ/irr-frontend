@@ -8,11 +8,10 @@ import InputText from "../../components/InputText";
 import { TypologyService } from "../../services";
 import { toast } from "react-toastify";
 
-const TipologyCreate = () => {
+const TypologyCreate = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    id: "",
     nome: "",
     valor: "",
   });
@@ -28,7 +27,7 @@ const TipologyCreate = () => {
         valor: Number(formData.valor),
       });
       toast.success("Tipologia criada com sucesso!");
-      navigate("/tipology-list");
+      navigate("/typology-list");
     } catch (error) {
       toast.error("Erro ao criar tipologia. Verifique os dados e tente novamente.");
       console.error(error);
@@ -50,17 +49,9 @@ const TipologyCreate = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
                 type="text"
-                titulo="ID"
-                name="id"
-                titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                onChange={(value) => handleChange("id", value)}
-              />
-
-              <InputText
-                type="text"
                 titulo="Nome"
                 name="nome"
+                value={formData.nome}
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("nome", value)}
@@ -70,6 +61,7 @@ const TipologyCreate = () => {
                 type="number"
                 titulo="Valor"
                 name="valor"
+                value={formData.valor}
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("valor", value)}
@@ -77,7 +69,7 @@ const TipologyCreate = () => {
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"tipology-list"} />
+              <BackButton path="/typology-list" />
               <Button
                 titulo="Criar"
                 type="button"
@@ -93,4 +85,4 @@ const TipologyCreate = () => {
   );
 };
 
-export default TipologyCreate;
+export default TypologyCreate;

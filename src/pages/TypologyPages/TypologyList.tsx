@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
 
-const TipologyList = () => {
+const TypologyList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
     const [data, setData] = useState<Array<any>>([]);
@@ -31,7 +31,7 @@ const TipologyList = () => {
     }, [page]);
 
     const handleCreate = () => {
-        navigate("/tipology-create");
+        navigate("/typology-create");
     };
 
     return (
@@ -47,7 +47,7 @@ const TipologyList = () => {
 
             <div className="overflow-x-auto">
                 <TableComponent 
-                    columns={['id', 'nome', 'valor']}
+                    columns={['nome', 'valor']}
                     data={data}
                 />
             </div>
@@ -73,4 +73,4 @@ const TipologyList = () => {
     );
 };
 
-export default TipologyList;
+export default TypologyList;

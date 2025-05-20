@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { TriageService } from "../../services";
+import { TriageService, SubTypologyService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
@@ -10,21 +10,32 @@ const TriageList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
     const [data, setData] = useState<Array<any>>([]);
-    const triageService = TriageService;
-
+    const [subtypologyMap, setSubtypologyMap] = useState<Record<string, string>>({});
+    
     const fetchData = async (page: number | null) => {
-        const response = await triageService.getAll(page);
-        setData(response?.data);
-        return response?.data;
+        const [triageResponse, subtypologyResponse] = await Promise.all([
+            TriageService.getAll(page),
+            SubTypologyService.getAll(1, 9999),
+        ]);
+
+        const subtypologies = subtypologyResponse?.data ?? [];
+        const subMap: Record<string, string> = {};
+        subtypologies.forEach((item: any) => {
+            subMap[item.id] = item.nome;
+        });
+        setSubtypologyMap(subMap);
+
+        const triageData = triageResponse?.data.map((item: any) => ({
+            ...item,
+            subtipologia: subMap[item.subtipologiaId] ?? item.subtipologiaId,
+        })) ?? [];
+
+        setData(triageData);
     };
 
     const handleBack = () => {
         navigate("/treatment-menu");
     };
-
-    useEffect(() => {
-        fetchData(page);
-    }, []);
 
     useEffect(() => {
         fetchData(page);
@@ -50,14 +61,13 @@ const TriageList = () => {
             <div className="overflow-x-auto">
                 <TableComponent 
                     columns={[
-                        'id',
                         'data',
                         'tipo',
                         'volumeTotal',
                         'volumeRejeito',
                         'tipoOrigem',
                         'tipoDestino',
-                        'subtipologiaId'
+                        'subtipologia'
                     ]}
                     data={data}
                 />

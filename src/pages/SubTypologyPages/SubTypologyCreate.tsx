@@ -14,7 +14,6 @@ const SubTypologyCreate = () => {
   const [typologies, setTypologies] = useState<{ name: string; value: string }[]>([]);
 
   const [formData, setFormData] = useState({
-    id: "",
     nome: "",
     valor: "",
     tipologiaId: "",
@@ -30,6 +29,12 @@ const SubTypologyCreate = () => {
           value: item.id,
         })) ?? [];
         setTypologies(mapped);
+        if (mapped.length > 0 && !formData.tipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            tipologiaId: mapped[0].value,
+          }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar tipologias.");
         console.error(error);
@@ -69,14 +74,6 @@ const SubTypologyCreate = () => {
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">Cadastrar Subtipologia</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-              <InputText
-                type="text"
-                titulo="ID"
-                name="id"
-                titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                onChange={(value) => handleChange("id", value)}
-              />
 
               <InputText
                 type="text"
@@ -101,13 +98,14 @@ const SubTypologyCreate = () => {
                 name="tipologiaId"
                 titleStyle="text-black"
                 options={typologies}
+                value={formData.tipologiaId} 
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("tipologiaId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"subtypology-list"} />
+              <BackButton path={"/subtypology-list"} />
               <Button
                 titulo="Criar"
                 type="button"

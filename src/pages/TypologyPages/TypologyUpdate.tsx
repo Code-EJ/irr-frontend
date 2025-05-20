@@ -8,12 +8,11 @@ import InputText from "../../components/InputText";
 import { TypologyService } from "../../services";
 import { toast } from "react-toastify";
 
-const TipologyUpdate = () => {
+const TypologyUpdate = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o ID da URL
+  const { id } = useParams(); 
 
   const [formData, setFormData] = useState({
-    id: "",
     nome: "",
     valor: "",
   });
@@ -23,7 +22,6 @@ const TipologyUpdate = () => {
       try {
         const response = await TypologyService.get(id!);
         setFormData({
-          id: response?.id ?? "",
           nome: response?.nome ?? "",
           valor: response?.valor?.toString() ?? "",
         });
@@ -42,10 +40,18 @@ const TipologyUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await TypologyService.update(id!, {
-        nome: formData.nome,
-        valor: Number(formData.valor),
-      }, { id });
+      await TypologyService.update(
+        id!,
+        {
+          nome: formData.nome,
+          valor: Number(formData.valor),
+        },
+        { id },
+        {
+          nome: formData.nome,
+          valor: Number(formData.valor),
+        }
+      );
       toast.success("Tipologia atualizada com sucesso!");
       navigate("/tipology-list");
     } catch (error) {
@@ -105,4 +111,4 @@ const TipologyUpdate = () => {
   );
 };
 
-export default TipologyUpdate;
+export default TypologyUpdate;
