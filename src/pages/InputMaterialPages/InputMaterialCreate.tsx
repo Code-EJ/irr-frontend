@@ -13,17 +13,19 @@ const InputMaterialCreate = () => {
   const navigate = useNavigate();
   const [subtypologies, setSubtypologies] = useState<{ name: string; value: string }[]>([]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    quantidade: string;
+    tipo: "DOACAO" | "COLETA";
+    subtipologiaId: string;
+  }>({
     quantidade: "",
-    tipo: "",
+    tipo: "DOACAO",
     subtipologiaId: "",
   });
 
   const tiposMaterial = [
-    { name: "PLÁSTICO", value: "PLASTICO" },
-    { name: "PAPEL", value: "PAPEL" },
-    { name: "VIDRO", value: "VIDRO" },
-    // Adicione mais tipos conforme necessário
+    { name: "DOAÇÃO", value: "DOACAO" },
+    { name: "COLETA", value: "COLETA" },
   ];
 
   useEffect(() => {
@@ -36,6 +38,12 @@ const InputMaterialCreate = () => {
           value: item.id,
         })) ?? [];
         setSubtypologies(mapped);
+        if (mapped.length > 0 && !formData.subtipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            subtipologiaId: mapped[0].value,
+          }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
         console.error(error);
@@ -100,13 +108,14 @@ const InputMaterialCreate = () => {
                 name="subtipologiaId"
                 options={subtypologies}
                 titleStyle="text-black"
+                value={formData.subtipologiaId}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("subtipologiaId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"material-entrada-list"} />
+              <BackButton path={"/input-material-list"} />
               <Button
                 titulo="Criar"
                 type="button"

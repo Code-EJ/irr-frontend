@@ -16,8 +16,8 @@ const PressingCreate = () => {
   const [formData, setFormData] = useState({
     data: "",
     volumeTotal: "",
-    tipoOrigem: "",
-    tipoDestino: "",
+    tipoOrigem: "DOACAO",
+    tipoDestino: "DOACAO",
     subtipologiaId: "",
   });
 
@@ -36,6 +36,12 @@ const PressingCreate = () => {
           value: item.id,
         })) ?? [];
         setSubtypologies(mapped);
+        if (mapped.length > 0 && !formData.subtipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            subtipologiaId: mapped[0].value,
+          }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
         console.error(error);
@@ -119,13 +125,14 @@ const PressingCreate = () => {
                 name="subtipologiaId"
                 options={subtypologies}
                 titleStyle="text-black"
+                value={formData.subtipologiaId}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("subtipologiaId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"pressing-list"} />
+              <BackButton path={"/pressing-list"} />
               <Button
                 titulo="Criar"
                 type="button"

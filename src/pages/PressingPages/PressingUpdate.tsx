@@ -11,17 +11,15 @@ import { toast } from "react-toastify";
 
 const PressingUpdate = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o id da URL
+  const { id } = useParams();
   const [subtypologies, setSubtypologies] = useState<{ name: string; value: string }[]>([]);
 
   const [formData, setFormData] = useState({
     data: "",
     volumeTotal: "",
-    tipoOrigem: "",
-    tipoDestino: "",
+    tipoOrigem: "DOACAO",
+    tipoDestino: "DOACAO",
     subtipologiaId: "",
-    tipo: "TOTAL", // Default value, adjust as needed
-    volumeRejeito: 0, // Default value, adjust as needed
   });
 
   const tiposOrigemDestino = [
@@ -34,10 +32,10 @@ const PressingUpdate = () => {
       try {
         const response = await SubTypologyService.getAll(1, 9999);
         const subtipologias = response?.data ?? [];
-        const mapped = subtipologias?.map((item: { nome: string; id: string }) => ({
+        const mapped = subtipologias.map((item: { nome: string; id: string }) => ({
           name: item.nome,
           value: item.id,
-        })) ?? [];
+        }));
         setSubtypologies(mapped);
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
@@ -47,15 +45,13 @@ const PressingUpdate = () => {
 
     const fetchData = async () => {
       try {
-        const response = await PressingService.get(id!); // Busca os dados da prensagem pelo ID
+        const response = await PressingService.get(id!);
         setFormData({
-          data: response?.data ? new Date(response.data).toISOString() : "",
+          data: response?.data ? new Date(response.data).toISOString().split("T")[0] : "",
           volumeTotal: response?.volumeTotal ? String(response.volumeTotal) : "",
-          tipoOrigem: response?.tipoOrigem ?? "",
-          tipoDestino: response?.tipoDestino ?? "",
+          tipoOrigem: response?.tipoOrigem ?? "DOACAO",
+          tipoDestino: response?.tipoDestino ?? "DOACAO",
           subtipologiaId: response?.subtipologiaId ?? "",
-          tipo: response?.tipo ?? "TOTAL", // Default to "TOTAL" if not provided
-          volumeRejeito: response?.volumeRejeito ?? 0, // Default to 0 if not provided
         });
       } catch (error) {
         toast.error("Erro ao carregar os dados da prensagem.");
@@ -73,15 +69,14 @@ const PressingUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await PressingService.update(id!, { 
+      await PressingService.update(id!, {
         ...formData,
         data: new Date(formData.data),
-        tipo: formData.tipo as "TOTAL" | "PARCIAL", // Ensure this is set correctly
-        volumeRejeito: Number(formData.volumeRejeito), // Ensure this is set correctly
         volumeTotal: Number(formData.volumeTotal),
+        tipoOrigem: formData.tipoOrigem as "DOACAO" | "COLETA",
         tipoDestino: formData.tipoDestino as "DOACAO" | "COLETA",
-        tipoOrigem: formData.tipoOrigem as "DOACAO" | "COLETA", // Ensure this is set correctly
       }, { id });
+
       toast.success("Prensagem atualizada com sucesso!");
       navigate("/pressing-list");
     } catch (error) {
@@ -110,6 +105,7 @@ const PressingUpdate = () => {
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("data", value)}
+                value={formData.data}
               />
 
               <InputText
@@ -119,6 +115,7 @@ const PressingUpdate = () => {
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("volumeTotal", value)}
+                value={formData.volumeTotal}
               />
 
               <InputList
@@ -128,6 +125,7 @@ const PressingUpdate = () => {
                 options={tiposOrigemDestino}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("tipoOrigem", value)}
+                value={formData.tipoOrigem}
               />
 
               <InputList
@@ -137,6 +135,7 @@ const PressingUpdate = () => {
                 options={tiposOrigemDestino}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("tipoDestino", value)}
+                value={formData.tipoDestino}
               />
 
               <InputList
@@ -146,6 +145,7 @@ const PressingUpdate = () => {
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("subtipologiaId", value)}
+                value={formData.subtipologiaId}
               />
             </div>
 

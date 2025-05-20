@@ -20,13 +20,6 @@ const OutputMaterialCreate = () => {
     subtipologiaId: "",
   });
 
-  const tiposMaterial = [
-    { name: "PLÁSTICO", value: "PLASTICO" },
-    { name: "PAPEL", value: "PAPEL" },
-    { name: "VIDRO", value: "VIDRO" },
-    // Adicione mais tipos conforme necessário
-  ];
-
   useEffect(() => {
     const fetchSubtypologies = async () => {
       try {
@@ -37,6 +30,12 @@ const OutputMaterialCreate = () => {
           value: item.id,
         })) ?? [];
         setSubtypologies(mapped);
+        if (mapped.length > 0 && !formData.subtipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            subtipologiaId: mapped[0].value,
+          }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
         console.error(error);
@@ -47,17 +46,22 @@ const OutputMaterialCreate = () => {
       try {
         const response = await DocumentService.getAll(1, 9999); 
         const notaFiscais = response?.data ?? [];
-        const mapped = notaFiscais?.map((item: { numero: string; id: string }) => ({
-          name: item.numero,
+        const mapped = notaFiscais?.map((item: any) => ({
+          name: item.numero ?? item.nome ?? item.id,
           value: item.id,
         })) ?? [];
         setNotaFiscais(mapped);
+        if (mapped.length > 0 && !formData.notaFiscalId) {
+          setFormData((prev) => ({
+            ...prev,
+            notaFiscalId: mapped[0].value,
+          }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar notas fiscais.");
         console.error(error);
       }
     };
-
     fetchSubtypologies();
     fetchNotaFiscais();
   }, []);
@@ -109,6 +113,7 @@ const OutputMaterialCreate = () => {
                 name="notaFiscalId"
                 titleStyle="text-black"
                 options={notaFiscais}
+                value={formData.notaFiscalId}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("notaFiscalId", value)}
               />
@@ -118,13 +123,14 @@ const OutputMaterialCreate = () => {
                 name="subtipologiaId"
                 options={subtypologies}
                 titleStyle="text-black"
+                value={formData.subtipologiaId}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("subtipologiaId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"output-material-list"} />
+              <BackButton path={"/output-material-list"} />
               <Button
                 titulo="Criar"
                 type="button"

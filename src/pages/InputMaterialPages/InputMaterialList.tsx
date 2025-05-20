@@ -10,42 +10,37 @@ const InputMaterialList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
     const [data, setData] = useState<Array<any>>([]);
-    const [subtipologias, setSubtipologias] = useState<{ name: string; value: string }[]>([]);
+    const [subtypologyMap, setSubtypologyMap] = useState<Record<string, string>>({});
     const inputMaterialService = InputMaterialService;
 
-    // Função para buscar subtipologias
-    const fetchSubtipologies = async () => {
-        try {
-            const response = await SubTypologyService.getAll(1, 9999); // Ajuste de acordo com sua API
-            const subtipologias = response?.data ?? [];
-            const mapped = subtipologias.map((item: { nome: string; id: string }) => ({
-                name: item.nome,
-                value: item.id,
-            }));
-            setSubtipologias(mapped);
-            return mapped;
-        } catch (error) {
-            console.error("Erro ao carregar subtipologias:", error);
-        }
-    };
-
-    // Função para buscar dados de MaterialEntrada
     const fetchData = async (page: number | null) => {
         try {
-            const response = await inputMaterialService.getAll(page);
-            setData(response?.data);
+            const [inputResponse, subtypologyResponse] = await Promise.all([
+                inputMaterialService.getAll(page),
+                SubTypologyService.getAll(1, 9999),
+            ]);
+
+            const subtypologies = subtypologyResponse?.data ?? [];
+            const subMap: Record<string, string> = {};
+            subtypologies.forEach((item: any) => {
+                subMap[item.id] = item.nome;
+            });
+            setSubtypologyMap(subMap);
+            
+
+            const inputData = inputResponse?.data?.map((item: any) => ({
+                ...item,
+                subtipologia: subMap[item.subtipologiaId] ?? item.subtipologiaId,
+            })) ?? [];
+
+            setData(inputData);
         } catch (error) {
             console.error("Erro ao buscar materiais de entrada:", error);
         }
     };
 
     useEffect(() => {
-        fetchSubtipologies(); // Carregar as subtipologias
-        fetchData(page); // Buscar materiais de entrada ao carregar o componente
-    }, []);
-
-    useEffect(() => {
-        fetchData(page); // Buscar dados sempre que a página for alterada
+        fetchData(page);
     }, [page]);
 
     const handleBack = () => {
@@ -53,7 +48,7 @@ const InputMaterialList = () => {
     };
 
     const handleCreate = () => {
-        navigate("/input-material-create"); // Navegar para a página de criação de MaterialEntrada
+        navigate("/input-material-create");
     };
 
     return (
@@ -70,10 +65,9 @@ const InputMaterialList = () => {
             <div className="overflow-x-auto">
                 <TableComponent 
                     columns={[
-                        'id',
                         'quantidade',
                         'tipo',
-                        'subtipologiaId'
+                        'subtipologia'
                     ]}
                     data={data}
                 />

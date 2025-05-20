@@ -3,7 +3,7 @@ import { InputMaterial } from "../models/Entities";
 
 class InputMaterialService extends BaseService<InputMaterial> {
   constructor() {
-    super("material-entrada");
+    super("materialEntrada");
   }
 }
 

@@ -1,59 +1,61 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { OutputMaterialService, SubTypologyService } from "../../services"; // Alteração no serviço
+import { OutputMaterialService, SubTypologyService, DocumentService } from "../../services"; 
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
 
-const OutputMaterialList = () => { // Nome da página alterado para OutputMaterial
+const OutputMaterialList = () => { 
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
     const [data, setData] = useState<Array<any>>([]);
-    const [subtipologias, setSubtipologias] = useState<{ name: string; value: string }[]>([]);
-    const outputMaterialService = OutputMaterialService; // Alteração no serviço
+    const [subtypologyMap, setSubtypologyMap] = useState<Record<string, string>>({});
+    const [notaFiscalMap, setNotaFiscalMap] = useState<Record<string, string>>({});
 
-    // Função para buscar subtipologias
-    const fetchSubtipologies = async () => {
-        try {
-            const response = await SubTypologyService.getAll(1, 9999); // Ajuste de acordo com sua API
-            const subtipologias = response?.data ?? [];
-            const mapped = subtipologias.map((item: { nome: string; id: string }) => ({
-                name: item.nome,
-                value: item.id,
-            }));
-            setSubtipologias(mapped);
-        } catch (error) {
-            console.error("Erro ao carregar subtipologias:", error);
-        }
-    };
-
-    // Função para buscar dados de OutputMaterial
     const fetchData = async (page: number | null) => {
-        try {
-            const response = await outputMaterialService.getAll(page); // Alteração para OutputMaterialService
-            setData(response?.data);
-            return response?.data
-        } catch (error) {
-            console.error("Erro ao buscar materiais de saída:", error);
-        }
+            const [outputMaterialResponse, subtypologyResponse, notaFiscalResponse] = await Promise.all([
+                OutputMaterialService.getAll(page),
+                SubTypologyService.getAll(1, 9999),
+                DocumentService.getAll(1, 9999),
+            ]);
+    
+            const subtypologies = subtypologyResponse?.data ?? [];
+            const subMap: Record<string, string> = {};
+            subtypologies.forEach((item: any) => {
+                subMap[item.id] = item.nome;
+            });
+            setSubtypologyMap(subMap);
+
+            const notaFiscal = notaFiscalResponse?.data ?? [];
+            const subMap2: Record<string, string> = {};
+            notaFiscal.forEach((item: any) => {
+                subMap2[item.id] = item.nome;
+            });
+            setNotaFiscalMap(subMap2);
+    
+            const outputMaterialData = outputMaterialResponse?.data.map((item: any) => ({
+                ...item,
+                subtipologia: subMap[item.subtipologiaId] ?? item.subtipologiaId,
+                notaFiscal: notaFiscalMap[item.notaFiscalId] ?? item.notaFiscalId,
+            })) ?? [];
+            setData(outputMaterialData);
     };
 
     useEffect(() => {
-        fetchSubtipologies(); // Carregar as subtipologias
-        fetchData(page); // Buscar materiais de saída ao carregar o componente
+        fetchData(page); 
     }, []);
 
     useEffect(() => {
-        fetchData(page); // Buscar dados sempre que a página for alterada
+        fetchData(page); 
     }, [page]);
 
     const handleBack = () => {
-        navigate("/stock-menu"); // Voltar para o menu de estoque
+        navigate("/stock-menu"); 
     };
 
     const handleCreate = () => {
-        navigate("/output-material-create"); // Navegar para a página de criação de Material de Saída
+        navigate("/output-material-create");
     };
 
     return (
@@ -61,7 +63,7 @@ const OutputMaterialList = () => { // Nome da página alterado para OutputMateri
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Materiais de Saída</h2>
                 <Button
-                    titulo={"Criar novo Material de Saída"} // Alterado para Material de Saída
+                    titulo={"Criar novo Material de Saída"}
                     className="bg-green-600 text-white mt-4 sm:mt-0"
                     onClick={handleCreate}
                 />
@@ -69,10 +71,9 @@ const OutputMaterialList = () => { // Nome da página alterado para OutputMateri
 
             <TableComponent 
                 columns={[
-                    'id',
                     'quantidade',
-                    'notaFiscalId', // Alterado para exibir notaFiscalId
-                    'subtipologiaId' // Alterado para exibir subtipologiaId
+                    'notaFiscal',
+                    'subtipologia' 
                 ]}
                 data={data}
             />
