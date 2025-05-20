@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
-import { SaleService } from "../../services"; // Update service import
+import InputList from "../../components/InputList";
 import { toast } from "react-toastify";
+import { SaleService, DocumentService } from "../../services";
 
 const SalesCreate = () => {
   const navigate = useNavigate();
+
+  const [documentos, setDocumentos] = useState<{ name: string; value: string }[]>([]);
 
   const [formData, setFormData] = useState({
     comprador: "",
@@ -20,6 +23,35 @@ const SalesCreate = () => {
     mtrTransportadorId: "",
     mtrDestinadorId: "",
   });
+
+  useEffect(() => {
+    const fetchDocumentos = async () => {
+      try {
+        const response = await DocumentService.getAll(1, 9999);
+        const data = response?.data ?? [];
+        const mapped = data.map((item: any) => ({
+          name: item.numero ?? item.nome ?? item.id,
+          value: item.id,
+        }));
+        setDocumentos(mapped);
+
+        if (mapped.length > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            notaFiscalId: prev.notaFiscalId || mapped[0].value,
+            mtrGeradorId: prev.mtrGeradorId || mapped[0].value,
+            mtrTransportadorId: prev.mtrTransportadorId || mapped[0].value,
+            mtrDestinadorId: prev.mtrDestinadorId || mapped[0].value,
+          }));
+        }
+      } catch (error) {
+        toast.error("Erro ao carregar documentos.");
+        console.error(error);
+      }
+    };
+
+    fetchDocumentos();
+  }, []);
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -37,7 +69,7 @@ const SalesCreate = () => {
         mtrDestinadorId: formData.mtrDestinadorId,
       });
       toast.success("Venda criada com sucesso!");
-      navigate("/sales-list");  // Navigate to sales list page after creation
+      navigate("/sales-list");
     } catch (error) {
       toast.error("Erro ao criar venda. Verifique os dados e tente novamente.");
       console.error(error);
@@ -52,7 +84,7 @@ const SalesCreate = () => {
         autoSetErrors={true}
         submitOnChange={false}
       >
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">CRIAR VENDA</h1>
 
@@ -62,65 +94,71 @@ const SalesCreate = () => {
                 titulo="Comprador"
                 name="comprador"
                 titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("comprador", value)}
               />
-              
-              <InputDate
+
+              <InputText
+                titleStyle="text-black"
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 titulo="Data"
                 name="data"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                type="date" 
                 onChange={(value) => handleChange("data", value)}
               />
-              
+
               <InputText
                 type="number"
                 titulo="Valor"
                 name="valor"
                 titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("valor", value)}
               />
-              
-              <InputText
-                type="text"
+
+              <InputList
+                titleStyle="text-black"
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 titulo="Nota Fiscal ID"
                 name="notaFiscalId"
-                titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                options={documentos}
+                value={formData.notaFiscalId}
                 onChange={(value) => handleChange("notaFiscalId", value)}
               />
-              
-              <InputText
-                type="text"
+
+              <InputList
+                titleStyle="text-black"
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 titulo="MTR Gerador ID"
                 name="mtrGeradorId"
-                titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                options={documentos}
+                value={formData.mtrGeradorId}
                 onChange={(value) => handleChange("mtrGeradorId", value)}
               />
-              
-              <InputText
-                type="text"
+
+              <InputList
+                titleStyle="text-black"
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 titulo="MTR Transportador ID"
                 name="mtrTransportadorId"
-                titleStyle="text-black"
-                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                options={documentos}
+                value={formData.mtrTransportadorId}
                 onChange={(value) => handleChange("mtrTransportadorId", value)}
               />
-              
-              <InputText
-                type="text"
-                titulo="MTR Destinador ID"
-                name="mtrDestinadorId"
+
+              <InputList
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                titulo="MTR Destinador ID"
+                name="mtrDestinadorId"
+                options={documentos}
+                value={formData.mtrDestinadorId}
                 onChange={(value) => handleChange("mtrDestinadorId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"sales-list"} />
+              <BackButton path={"/sales-list"} />
               <Button
                 titulo="Criar"
                 type="button"

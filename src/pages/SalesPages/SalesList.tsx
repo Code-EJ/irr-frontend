@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { SaleService } from "../../services"; // Atualizado para SaleService
+import { SaleService, DocumentService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
@@ -10,16 +10,36 @@ const SalesList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
     const [data, setData] = useState<Array<any>>([]);
-    const saleService = SaleService;
+    const [documentMap, setDocumentMap] = useState<Record<string, string>>({});
 
     const fetchData = async (page: number | null) => {
-        const response = await saleService.getAll(page);
-        setData(response?.data);
-        return response?.data;
+        const [saleResponse, documentResponse] = await Promise.all([
+            SaleService.getAll(page),
+            DocumentService.getAll(1, 9999),
+        ]);
+
+        const documents = documentResponse?.data ?? [];
+
+        const docMap: Record<string, string> = {};
+        documents.forEach((item: any) => {
+            docMap[item.id] = item.nome ?? item.numero;
+        });
+        setDocumentMap(docMap);
+
+        const formattedData = saleResponse?.data.map((item: any) => ({
+            ...item,
+            mtrGerador: docMap[item.mtrGeradorId] ?? item.mtrGeradorId,
+            mtrDestinador: docMap[item.mtrDestinadorId] ?? item.mtrDestinadorId,
+            mtrTransportador: docMap[item.mtrTransportadorId] ?? item.mtrTransportadorId,
+            notaFiscal: docMap[item.notaFiscalId] ?? item.notaFiscalId,
+        })) ?? [];
+
+        setData(formattedData);
+        return formattedData;
     };
 
     const handleBack = () => {
-        navigate("/menu"); // Você pode mudar a rota se quiser outra página inicial
+        navigate("/menu");
     };
 
     useEffect(() => {
@@ -31,7 +51,7 @@ const SalesList = () => {
     }, [page]);
 
     const handleCreate = () => {
-        navigate("/sales-create"); // Atualizado para rota de criar Sales
+        navigate("/sales-create");
     };
 
     return (
@@ -44,23 +64,22 @@ const SalesList = () => {
                     onClick={handleCreate}
                 />
             </div>
-            
+
             <div className="overflow-x-auto">
                 <TableComponent 
                     columns={[
-                        'id',
                         'comprador',
                         'data',
                         'valor',
-                        'notaFiscalId',
-                        'mtrGeradorId',
-                        'mtrTransportadorId',
-                        'mtrDestinadorId',
+                        'notaFiscal',
+                        'mtrGerador',
+                        'mtrTransportador',
+                        'mtrDestinador',
                     ]}
                     data={data}
                 />
             </div>
-            
+
             <div className="flex flex-col sm:flex-row justify-between items-center mt-4 flex-wrap">
                 <div className="flex mb-2 sm:mb-0">
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white mr-2" />

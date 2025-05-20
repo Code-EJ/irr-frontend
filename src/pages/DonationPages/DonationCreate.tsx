@@ -7,42 +7,85 @@ import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
 import InputList from "../../components/InputList";
 import { toast } from "react-toastify";
-import { DonationService, TypologyService, SubTypologyService, DonatorService, UserService } from "../../services";
+import { DonationService, DonatorService, TypologyService, SubTypologyService } from "../../services";
 
 const DonationCreate = () => {
   const navigate = useNavigate();
-  const [tipologias, setTipologias] = useState([]);
-  const [subtipologias, setSubtipologias] = useState([]);
-  const [doadores, setDoadores] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
-  
+  const [tipologias, setTipologias] = useState<{ name: string; value: string }[]>([]);
+  const [subtipologias, setSubtipologias] = useState<{ name: string; value: string }[]>([]);
+  const [doadores, setDoadores] = useState<{ name: string; value: string }[]>([]);
+
   const [formData, setFormData] = useState({
     tipologiaId: "",
     subtipologiaId: "",
     pesagem: "",
     doadorId: "",
-    criadorId: ""
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTipologia = async () => {
       try {
-        const [tipRes, subtipRes, doadorRes, userRes] = await Promise.all([
-          TypologyService.getAll(1, 9999),
-          SubTypologyService.getAll(1, 9999),
-          DonatorService.getAll(1, 9999),
-          UserService.getAll(1, 9999)
-        ]);
-        setTipologias(tipRes.data);
-        setSubtipologias(subtipRes.data);
-        setDoadores(doadorRes.data);
-        setUsuarios(userRes.data);
+        const response = await TypologyService.getAll(1, 9999);
+        const tipologia = response?.data ?? [];
+        const mapped = tipologia?.map((item: any) => ({
+          name: item.nome,
+          value: item.id,
+        })) ?? [];
+        setTipologias(mapped);
+        if (mapped.length > 0 && !formData.tipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            tipologiaId: mapped[0].value,
+          }));
+        }
       } catch (error) {
-        toast.error("Erro ao carregar dados.");
+        toast.error("Erro ao carregar notas fiscais.");
         console.error(error);
       }
     };
-    fetchData();
+    const fetchSubtipologia = async () => {
+      try {
+        const response = await SubTypologyService.getAll(1, 9999);
+        const subtipologia = response?.data ?? [];
+        const mapped = subtipologia?.map((item: any) => ({
+          name: item.nome,
+          value: item.id,
+        })) ?? [];
+        setSubtipologias(mapped);
+        if (mapped.length > 0 && !formData.subtipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            subtipologiaId: mapped[0].value,
+          }));
+        }
+      } catch (error) {
+        toast.error("Erro ao carregar notas fiscais.");
+        console.error(error);
+      }
+    };
+    const fetchDoadores = async () => {
+      try {
+        const response = await DonatorService.getAll(1, 9999);
+        const donator = response?.data ?? [];
+        const mapped = donator?.map((item: any) => ({
+          name: item.nome,
+          value: item.id,
+        })) ?? [];
+        setDoadores(mapped);
+        if (mapped.length > 0 && !formData.doadorId) {
+          setFormData((prev) => ({
+            ...prev,
+            doadorId: mapped[0].value,
+          }));
+        }
+      } catch (error) {
+        toast.error("Erro ao carregar notas fiscais.");
+        console.error(error);
+      }
+    };
+    fetchTipologia();
+    fetchSubtipologia();
+    fetchDoadores();
   }, []);
 
   const handleChange = (field, value) => {
@@ -51,7 +94,13 @@ const DonationCreate = () => {
 
   const handleSubmit = async () => {
     try {
-      await DonationService.create(formData);
+      await DonationService.create({
+        ...formData,
+        pesagem: parseFloat(formData.pesagem),
+        tipologiaId: formData.tipologiaId,
+        subtipologiaId: formData.subtipologiaId,
+        doadorId: formData.doadorId,
+      });
       toast.success("Doação criada com sucesso!");
       navigate("/donation-list");
     } catch (error) {
@@ -59,9 +108,6 @@ const DonationCreate = () => {
       console.error(error);
     }
   };
-
-  const mapToOptions = (list, labelKey = "nome", valueKey = "id") =>
-    list.map((item) => ({ name: item[labelKey], value: item[valueKey] }));
 
   return (
     <Card className="rounded-[50px] shadow-lg w-3/4 max-w-4xl mx-auto p-4">
@@ -78,34 +124,39 @@ const DonationCreate = () => {
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputList
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                titleStyle="text-black" 
                 titulo="Tipologia"
                 name="tipologiaId"
-                options={mapToOptions(tipologias)}
+                options={tipologias}
+                value={formData.tipologiaId}
                 onChange={(value) => handleChange("tipologiaId", value)}
               />
               <InputList
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                titleStyle="text-black" 
                 titulo="Subtipologia"
                 name="subtipologiaId"
-                options={mapToOptions(subtipologias)}
+                options={subtipologias}
+                value={formData.subtipologiaId}
                 onChange={(value) => handleChange("subtipologiaId", value)}
               />
               <InputText
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                titleStyle="text-black" 
                 titulo="Pesagem (kg)"
                 name="pesagem"
                 type="number"
                 onChange={(value) => handleChange("pesagem", value)}
               />
               <InputList
+                className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                titleStyle="text-black" 
                 titulo="Doador"
                 name="doadorId"
-                options={mapToOptions(doadores)}
+                options={doadores}
+                value={formData.doadorId}
                 onChange={(value) => handleChange("doadorId", value)}
-              />
-              <InputList
-                titulo="Criador"
-                name="criadorId"
-                options={mapToOptions(usuarios, "nomeCompleto")}
-                onChange={(value) => handleChange("criadorId", value)}
               />
             </div>
 

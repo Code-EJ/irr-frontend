@@ -49,7 +49,7 @@ const DriverList = () => {
 
       <div className="overflow-x-auto">
         <TableComponent
-          columns={["id", "nome", "cpf"]}
+          columns={["nome", "cpf"]}
           data={data}
           editUrl={"driver-update"}
         />
