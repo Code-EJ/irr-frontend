@@ -77,6 +77,7 @@ const SalesList = () => {
                         'mtrDestinador',
                     ]}
                     data={data}
+                    editUrl={"sales-update"}
                 />
             </div>
 

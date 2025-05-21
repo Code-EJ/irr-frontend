@@ -86,6 +86,7 @@ const DonationList = () => {
                         "doador",
                     ]}
                     data={data}
+                    editUrl={"donation-update"}
                 />
             </div>
 

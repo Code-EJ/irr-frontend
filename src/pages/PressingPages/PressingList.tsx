@@ -69,6 +69,7 @@ const PressingList = () => {
                         'subtipologia'
                     ]}
                     data={data}
+                    editUrl={"pressing-update"}
                 />
             </div>
 

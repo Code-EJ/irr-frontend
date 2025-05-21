@@ -70,6 +70,7 @@ const InputMaterialList = () => {
                         'subtipologia'
                     ]}
                     data={data}
+                    editUrl={"input-material-update"}
                 />
             </div>
 

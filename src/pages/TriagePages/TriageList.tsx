@@ -70,6 +70,7 @@ const TriageList = () => {
                         'subtipologia'
                     ]}
                     data={data}
+                    editUrl={"triage-update"}
                 />
             </div>
 

@@ -53,6 +53,7 @@ const VehicleList = () => {
         <TableComponent
           columns={['Placa', 'Modelo']}
           data={data}
+          editUrl={"vehicle-update"}
         />
       </div>
 

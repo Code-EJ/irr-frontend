@@ -67,6 +67,7 @@ const DonatorList = () => {
           <TableComponent
             columns={["Nome", "Endereço", "Tipo", "Cadastro Nacional"]}
             data={data}
+            editUrl={"donator-update"}
           />
         </div>
       )}

@@ -49,6 +49,7 @@ const TypologyList = () => {
                 <TableComponent 
                     columns={['nome', 'valor']}
                     data={data}
+                    editUrl={"typology-update"}
                 />
             </div>
 

@@ -57,6 +57,7 @@ const DocumentList = () => {
                         'mediaId',
                     ]}
                     data={data}
+                    editUrl={"document-update"}
                 />
             </div>
 

@@ -76,6 +76,7 @@ const OutputMaterialList = () => {
                     'subtipologia' 
                 ]}
                 data={data}
+                editUrl={"output-material-update"}
             />
 
             <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
