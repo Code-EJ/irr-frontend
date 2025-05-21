@@ -44,11 +44,11 @@ import InputMaterialUpdate from "../pages/InputMaterialPages/InputMaterialUpdate
 import OutputMaterialUpdate from "../pages/OutputMaterialPages/OutputMaterialUpdate";
 import PressingUpdate from "../pages/PressingPages/PressingUpdate";
 import SalesUpdate from "../pages/SalesPages/SalesUpdate";
-import SubTypologyUpdate from "../pages/SubTypologyPages/SubTypologyUpdate";
 import TypologyUpdate from "../pages/TypologyPages/TypologyUpdate";
 import TriageUpdate from "../pages/TriageDrivers/TriageDriversUpdate";
 import VehicleUpdate from "../pages/VehiclePages/VehicleUpdate";
 import DonatorUpdate from "../pages/DonatorPages/DonatorUpdate";
+import SubTypologyUpdate from "../pages/SubTypologyPages/SubtypologyUpdate";
 
 // Rotas comuns (ex: login)
 const commonRoutes = [

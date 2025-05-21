@@ -7,51 +7,49 @@ import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
 import InputList from "../../components/InputList";
 import InputFile from "../../components/InputFile";
-import { DocumentService } from "../../services";
 import { toast } from "react-toastify";
+import { DocumentService } from "../../services";
 
 const DocumentUpdate = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  const tiposDocumento = [
-    "NOTA_FISCAL",
-    "MTR_GERADOR",
-    "MTR_TRANSPORTADOR",
-    "MTR_DESTINADOR",
-    "DIARIO_COLETA",
-  ];
-
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    nome: string;
+    dataDocumento: string;
+    dataInsercao: string;
+    tipo: string;
+    arquivo: File | null;
+  }>({
     nome: "",
     dataDocumento: "",
-    dataInsercao: new Date().toISOString(),
+    dataInsercao: "", 
     tipo: "NOTA_FISCAL",
     arquivo: null,
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await DocumentService.get(id!);
-        const data = response ?? {};
-
-        setFormData({
-          nome: data.nome ?? "",
-          dataDocumento: data.dataDocumento
-            ? new Date(data.dataDocumento).toISOString().split("T")[0]
-            : "",
-          dataInsercao: data.dataInsercao ?? new Date().toISOString(),
-          tipo: data.tipo ?? "NOTA_FISCAL",
-          arquivo: null,
+    if (id) {
+      DocumentService.get(id)
+        .then((response) => {
+          if (!response || !response.data) {
+            toast.error("Resposta inválida ao carregar documento.");
+            return;
+          }
+          const doc = response.data;
+          setFormData({
+            nome: doc.nome || "",
+            dataDocumento: doc.dataDocumento ? doc.dataDocumento.split("T")[0] : "",
+            dataInsercao: doc.dataInsercao || "",
+            tipo: doc.tipo || "NOTA_FISCAL",
+            arquivo: null, 
+          });
+        })
+        .catch((error) => {
+          toast.error("Erro ao carregar documento.");
+          console.error(error);
         });
-      } catch (error) {
-        toast.error("Erro ao carregar os dados do documento.");
-        console.error(error);
-      }
-    };
-
-    fetchData();
+    }
   }, [id]);
 
   const handleChange = (field: string, value: any) => {
@@ -60,8 +58,16 @@ const DocumentUpdate = () => {
 
   const handleSubmit = async () => {
     if (!formData.nome || !formData.dataDocumento || !formData.tipo) {
-      toast.error("Preencha todos os campos obrigatórios!");
+      toast.error('Preencha todos os campos obrigatórios!');
       return;
+    }
+
+    if (formData.arquivo) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      if (!allowedTypes.includes(formData.arquivo.type)) {
+        toast.error('Tipo de arquivo não permitido! Por favor, envie uma imagem ou PDF.');
+        return;
+      }
     }
 
     const dataDocumentoFormatted = `${formData.dataDocumento}T00:00:00.000Z`;
@@ -73,16 +79,11 @@ const DocumentUpdate = () => {
     formDataToSend.append("tipo", formData.tipo);
 
     if (formData.arquivo) {
-      const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-      if (!allowedTypes.includes(formData.arquivo.type)) {
-        toast.error("Tipo de arquivo não permitido! Envie uma imagem ou PDF.");
-        return;
-      }
       formDataToSend.append("arquivo", formData.arquivo);
     }
 
     try {
-      await DocumentService.update(id!, formDataToSend);
+      await DocumentService.update(id, formDataToSend);
       toast.success("Documento atualizado com sucesso!");
       navigate("/document-list");
     } catch (error) {
@@ -90,6 +91,14 @@ const DocumentUpdate = () => {
       console.error(error);
     }
   };
+
+  const tiposDocumento = [
+    "NOTA_FISCAL",
+    "MTR_GERADOR",
+    "MTR_TRANSPORTADOR",
+    "MTR_DESTINADOR",
+    "DIARIO_COLETA",
+  ];
 
   return (
     <Card className="rounded-[50px] shadow-lg w-3/4 max-w-4xl mx-auto p-4">
@@ -102,7 +111,7 @@ const DocumentUpdate = () => {
         {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">
-              ATUALIZAR DOCUMENTO
+              EDITAR DOCUMENTO
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
@@ -130,7 +139,7 @@ const DocumentUpdate = () => {
                 onChange={(value) => handleChange("tipo", value)}
               />
               <InputFile
-                titulo="Arquivo (opcional)"
+                titulo="Arquivo (se quiser atualizar)"
                 name="arquivo"
                 onChange={(file) => handleChange("arquivo", file)}
               />
