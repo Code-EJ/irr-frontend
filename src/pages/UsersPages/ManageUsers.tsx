@@ -1,50 +1,68 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import InputText from "../../components/InputText";
-import InputList from "../../components/InputList";
 import Button from "../../components/Button";
 import SimpleForm from "../../components/SimpleForm";
-import { apiClient } from "../../config/security/ApiClient";
-import { logout } from "../../config/security/AuthServices";
-import BackButton from "../../components/BackButton";
 import { toast } from "react-toastify";
+import BackButton from "../../components/BackButton";
+import { UserService } from "../../services";
 
 const ManageUsers = () => {
   const [selectedFilter, setSelectedFilter] = useState("Todos");
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
+  const [users, setUsers] = useState([]);
 
-  const userTypes = [
-    {name: "Admin", value: 1 },
-    {name: "Organização", value: 2 },
-    {name: "Prefeitura", value: 3 },
-    {name: "Catadores", value: 4 },
-    {name: "Admin", value: 5 },
-  ];
+  const filters = ["Todos", "Administrador", "Organizacao", "Prefeitura", "Representante"];
 
-  const users = [
-    { name: "João Silva", role: "Admin" },
-    { name: "Maria Oliveira", role: "Organização" },
-    { name: "Carlos Pereira", role: "Prefeitura" },
-    { name: "Ana Costa", role: "Catadores" },
-    { name: "Pedro Souza", role: "Admin" },
-  ]
-
-  const filters = ["Todos", "Admins", "Organização", "Prefeitura", "Catadores"];
-
-  const handleDeactivate = async (values) => {
+  const fetchData = async () => {
     try {
-      const res = await apiClient.post("/users/deactivate", {
-        name: values.name,
-        userType: values.userType,
-      });
+      const response = await UserService.getAll();
+      const usuarios = response?.data || [];
+      setUsers(usuarios);
+    } catch (error) {
+      toast.error("Erro ao carregar usuários.");
+      console.error(error);
+    }
+  };
 
-      if (res.status === 200) {
-        toast.success(`Usuário ${values.name} foi desativado com sucesso!`);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const filteredUsers = users.filter((user) => {
+    if (selectedFilter === "Todos") return true;
+    return user.tipo.toLowerCase() === selectedFilter.toLowerCase();
+  });
+
+  const handleDeactivateById = async (id) => {
+    try {
+      await UserService.delete(id);
+      toast.success("Usuário desativado com sucesso!");
+      fetchData();
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao desativar o usuário. Por favor, tente novamente.");
+    }
+  };
+
+  const handleDeactivate = async (values, { resetForm, setFieldValue }) => {
+    try {
+      const userToDeactivate = users.find(
+        (user) => user.email.toLowerCase() === values.email.toLowerCase()
+      );
+
+      if (!userToDeactivate) {
+        toast.error("Usuário não encontrado.");
+        return;
       }
+
+      await UserService.delete(userToDeactivate.id);
+      toast.success(`Usuário ${values.email} foi desativado com sucesso!`);
+      fetchData();
     } catch (err) {
       console.error(err);
       toast.error(
-        `Erro ao desativar o usuário ${values.name}. Por favor, tente novamente.`,
+        `Erro ao desativar o usuário ${values.email}. Por favor, tente novamente.`
       );
     }
   };
@@ -55,7 +73,6 @@ const ManageUsers = () => {
         Gerenciamento de Usuários
       </h1>
 
-      {/* Card Principal */}
       <div className="flex flex-wrap lg:flex-nowrap gap-8">
         <Card className="flex-1 bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
           <div className="bg-yellow-600 p-4 rounded-3xl min-w-52">
@@ -76,22 +93,38 @@ const ManageUsers = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 max-h-[400px]">
-            {users.map((user, index) => (
-              <div
-                key={index}
-                onClick={() => setSelectedUserIndex(index)}
-                className={`flex justify-between items-center p-4 my-2 rounded-lg cursor-pointer border ${selectedUserIndex === index
-                  ? "bg-gray-200 border-gray-400"
-                  : "bg-white border-gray-300"
-                  } transition`}
-              >
-                <div>
-                  <strong>{user.name}</strong>
-                  <div className="text-sm text-gray-600">{user.role}</div>
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user, index) => (
+                <div
+                  key={user.id}
+                  onClick={() => setSelectedUserIndex(index)}
+                  className={`flex justify-between items-center p-4 my-2 rounded-lg cursor-pointer border ${selectedUserIndex === index
+                    ? "bg-gray-200 border-gray-400"
+                    : "bg-white border-gray-300"
+                    } transition`}
+                >
+                  <div>
+                    <strong>{user.nome || user.email}</strong>
+                    <div className="text-sm text-gray-600">{user.tipo}</div>
+                    <div className="text-xs text-gray-500">{user.email}</div>
+                  </div>
+                  <Button
+                    titulo="🔒"
+                    className="bg-transparent shadow-none"
+                    onClick={() => {
+                      const confirm = window.confirm(`Tem certeza que deseja desativar ${user.email}?`);
+                      if (confirm) {
+                        handleDeactivateById(user.id);
+                      }
+                    }}
+                  />
                 </div>
-                <Button titulo="🔒" className="bg-transparent shadow-none" />
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-gray-500">
+                Nenhum usuário encontrado.
+              </p>
+            )}
           </div>
         </Card>
 
@@ -99,28 +132,21 @@ const ManageUsers = () => {
           <h3 className="text-gray-700 text-center font-medium text-xl">
             Desativar Usuário
           </h3>
-          <SimpleForm
-            initialValues={{ name: "", userType: "1" }}
-            onSubmit={handleDeactivate}
-          >
+          <SimpleForm initialValues={{ email: "" }} onSubmit={handleDeactivate}>
             {(formik) => (
               <>
                 <InputText
-                  titulo="Nome ou E-mail do usuário"
-                  name="name"
+                  titulo="E-mail do usuário"
+                  name="email"
                   onChange={formik.handleChange}
-                />
-                <InputList
-                  titulo="Tipo de Usuário"
-                  name="userType"
-                  onChange={formik.handleChange}
-                  options={userTypes}
+                  value={formik.values.email}
                 />
                 <div className="mt-2">
                   <Button
                     titulo="Desativar"
                     type="submit"
                     className="bg-green-800 text-white rounded-lg px-6 py-2 text-sm"
+                    disabled={formik.isSubmitting}
                   />
                 </div>
               </>
@@ -128,8 +154,9 @@ const ManageUsers = () => {
           </SimpleForm>
         </Card>
       </div>
+
       <div className="flex gap-16 justify-between">
-        <BackButton path={"/users-menu"}  />
+        <BackButton path={"/users-menu"} />
       </div>
     </Card>
   );

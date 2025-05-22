@@ -1,34 +1,39 @@
-/* eslint-disable no-unused-vars */
 import Card from "../../components/Card";
 import InputText from "../../components/InputText";
 import Button from "../../components/Button";
 import SimpleForm from "../../components/SimpleForm";
-import { apiClient } from "../../config/security/Client";
+import { toast } from "react-toastify";
+import { UserService } from "../../services";
 import LogoImg from "../../assets/imgs/logo_IRR.png";
 import BackButton from "../../components/BackButton";
 import InputList from "../../components/InputList";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const RegisterUserAdmin = () => {
+  const navigate = useNavigate();
   const userTypes = [
-    { value: 1, name: "Admin" },
-    { value: 2, name: "Organização" },
-    { value: 3, name: "Prefeitura" },
-    { value: 4, name: "Representante de Catadores" },
-  ]
-  
-  const handleRegister = async (values, { setFieldError }) => {
+    { value: "ADMINISTRADOR", name: "Administrador" },
+    { value: "ORGANIZACAO", name: "Organização" },
+    { value: "PREFEITURA", name: "Prefeitura" },
+    { value: "REPRESENTANTE", name: "Representante de Catadores" },
+  ];
+
+  const handleRegister = async (values, { setFieldError, resetForm }) => {
     try {
-      const res = await apiClient.post("/users/register", values);
-      if (res.status === 201) {
-        toast.success("Usuário cadastrado com sucesso!");
-      }
+      const payload = {
+        nome: values.nome,
+        email: values.email,
+        senha: values.senha,
+        tipo: values.tipo,
+      };
+
+      await UserService.create(payload);
+      toast.success("Usuário cadastrado com sucesso!");
+      navigate("/users-management");
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Erro ao cadastrar o usuário.";
+      const message = error.response?.data?.message || "Erro ao cadastrar o usuário.";
       toast.error(message);
 
-      // Exemplo de erro específico no campo
       if (error.response?.data?.errors?.email) {
         setFieldError("email", error.response.data.errors.email);
       }
@@ -41,26 +46,21 @@ const RegisterUserAdmin = () => {
         Cadastro de Usuário
       </h2>
       <SimpleForm
-        initialValues={{ nome: "", funcao: "", email: "", senha: "" }}
+        initialValues={{ nome: "", tipo: "ADMINISTRADOR", email: "", senha: "" }}
         onSubmit={handleRegister}
         autoSetErrors
       >
         {(formik) => (
           <div className="grid grid-cols-2 gap-6 justify-between w-full">
-            <InputText
-              titulo="Nome"
-              name="nome"
-            />
-            <InputList options={userTypes} titulo="Função" name="function" />
+            <InputText titulo="Nome" name="nome" />
+            <InputList options={userTypes} titulo="Função" name="tipo" />
             <InputText
               titulo="E-mail"
               name="email"
               error={formik.errors.email}
             />
-            <InputText
-              titulo="Senha"
-              name="senha"
-            />
+            <InputText titulo="Senha" name="senha" type="password" />
+
             <BackButton path={"/users-menu"} />
             <Button
               titulo="Cadastrar"
@@ -70,7 +70,7 @@ const RegisterUserAdmin = () => {
               onClick={formik.handleSubmit}
               disabled={formik.isSubmitting}
             />
-            <img src={LogoImg} alt="Imagem de login" className="w-24 h-24" />
+            <img src={LogoImg} alt="Logo IRR" className="w-24 h-24" />
           </div>
         )}
       </SimpleForm>
