@@ -3,7 +3,7 @@ import { OutputMaterial } from "../models/Entities";
 
 class OutputMaterialService extends BaseService<OutputMaterial> {
   constructor() {
-    super("material-saida");
+    super("materialSaida");
   }
 }
 

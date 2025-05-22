@@ -1,5 +1,5 @@
 import { MenuIcon } from 'lucide-react';
-import React from 'react';  
+import React from 'react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -9,6 +9,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const menuItems = [
+    { label: 'Menu', link: '/menu' },
     { label: 'Cadastro de Usuários', link: '/users-register' },
     { label: 'Manejo de Usuários', link: '/users-management' },
     { label: 'Tipologia', link: '/typology-list' },
@@ -22,18 +23,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { label: 'Motorista', link: '/driver-list' },
     { label: 'Material de Entrada', link: '/input-material-list' },
     { label: 'Material de Saída', link: '/output-material-list' },
-    { label: 'Mercado', link: '/sale-list' },
+    { label: 'Documento', link: '/document-list' },
+    { label: 'Mercado', link: '/sales-list' },
     { label: 'Perfil', link: '/profile' },
   ];
 
   const handleMenuItemClick = (link: string) => {
-    // Altere o comportamento para não fechar a sidebar ao clicar em um item do menu
     window.location.href = link;
   };
 
   return (
     <div
-      className={`fixed top-0 left-0 w-64 h-full bg-white shadow-md p-4 ${isOpen ? 'block' : 'hidden'}`}
+      className={`fixed top-0 left-0 w-64 h-full bg-white shadow-md p-4 overflow-y-auto ${isOpen ? 'block' : 'hidden'}`}
       aria-hidden={!isOpen}
     >
       <button

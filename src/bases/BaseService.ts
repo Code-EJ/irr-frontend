@@ -24,29 +24,30 @@ class BaseService<E extends Model> {
     }
   }
 
-  async getAll(page: number | null): Promise<E[] | undefined> {
-    // Ternario meio generico que deve ser alterado depois
-    // Para pegar filtros também
-    const params = page !== null ? { page } : {};
-
+  async getAll(page: number | null, limit: number = 10): Promise<{ data: E[]; total: number } | undefined> {
+    const params = page !== null ? { page, limit } : {};
     const res = await apiClient.get(`/${this.route}`, { params });
 
-    if (res.status === 200) {
-        return res.data;
-    }
-}
-
-
-  async delete(id: string): Promise<E | undefined> {
-    const res = await apiClient.delete(`/${this.route}/${id}`);
-  
     if (res.status === 200) {
       return res.data;
     }
   }
 
-  async update(data: Partial<E>): Promise<E | undefined> {
-    const res = await apiClient.patch(`/${this.route}/${data.id}`, data);
+
+  async delete(id: string): Promise<E | undefined> {
+    const res = await apiClient.delete(`/${this.route}/${id}`);
+
+    if (res.status === 200) {
+      return res.data;
+    }
+  }
+
+  async update(id: string, data: any): Promise<E | undefined> {
+    const headers = data instanceof FormData
+      ? {}
+      : { 'Content-Type': 'application/json' };
+
+    const res = await apiClient.patch(`/${this.route}/${id}`, data, { headers });
 
     if (res.status === 200 || res.status === 201) {
       return res.data;

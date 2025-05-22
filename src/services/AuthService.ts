@@ -1,15 +1,20 @@
 import { apiClient, deleteToken, setToken } from "../config/security/Client";
 
-const login = async (data: Login): Promise<boolean> => {
+type loginResponse = {
+  token: string | null;
+  error: string | null;
+  status: number;
+}
+
+const login = async (data: Login): Promise<loginResponse> => {
   const res = await apiClient.post("/auth/login", data);
   
   if (res.status === 200) {
     const data: LoginResponse = res.data;
     setToken(data.access_token);
-    console.log("Token salvo");
-    return true;
+    return {token: data.access_token, error: null, status: 200};
   } else {
-    return false;
+    return {token: null, error: "Usuário inválido", status: res.status};
   }
 };
 
