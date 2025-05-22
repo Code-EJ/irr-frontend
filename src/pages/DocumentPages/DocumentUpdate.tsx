@@ -23,7 +23,7 @@ const DocumentUpdate = () => {
   }>({
     nome: "",
     dataDocumento: "",
-    dataInsercao: "", 
+    dataInsercao: "",
     tipo: "NOTA_FISCAL",
     arquivo: null,
   });
@@ -32,25 +32,21 @@ const DocumentUpdate = () => {
     if (id) {
       DocumentService.get(id)
         .then((response) => {
-          if (!response || !response.data) {
-            toast.error("Resposta inválida ao carregar documento.");
-            return;
-          }
-          const doc = response.data;
+          const doc = response?.data ?? response;
           setFormData({
             nome: doc.nome || "",
             dataDocumento: doc.dataDocumento ? doc.dataDocumento.split("T")[0] : "",
             dataInsercao: doc.dataInsercao || "",
             tipo: doc.tipo || "NOTA_FISCAL",
-            arquivo: null, 
+            arquivo: doc.arquivo || null,
           });
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error("Erro ao carregar documento.");
-          console.error(error);
         });
     }
   }, [id]);
+
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -62,19 +58,9 @@ const DocumentUpdate = () => {
       return;
     }
 
-    if (formData.arquivo) {
-      const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-      if (!allowedTypes.includes(formData.arquivo.type)) {
-        toast.error('Tipo de arquivo não permitido! Por favor, envie uma imagem ou PDF.');
-        return;
-      }
-    }
-
-    const dataDocumentoFormatted = `${formData.dataDocumento}T00:00:00.000Z`;
-
     const formDataToSend = new FormData();
     formDataToSend.append("nome", formData.nome);
-    formDataToSend.append("dataDocumento", dataDocumentoFormatted);
+    formDataToSend.append("dataDocumento", `${formData.dataDocumento}T00:00:00.000Z`);
     formDataToSend.append("dataInsercao", formData.dataInsercao);
     formDataToSend.append("tipo", formData.tipo);
 
@@ -83,14 +69,15 @@ const DocumentUpdate = () => {
     }
 
     try {
-      await DocumentService.update(id, formDataToSend);
+      await DocumentService.update(id!, formDataToSend);
       toast.success("Documento atualizado com sucesso!");
       navigate("/document-list");
-    } catch (error) {
-      toast.error("Erro ao atualizar documento. Verifique os dados.");
-      console.error(error);
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || error.message || "Erro desconhecido";
+      toast.error(`Erro ao atualizar documento: ${msg}`);
     }
   };
+
 
   const tiposDocumento = [
     "NOTA_FISCAL",
