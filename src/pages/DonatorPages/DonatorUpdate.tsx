@@ -20,10 +20,7 @@ const DonatorUpdate = () => {
     cadastroNacional: "",
   });
 
-  const tiposDoador = [
-    "PESSOA_FISICA",
-    "PESSOA_JURIDICA"
-  ];
+  const tiposDoador = ["PESSOA_FISICA", "PESSOA_JURIDICA"];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,15 +47,7 @@ const DonatorUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await DonatorService.update(
-        id!,
-        { nome: formData.nome, valor: 0 },
-        { id },
-        {
-          ...formData,
-          tipo: formData.tipo as "PESSOA_FISICA" | "PESSOA_JURIDICA",
-        }
-      );
+      await DonatorService.update(id!, formData);
       toast.success("Doador atualizado com sucesso!");
       navigate("/donator-list");
     } catch (error) {
@@ -77,7 +66,9 @@ const DonatorUpdate = () => {
       >
         {(formik) => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">Atualizar Doador</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">
+              Atualizar Doador
+            </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText

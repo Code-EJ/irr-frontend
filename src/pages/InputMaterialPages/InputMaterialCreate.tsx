@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"; 
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
@@ -9,8 +9,10 @@ import InputText from "../../components/InputText";
 import { InputMaterialService, SubTypologyService } from "../../services";
 import { toast } from "react-toastify";
 
-const InputMaterialCreate = () => {
+const InputMaterialUpdate = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+
   const [subtypologies, setSubtypologies] = useState<{ name: string; value: string }[]>([]);
 
   const [formData, setFormData] = useState<{
@@ -38,19 +40,28 @@ const InputMaterialCreate = () => {
           value: item.id,
         })) ?? [];
         setSubtypologies(mapped);
-        if (mapped.length > 0 && !formData.subtipologiaId) {
-          setFormData((prev) => ({
-            ...prev,
-            subtipologiaId: mapped[0].value,
-          }));
-        }
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
         console.error(error);
       }
     };
+
+    const fetchData = async () => {
+      try {
+        const response = await InputMaterialService.get(id!);
+        setFormData({
+          quantidade: response?.quantidade ? String(response.quantidade) : "",
+          tipo: response?.tipo ?? "DOACAO",
+          subtipologiaId: response?.subtipologiaId ?? "",
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchSubtypologies();
-  }, []);
+    fetchData();
+  }, [id]);
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -58,16 +69,16 @@ const InputMaterialCreate = () => {
 
   const handleSubmit = async () => {
     try {
-      await InputMaterialService.create({
+      await InputMaterialService.update(id!, {
         ...formData,
         quantidade: Number(formData.quantidade),
         tipo: formData.tipo,
         subtipologiaId: formData.subtipologiaId,
       });
-      toast.success("Material de entrada criado com sucesso!");
+      toast.success("Material de entrada atualizado com sucesso!");
       navigate("/input-material-list");
     } catch (error) {
-      toast.error("Erro ao criar material de entrada. Verifique os dados e tente novamente.");
+      toast.error("Erro ao atualizar material de entrada. Verifique os dados e tente novamente.");
       console.error(error);
     }
   };
@@ -82,7 +93,9 @@ const InputMaterialCreate = () => {
       >
         {(formik) => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">MATERIAL DE ENTRADA</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">
+              ATUALIZAR MATERIAL DE ENTRADA
+            </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
@@ -117,7 +130,7 @@ const InputMaterialCreate = () => {
             <div className="flex justify-between mt-8">
               <BackButton path={"/input-material-list"} />
               <Button
-                titulo="Criar"
+                titulo="Atualizar"
                 type="button"
                 variant="primary"
                 className="bg-green-950 text-white text-sm"
@@ -131,4 +144,4 @@ const InputMaterialCreate = () => {
   );
 };
 
-export default InputMaterialCreate;
+export default InputMaterialUpdate;

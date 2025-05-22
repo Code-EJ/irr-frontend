@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";  
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
@@ -25,16 +25,13 @@ const OutputMaterialCreate = () => {
       try {
         const response = await SubTypologyService.getAll(1, 9999);
         const subtipologias = response?.data ?? [];
-        const mapped = subtipologias?.map((item: { nome: string; id: string }) => ({
+        const mapped = subtipologias.map((item: { nome: string; id: string }) => ({
           name: item.nome,
           value: item.id,
-        })) ?? [];
+        }));
         setSubtypologies(mapped);
         if (mapped.length > 0 && !formData.subtipologiaId) {
-          setFormData((prev) => ({
-            ...prev,
-            subtipologiaId: mapped[0].value,
-          }));
+          setFormData((prev) => ({ ...prev, subtipologiaId: mapped[0].value }));
         }
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
@@ -44,24 +41,29 @@ const OutputMaterialCreate = () => {
 
     const fetchNotaFiscais = async () => {
       try {
-        const response = await DocumentService.getAll(1, 9999); 
-        const notaFiscais = response?.data ?? [];
-        const mapped = notaFiscais?.map((item: any) => ({
+        const response = await DocumentService.getAll(1, 9999);
+        const documentos = response?.data ?? [];
+
+        const notasFiscais = documentos.filter(
+          (item: any) => item.tipo === 'NOTA_FISCAL'
+        );
+
+        const mapped = notasFiscais.map((item: any) => ({
           name: item.numero ?? item.nome ?? item.id,
           value: item.id,
-        })) ?? [];
+        }));
+
         setNotaFiscais(mapped);
+
         if (mapped.length > 0 && !formData.notaFiscalId) {
-          setFormData((prev) => ({
-            ...prev,
-            notaFiscalId: mapped[0].value,
-          }));
+          setFormData((prev) => ({ ...prev, notaFiscalId: mapped[0].value }));
         }
       } catch (error) {
         toast.error("Erro ao carregar notas fiscais.");
         console.error(error);
       }
     };
+
     fetchSubtypologies();
     fetchNotaFiscais();
   }, []);

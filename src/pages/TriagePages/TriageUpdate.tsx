@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; 
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
@@ -16,11 +16,11 @@ const TriageUpdate = () => {
 
   const [formData, setFormData] = useState({
     data: "",
-    tipo: "",
+    tipo: "TOTAL",
     volumeTotal: "",
     volumeRejeito: "",
-    tipoOrigem: "",
-    tipoDestino: "",
+    tipoOrigem: "DOACAO",
+    tipoDestino: "DOACAO",
     subtipologiaId: "",
   });
 
@@ -44,6 +44,14 @@ const TriageUpdate = () => {
           value: item.id,
         })) ?? [];
         setSubtypologies(mapped);
+
+        // Se não tiver subtipologia selecionada, pega a primeira
+        if (mapped.length > 0 && !formData.subtipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            subtipologiaId: mapped[0].value,
+          }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
         console.error(error);
@@ -52,14 +60,17 @@ const TriageUpdate = () => {
 
     const fetchData = async () => {
       try {
-        const response = await TriageService.get(id!); // Busca os dados da triagem pelo ID
+        const response = await TriageService.get(id!);
+        // Ajustar o campo data para ISO string (yyyy-MM-dd)
+        const dataISO = response?.data ? new Date(response.data).toISOString().substring(0, 10) : "";
+
         setFormData({
-          data: response?.data ? new Date(response.data).toISOString() : "",
-          tipo: response?.tipo ?? "",
+          data: dataISO,
+          tipo: response?.tipo ?? "TOTAL",
           volumeTotal: response?.volumeTotal ? String(response.volumeTotal) : "",
           volumeRejeito: response?.volumeRejeito ? String(response.volumeRejeito) : "",
-          tipoOrigem: response?.tipoOrigem ?? "",
-          tipoDestino: response?.tipoDestino ?? "",
+          tipoOrigem: response?.tipoOrigem ?? "DOACAO",
+          tipoDestino: response?.tipoDestino ?? "DOACAO",
           subtipologiaId: response?.subtipologiaId ?? "",
         });
       } catch (error) {
@@ -78,7 +89,7 @@ const TriageUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await TriageService.update(id!, { 
+      await TriageService.update(id!, {
         ...formData,
         data: new Date(formData.data),
         tipo: formData.tipo as "TOTAL" | "PARCIAL",
@@ -86,7 +97,8 @@ const TriageUpdate = () => {
         tipoDestino: formData.tipoDestino as "DOACAO" | "COLETA",
         volumeTotal: Number(formData.volumeTotal),
         volumeRejeito: Number(formData.volumeRejeito),
-      }, { id });
+        subtipologiaId: formData.subtipologiaId,
+      });
       toast.success("Triagem atualizada com sucesso!");
       navigate("/triage-list");
     } catch (error) {
@@ -114,6 +126,7 @@ const TriageUpdate = () => {
                 name="data"
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={formData.data}
                 onChange={(value) => handleChange("data", value)}
               />
 
@@ -123,6 +136,7 @@ const TriageUpdate = () => {
                 titleStyle="text-black"
                 options={tiposTriagem}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={formData.tipo}
                 onChange={(value) => handleChange("tipo", value)}
               />
 
@@ -132,6 +146,7 @@ const TriageUpdate = () => {
                 name="volumeTotal"
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={formData.volumeTotal}
                 onChange={(value) => handleChange("volumeTotal", value)}
               />
 
@@ -141,6 +156,7 @@ const TriageUpdate = () => {
                 name="volumeRejeito"
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={formData.volumeRejeito}
                 onChange={(value) => handleChange("volumeRejeito", value)}
               />
 
@@ -150,6 +166,7 @@ const TriageUpdate = () => {
                 titleStyle="text-black"
                 options={tiposOrigemDestino}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={formData.tipoOrigem}
                 onChange={(value) => handleChange("tipoOrigem", value)}
               />
 
@@ -159,6 +176,7 @@ const TriageUpdate = () => {
                 titleStyle="text-black"
                 options={tiposOrigemDestino}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={formData.tipoDestino}
                 onChange={(value) => handleChange("tipoDestino", value)}
               />
 
@@ -168,12 +186,13 @@ const TriageUpdate = () => {
                 options={subtypologies}
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={formData.subtipologiaId}
                 onChange={(value) => handleChange("subtipologiaId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"triage-list"} />
+              <BackButton path={"/triage-list"} />
               <Button
                 titulo="Atualizar"
                 type="button"

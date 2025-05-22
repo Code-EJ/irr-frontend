@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"; 
-import { useNavigate, useParams } from "react-router-dom"; 
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
@@ -11,19 +11,23 @@ import { toast } from "react-toastify";
 
 const InputMaterialUpdate = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o id da URL
-  const [subtipologies, setSubtypologies] = useState<{ name: string; value: string }[]>([]);
+  const { id } = useParams();
 
-  const [formData, setFormData] = useState({
+  const [subtypologies, setSubtypologies] = useState<{ name: string; value: string }[]>([]);
+
+  const [formData, setFormData] = useState<{
+    quantidade: string;
+    tipo: "DOACAO" | "COLETA";
+    subtipologiaId: string;
+  }>({
     quantidade: "",
-    tipo: "",
+    tipo: "DOACAO",
     subtipologiaId: "",
   });
 
   const tiposMaterial = [
-    { name: "TIPO 1", value: "TIPO_1" },
-    { name: "TIPO 2", value: "TIPO_2" },
-    // Adicione mais tipos conforme necessário
+    { name: "DOAÇÃO", value: "DOACAO" },
+    { name: "COLETA", value: "COLETA" },
   ];
 
   useEffect(() => {
@@ -44,10 +48,10 @@ const InputMaterialUpdate = () => {
 
     const fetchData = async () => {
       try {
-        const response = await InputMaterialService.get(id!); // Busca os dados de MaterialEntrada pelo ID
+        const response = await InputMaterialService.get(id!);
         setFormData({
           quantidade: response?.quantidade ? String(response.quantidade) : "",
-          tipo: response?.tipo ?? "",
+          tipo: response?.tipo ?? "DOACAO",
           subtipologiaId: response?.subtipologiaId ?? "",
         });
       } catch (error) {
@@ -66,15 +70,12 @@ const InputMaterialUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await InputMaterialService.update(id!, { 
+      await InputMaterialService.update(id!, {
         ...formData,
-        data: new Date(), // Assuming current date for 'data'
-        tipo: formData.tipo as "TOTAL" | "PARCIAL", // Adjust as needed
-        tipoOrigem: "DOACAO", // Replace with appropriate value
-        tipoDestino: "COLETA", // Replace with appropriate value
-        volumeTotal: Number(formData.quantidade),
-        volumeRejeito: 0, // Replace with appropriate value
-      }, { id });
+        quantidade: Number(formData.quantidade),
+        tipo: formData.tipo,
+        subtipologiaId: formData.subtipologiaId,
+      });
       toast.success("Material de entrada atualizado com sucesso!");
       navigate("/input-material-list");
     } catch (error) {
@@ -93,7 +94,9 @@ const InputMaterialUpdate = () => {
       >
         {(formik) => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR MATERIAL DE ENTRADA</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">
+              ATUALIZAR MATERIAL DE ENTRADA
+            </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
@@ -106,7 +109,7 @@ const InputMaterialUpdate = () => {
               />
 
               <InputList
-                titulo="Tipo"
+                titulo="Tipo de Material"
                 name="tipo"
                 titleStyle="text-black"
                 options={tiposMaterial}
@@ -117,15 +120,16 @@ const InputMaterialUpdate = () => {
               <InputList
                 titulo="Subtipologia"
                 name="subtipologiaId"
-                options={subtipologies}
+                options={subtypologies}
                 titleStyle="text-black"
+                value={formData.subtipologiaId}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("subtipologiaId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"material-entrada-list"} />
+              <BackButton path={"/input-material-list"} />
               <Button
                 titulo="Atualizar"
                 type="button"

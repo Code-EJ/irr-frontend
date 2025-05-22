@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react"; 
-import { useNavigate, useParams } from "react-router-dom"; 
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputList from "../../components/InputList";
 import InputText from "../../components/InputText";
-import { OutputMaterialService, SubTypologyService, DocumentService } from "../../services"; 
+import { OutputMaterialService, SubTypologyService, DocumentService } from "../../services";
 import { toast } from "react-toastify";
 
 const OutputMaterialUpdate = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o id da URL
-  const [subtipologies, setSubtypologies] = useState<{ name: string; value: string }[]>([]);
+  const { id } = useParams();
+  const [subtipologies, setSubtipologies] = useState<{ name: string; value: string }[]>([]);
   const [notaFiscais, setNotaFiscais] = useState<{ name: string; value: string }[]>([]);
 
   const [formData, setFormData] = useState({
@@ -25,12 +25,11 @@ const OutputMaterialUpdate = () => {
     const fetchSubtypologies = async () => {
       try {
         const response = await SubTypologyService.getAll(1, 9999);
-        const subtipologias = response?.data ?? [];
-        const mapped = subtipologias?.map((item: { nome: string; id: string }) => ({
+        const mapped = (response?.data ?? []).map((item: { nome: string; id: string }) => ({
           name: item.nome,
           value: item.id,
-        })) ?? [];
-        setSubtypologies(mapped);
+        }));
+        setSubtipologies(mapped);
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
         console.error(error);
@@ -39,13 +38,23 @@ const OutputMaterialUpdate = () => {
 
     const fetchNotaFiscais = async () => {
       try {
-        const response = await DocumentService.getAll(1, 9999); // Buscar todas as notas fiscais
-        const notas = response?.data ?? [];
-        const mapped = notas?.map((item: { numero: string; id: string }) => ({
-          name: item.numero,
+        const response = await DocumentService.getAll(1, 9999);
+        const documentos = response?.data ?? [];
+
+        const notasFiscais = documentos.filter(
+          (item: any) => item.tipo === 'NOTA_FISCAL'
+        );
+
+        const mapped = notasFiscais.map((item: any) => ({
+          name: item.numero ?? item.nome ?? item.id,
           value: item.id,
-        })) ?? [];
+        }));
+
         setNotaFiscais(mapped);
+
+        if (mapped.length > 0 && !formData.notaFiscalId) {
+          setFormData((prev) => ({ ...prev, notaFiscalId: mapped[0].value }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar notas fiscais.");
         console.error(error);
@@ -54,7 +63,7 @@ const OutputMaterialUpdate = () => {
 
     const fetchData = async () => {
       try {
-        const response = await OutputMaterialService.get(id!); // Buscar os dados de MaterialSaida pelo ID
+        const response = await OutputMaterialService.get(id!);
         setFormData({
           quantidade: response?.quantidade ? String(response.quantidade) : "",
           notaFiscalId: response?.notaFiscalId ?? "",
@@ -77,7 +86,7 @@ const OutputMaterialUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await OutputMaterialService.update(id!, { 
+      await OutputMaterialService.update(id!, {
         ...formData,
         quantidade: Number(formData.quantidade),
         notaFiscalId: formData.notaFiscalId,
@@ -93,12 +102,7 @@ const OutputMaterialUpdate = () => {
 
   return (
     <Card className="rounded-[50px] shadow-lg d-flex flex-col w-3/4 max-w-4x1 mx-auto p-4">
-      <SimpleForm
-        initialValues={formData}
-        onSubmit={handleSubmit}
-        autoSetErrors={true}
-        submitOnChange={false}
-      >
+      <SimpleForm initialValues={formData} onSubmit={handleSubmit} autoSetErrors={true} submitOnChange={false}>
         {(formik) => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR MATERIAL DE SAÍDA</h1>
@@ -110,6 +114,7 @@ const OutputMaterialUpdate = () => {
                 name="quantidade"
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={formData.quantidade}
                 onChange={(value) => handleChange("quantidade", value)}
               />
 
@@ -118,6 +123,7 @@ const OutputMaterialUpdate = () => {
                 name="notaFiscalId"
                 titleStyle="text-black"
                 options={notaFiscais}
+                value={formData.notaFiscalId}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("notaFiscalId", value)}
               />
@@ -127,13 +133,14 @@ const OutputMaterialUpdate = () => {
                 name="subtipologiaId"
                 options={subtipologies}
                 titleStyle="text-black"
+                value={formData.subtipologiaId}
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 onChange={(value) => handleChange("subtipologiaId", value)}
               />
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"output-material-list"} />
+              <BackButton path={"/output-material-list"} />
               <Button
                 titulo="Atualizar"
                 type="button"

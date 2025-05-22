@@ -8,11 +8,11 @@ type TableProps = {
     editUrl: string | undefined;
 }
 
-const TableComponent = ({columns, data, editUrl}: TableProps) => {
+const TableComponent = ({ columns, data, editUrl }: TableProps) => {
     const navigate = useNavigate();
-    const redirectEdit = (url: string | undefined , id: string) => {
+    const redirectEdit = (url: string | undefined, id: string) => {
         if (url && id) {
-            navigate(`${url}/${id}`);
+            navigate(`/${url}/${id}`);
         } else {
             toast.error("Erro ao redirecionar para a pagina de edição.");
         }
@@ -20,29 +20,29 @@ const TableComponent = ({columns, data, editUrl}: TableProps) => {
 
     return (
         <table className="w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr className="bg-gray-100">
-                        {columns.map((col) => (
-                            <th className="p-2">{col}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((item: any, index: any) => (
-                        <tr key={index} className="border-t">
-                            {columns.map((col) => (
-                                <td className="p-2">{item[col]}</td>
-                            ))}
-                            <td className="p-2">
-                                <Pencil className="cursor-pointer text-gray-500" onClick={() => redirectEdit(editUrl, item.id)}/>
-                            </td>
-                            <td className="p-2">
-                                <Play className="cursor-pointer text-gray-500" />
-                            </td>    
-                        </tr>
+            <thead>
+                <tr className="bg-gray-100">
+                    {columns.map((col) => (
+                        <th className="p-2">{col}</th>
                     ))}
-                </tbody>
-            </table> 
+                </tr>
+            </thead>
+            <tbody>
+                {data.map((item: any, index: any) => (
+                    <tr key={index} className="border-t">
+                        {columns.map((col) => (
+                            <td className="p-2">{item[col]}</td>
+                        ))}
+                        <td className="p-2">
+                            <Pencil className="cursor-pointer text-gray-500" onClick={() => redirectEdit(editUrl, item.id)} />
+                        </td>
+                        <td className="p-2">
+                            <Play className="cursor-pointer text-gray-500" />
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
     )
 }
 export default TableComponent;

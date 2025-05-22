@@ -5,12 +5,12 @@ import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputText from "../../components/InputText";
-import { VehicleService } from "../../services"; // Substitua com o serviço real para Vehicle
+import { VehicleService } from "../../services";
 import { toast } from "react-toastify";
 
 const VehicleUpdate = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o ID da URL
+  const { id } = useParams();
 
   const [formData, setFormData] = useState({
     placa: "",
@@ -20,7 +20,7 @@ const VehicleUpdate = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await VehicleService.get(id!); // Substitua com o serviço real para buscar o Vehicle
+        const response = await VehicleService.get(id!);
         setFormData({
           placa: response?.placa ?? "",
           modelo: response?.modelo ?? "",
@@ -40,15 +40,7 @@ const VehicleUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await VehicleService.update(
-        id!,
-        { nome: "", valor: 0 }, 
-        { id },
-        {
-          placa: formData.placa,
-          modelo: formData.modelo,
-        }
-      );
+      await VehicleService.update(id!, formData);
       toast.success("Veículo atualizado com sucesso!");
       navigate("/vehicle-list");
     } catch (error) {
@@ -67,10 +59,11 @@ const VehicleUpdate = () => {
       >
         {(formik) => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR VEÍCULO</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">
+              ATUALIZAR VEÍCULO
+            </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-
               <InputText
                 type="text"
                 titulo="Placa"
@@ -93,7 +86,7 @@ const VehicleUpdate = () => {
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"vehicle-list"} /> {/* Atualize para a rota de listagem de veículos */}
+              <BackButton path={"vehicle-list"} />
               <Button
                 titulo="Atualizar"
                 type="button"

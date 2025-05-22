@@ -9,10 +9,23 @@ import InputList from "../../components/InputList";
 import { toast } from "react-toastify";
 import { SaleService, DocumentService } from "../../services";
 
+const tiposDocumento = [
+  "NOTA_FISCAL",
+  "MTR_GERADOR",
+  "MTR_TRANSPORTADOR",
+  "MTR_DESTINADOR",
+  "DIARIO_COLETA",
+];
+
 const SalesCreate = () => {
   const navigate = useNavigate();
 
-  const [documentos, setDocumentos] = useState<{ name: string; value: string }[]>([]);
+  const [documentos, setDocumentos] = useState<any[]>([]);
+
+  const [notaFiscais, setNotaFiscais] = useState<{ name: string; value: string }[]>([]);
+  const [mtrGeradores, setMtrGeradores] = useState<{ name: string; value: string }[]>([]);
+  const [mtrTransportadores, setMtrTransportadores] = useState<{ name: string; value: string }[]>([]);
+  const [mtrDestinadores, setMtrDestinadores] = useState<{ name: string; value: string }[]>([]);
 
   const [formData, setFormData] = useState({
     comprador: "",
@@ -29,21 +42,35 @@ const SalesCreate = () => {
       try {
         const response = await DocumentService.getAll(1, 9999);
         const data = response?.data ?? [];
-        const mapped = data.map((item: any) => ({
-          name: item.numero ?? item.nome ?? item.id,
-          value: item.id,
-        }));
-        setDocumentos(mapped);
 
-        if (mapped.length > 0) {
-          setFormData((prev) => ({
-            ...prev,
-            notaFiscalId: prev.notaFiscalId || mapped[0].value,
-            mtrGeradorId: prev.mtrGeradorId || mapped[0].value,
-            mtrTransportadorId: prev.mtrTransportadorId || mapped[0].value,
-            mtrDestinadorId: prev.mtrDestinadorId || mapped[0].value,
+        const documentosFiltrados = data.filter((doc: any) => tiposDocumento.includes(doc.tipo));
+
+        setDocumentos(documentosFiltrados);
+
+        const mapOptions = (docs: any[]) =>
+          docs.map((item) => ({
+            name: item.numero ?? item.nome ?? item.id,
+            value: item.id,
           }));
-        }
+
+        const filteredNotaFiscais = documentosFiltrados.filter(doc => doc.tipo === "NOTA_FISCAL");
+        const filteredMtrGeradores = documentosFiltrados.filter(doc => doc.tipo === "MTR_GERADOR");
+        const filteredMtrTransportadores = documentosFiltrados.filter(doc => doc.tipo === "MTR_TRANSPORTADOR");
+        const filteredMtrDestinadores = documentosFiltrados.filter(doc => doc.tipo === "MTR_DESTINADOR");
+
+        setNotaFiscais(mapOptions(filteredNotaFiscais));
+        setMtrGeradores(mapOptions(filteredMtrGeradores));
+        setMtrTransportadores(mapOptions(filteredMtrTransportadores));
+        setMtrDestinadores(mapOptions(filteredMtrDestinadores));
+
+        setFormData((prev) => ({
+          ...prev,
+          notaFiscalId: prev.notaFiscalId || (filteredNotaFiscais[0]?.id ?? ""),
+          mtrGeradorId: prev.mtrGeradorId || (filteredMtrGeradores[0]?.id ?? ""),
+          mtrTransportadorId: prev.mtrTransportadorId || (filteredMtrTransportadores[0]?.id ?? ""),
+          mtrDestinadorId: prev.mtrDestinadorId || (filteredMtrDestinadores[0]?.id ?? ""),
+        }));
+
       } catch (error) {
         toast.error("Erro ao carregar documentos.");
         console.error(error);
@@ -103,7 +130,7 @@ const SalesCreate = () => {
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 titulo="Data"
                 name="data"
-                type="date" 
+                type="date"
                 onChange={(value) => handleChange("data", value)}
               />
 
@@ -119,9 +146,9 @@ const SalesCreate = () => {
               <InputList
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                titulo="Nota Fiscal ID"
+                titulo="Nota Fiscal"
                 name="notaFiscalId"
-                options={documentos}
+                options={notaFiscais}
                 value={formData.notaFiscalId}
                 onChange={(value) => handleChange("notaFiscalId", value)}
               />
@@ -129,9 +156,9 @@ const SalesCreate = () => {
               <InputList
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                titulo="MTR Gerador ID"
+                titulo="MTR Gerador"
                 name="mtrGeradorId"
-                options={documentos}
+                options={mtrGeradores}
                 value={formData.mtrGeradorId}
                 onChange={(value) => handleChange("mtrGeradorId", value)}
               />
@@ -139,9 +166,9 @@ const SalesCreate = () => {
               <InputList
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                titulo="MTR Transportador ID"
+                titulo="MTR Transportador"
                 name="mtrTransportadorId"
-                options={documentos}
+                options={mtrTransportadores}
                 value={formData.mtrTransportadorId}
                 onChange={(value) => handleChange("mtrTransportadorId", value)}
               />
@@ -149,9 +176,9 @@ const SalesCreate = () => {
               <InputList
                 titleStyle="text-black"
                 className="h-8 sm:h-8 md:h-10 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                titulo="MTR Destinador ID"
+                titulo="MTR Destinador"
                 name="mtrDestinadorId"
-                options={documentos}
+                options={mtrDestinadores}
                 value={formData.mtrDestinadorId}
                 onChange={(value) => handleChange("mtrDestinadorId", value)}
               />

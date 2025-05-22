@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"; 
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import SimpleForm from "../../components/SimpleForm";
@@ -37,6 +37,13 @@ const PressingUpdate = () => {
           value: item.id,
         }));
         setSubtypologies(mapped);
+
+        if (mapped.length > 0 && !formData.subtipologiaId) {
+          setFormData((prev) => ({
+            ...prev,
+            subtipologiaId: mapped[0].value,
+          }));
+        }
       } catch (error) {
         toast.error("Erro ao carregar subtipologias.");
         console.error(error);
@@ -75,7 +82,7 @@ const PressingUpdate = () => {
         volumeTotal: Number(formData.volumeTotal),
         tipoOrigem: formData.tipoOrigem as "DOACAO" | "COLETA",
         tipoDestino: formData.tipoDestino as "DOACAO" | "COLETA",
-      }, { id });
+      });
 
       toast.success("Prensagem atualizada com sucesso!");
       navigate("/pressing-list");
@@ -93,7 +100,7 @@ const PressingUpdate = () => {
         autoSetErrors={true}
         submitOnChange={false}
       >
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR PRENSAGEM</h1>
 

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import { OutputMaterialService, SubTypologyService, DocumentService } from "../../services"; 
+import { OutputMaterialService, SubTypologyService, DocumentService } from "../../services";
 import { useNavigate } from 'react-router-dom';
 import TableComponent from "../../components/TableComponent";
 import { handleExport } from "../../utils/ExportService";
 
-const OutputMaterialList = () => { 
+const OutputMaterialList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
     const [data, setData] = useState<Array<any>>([]);
@@ -14,44 +14,44 @@ const OutputMaterialList = () => {
     const [notaFiscalMap, setNotaFiscalMap] = useState<Record<string, string>>({});
 
     const fetchData = async (page: number | null) => {
-            const [outputMaterialResponse, subtypologyResponse, notaFiscalResponse] = await Promise.all([
-                OutputMaterialService.getAll(page),
-                SubTypologyService.getAll(1, 9999),
-                DocumentService.getAll(1, 9999),
-            ]);
-    
-            const subtypologies = subtypologyResponse?.data ?? [];
-            const subMap: Record<string, string> = {};
-            subtypologies.forEach((item: any) => {
-                subMap[item.id] = item.nome;
-            });
-            setSubtypologyMap(subMap);
+        const [outputMaterialResponse, subtypologyResponse, notaFiscalResponse] = await Promise.all([
+            OutputMaterialService.getAll(page),
+            SubTypologyService.getAll(1, 9999),
+            DocumentService.getAll(1, 9999),
+        ]);
 
-            const notaFiscal = notaFiscalResponse?.data ?? [];
-            const subMap2: Record<string, string> = {};
-            notaFiscal.forEach((item: any) => {
-                subMap2[item.id] = item.nome;
-            });
-            setNotaFiscalMap(subMap2);
-    
-            const outputMaterialData = outputMaterialResponse?.data.map((item: any) => ({
-                ...item,
-                subtipologia: subMap[item.subtipologiaId] ?? item.subtipologiaId,
-                notaFiscal: notaFiscalMap[item.notaFiscalId] ?? item.notaFiscalId,
-            })) ?? [];
-            setData(outputMaterialData);
+        const subtypologies = subtypologyResponse?.data ?? [];
+        const subMap: Record<string, string> = {};
+        subtypologies.forEach((item: any) => {
+            subMap[item.id] = item.nome;
+        });
+        setSubtypologyMap(subMap);
+
+        const notaFiscal = notaFiscalResponse?.data ?? [];
+        const subMap2: Record<string, string> = {};
+        notaFiscal.forEach((item: any) => {
+            subMap2[item.id] = item.nome;
+        });
+        setNotaFiscalMap(subMap2);
+
+        const outputMaterialData = outputMaterialResponse?.data.map((item: any) => ({
+            ...item,
+            subtipologia: subMap[item.subtipologiaId] ?? item.subtipologiaId,
+            notaFiscal: notaFiscalMap[item.notaFiscalId] ?? item.notaFiscalId,
+        })) ?? [];
+        setData(outputMaterialData);
     };
 
     useEffect(() => {
-        fetchData(page); 
+        fetchData(page);
     }, []);
 
     useEffect(() => {
-        fetchData(page); 
+        fetchData(page);
     }, [page]);
 
     const handleBack = () => {
-        navigate("/stock-menu"); 
+        navigate("/stock-menu");
     };
 
     const handleCreate = () => {
@@ -68,27 +68,27 @@ const OutputMaterialList = () => {
                     onClick={handleCreate}
                 />
             </div>
-
-            <TableComponent 
-                columns={[
-                    'quantidade',
-                    'notaFiscal',
-                    'subtipologia' 
-                ]}
-                data={data}
-                editUrl={"output-material-update"}
-            />
-
+            <div className="w-full overflow-x-auto">
+                <TableComponent
+                    columns={[
+                        'quantidade',
+                        'notaFiscal',
+                        'subtipologia'
+                    ]}
+                    data={data}
+                    editUrl={"output-material-update"}
+                />
+            </div>
             <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
                 <div className="flex flex-wrap gap-2">
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
                     <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "material-saida")} />
                 </div>
                 <div className="flex items-center mt-4 sm:mt-0">
-                    <b 
-                        className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4" 
+                    <b
+                        className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4"
                         onClick={handleBack}
-                    > 
+                    >
                         Voltar
                     </b>
                     <Button className="text-white" titulo="<" onClick={() => setPage(page - 1)} disabled={page === 1} />

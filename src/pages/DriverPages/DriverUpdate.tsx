@@ -14,20 +14,19 @@ const DriverUpdate = () => {
 
   const [formData, setFormData] = useState({
     nome: "",
-    cpf: ""
+    cpf: "",
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const driverRes = await DriverService.get(id!);
-        const data = driverRes ?? {};
+        const response = await DriverService.get(id!);
         setFormData({
-          nome: data.nome ?? "",
-          cpf: data.cpf ?? ""
+          nome: response?.nome ?? "",
+          cpf: response?.cpf ?? "",
         });
       } catch (error) {
-        toast.error("Erro ao carregar dados.");
+        toast.error("Erro ao carregar os dados do motorista.");
         console.error(error);
       }
     };
@@ -51,11 +50,18 @@ const DriverUpdate = () => {
   };
 
   return (
-    <Card className="rounded-[50px] shadow-lg d-flex flex-col w-3/4 max-w-4x1 mx-auto p-4">
-      <SimpleForm initialValues={formData} onSubmit={handleSubmit} autoSetErrors={true} submitOnChange={false}>
-        {(formik) => (
+    <Card className="rounded-[50px] shadow-lg w-3/4 max-w-4xl mx-auto p-4">
+      <SimpleForm
+        initialValues={formData}
+        onSubmit={handleSubmit}
+        autoSetErrors={true}
+        submitOnChange={false}
+      >
+        {() => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR MOTORISTA</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">
+              ATUALIZAR MOTORISTA
+            </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
@@ -73,7 +79,7 @@ const DriverUpdate = () => {
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path="driver-list" />
+              <BackButton path="/driver-list" />
               <Button
                 titulo="Atualizar"
                 type="button"

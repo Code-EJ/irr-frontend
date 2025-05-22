@@ -103,7 +103,7 @@ const DocumentList = () => {
                         "media",
                     ]}
                     data={tableData}
-                    editUrl="/document-update" // rota base para edição + id
+                    editUrl="document-update"
                 />
             </div>
 

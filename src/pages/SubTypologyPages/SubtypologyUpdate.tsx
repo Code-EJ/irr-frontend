@@ -6,16 +6,15 @@ import SimpleForm from "../../components/SimpleForm";
 import BackButton from "../../components/BackButton";
 import InputList from "../../components/InputList";
 import InputText from "../../components/InputText";
-import { SubTypologyService, TypologyService } from "../../services"; // Corrigido
+import { SubTypologyService, TypologyService } from "../../services";
 import { toast } from "react-toastify";
 
 const SubTypologyUpdate = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Pega o id da URL
+  const { id } = useParams();
   const [typologies, setTypologies] = useState<{ name: string; value: string }[]>([]);
 
   const [formData, setFormData] = useState({
-    id: "",
     nome: "",
     valor: "",
     tipologiaId: "",
@@ -24,7 +23,7 @@ const SubTypologyUpdate = () => {
   useEffect(() => {
     const fetchTypologies = async () => {
       try {
-        const response = await TypologyService.getAll(1, 9999); // Buscar todas as Tipologias
+        const response = await TypologyService.getAll(1, 9999);
         const tipologias = response?.data ?? [];
         const mapped = tipologias?.map((item: { nome: string; id: string }) => ({
           name: item.nome,
@@ -41,9 +40,8 @@ const SubTypologyUpdate = () => {
       try {
         const response = await SubTypologyService.get(id!);
         setFormData({
-          id: response?.id ?? "",
           nome: response?.nome ?? "",
-          valor: response?.valor ?? "",
+          valor: String(response?.valor ?? ""),
           tipologiaId: response?.tipologia?.id ?? "",
         });
       } catch (error) {
@@ -63,12 +61,11 @@ const SubTypologyUpdate = () => {
   const handleSubmit = async () => {
     try {
       await SubTypologyService.update(id!, {
-        nome: formData.nome,
-        valor: formData.valor,
-        tipologiaId: formData.tipologiaId,
-      }, { id });
+        ...formData,
+        valor: Number(formData.valor),
+      });
       toast.success("Subtipologia atualizada com sucesso!");
-      navigate("/subtypology-list"); // Redireciona para a lista de subtipologias
+      navigate("/subtypology-list");
     } catch (error) {
       toast.error("Erro ao atualizar subtipologia. Verifique os dados e tente novamente.");
       console.error(error);
@@ -85,7 +82,9 @@ const SubTypologyUpdate = () => {
       >
         {(formik) => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR SUBTIPOLOGIA</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">
+              ATUALIZAR SUBTIPOLOGIA
+            </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
@@ -99,7 +98,7 @@ const SubTypologyUpdate = () => {
               />
 
               <InputText
-                type="text"
+                type="number"
                 titulo="Valor"
                 name="valor"
                 value={formData.valor}
@@ -120,7 +119,7 @@ const SubTypologyUpdate = () => {
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"subtypology-list"} />
+              <BackButton path={"/subtypology-list"} />
               <Button
                 titulo="Atualizar"
                 type="button"

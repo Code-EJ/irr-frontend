@@ -83,35 +83,35 @@ const CollectionList = () => {
                     onClick={handleCreate}
                 />
             </div>
-
-            <TableComponent 
-                columns={[
-                    'dataRealizacao',
-                    'dataChegada',
-                    'dataSaida',
-                    'pesagem',
-                    'quilometragem',
-                    'veiculo',
-                    'motorista',
-                    'mtrGerador',
-                    'mtrDestinador',
-                    'mtrTransportador',
-                    'diarioColeta'
-                ]}
-                data={data}
-                editUrl="collection-update"
-            />
-
+            <div className="w-full overflow-x-auto">
+                <TableComponent
+                    columns={[
+                        'dataRealizacao',
+                        'dataChegada',
+                        'dataSaida',
+                        'pesagem',
+                        'quilometragem',
+                        'veiculo',
+                        'motorista',
+                        'mtrGerador',
+                        'mtrDestinador',
+                        'mtrTransportador',
+                        'diarioColeta'
+                    ]}
+                    data={data}
+                    editUrl="collection-update"
+                />
+            </div>
             <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
                 <div className="flex flex-wrap gap-2">
                     <Button titulo="Excluir selecionados" className="bg-red-600 text-white" />
                     <Button titulo="Exportar CSV" onClick={() => handleExport(fetchData, page, "coletas")} />
                 </div>
                 <div className="flex items-center mt-4 sm:mt-0">
-                    <b 
-                        className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4" 
+                    <b
+                        className="underline text-[#0c4200] hover:cursor-pointer hover:text-[#082e00] p-4"
                         onClick={handleBack}
-                    > 
+                    >
                         Voltar
                     </b>
                     <Button className="text-white" titulo="<" onClick={() => setPage(page - 1)} disabled={page === 1} />

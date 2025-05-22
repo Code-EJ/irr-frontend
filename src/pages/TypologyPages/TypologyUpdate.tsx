@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 
 const TypologyUpdate = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); 
+  const { id } = useParams();
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -40,20 +40,12 @@ const TypologyUpdate = () => {
 
   const handleSubmit = async () => {
     try {
-      await TypologyService.update(
-        id!,
-        {
-          nome: formData.nome,
-          valor: Number(formData.valor),
-        },
-        { id },
-        {
-          nome: formData.nome,
-          valor: Number(formData.valor),
-        }
-      );
+      await TypologyService.update(id!, {
+        nome: formData.nome,
+        valor: Number(formData.valor),
+      });
       toast.success("Tipologia atualizada com sucesso!");
-      navigate("/tipology-list");
+      navigate("/typology-list");
     } catch (error) {
       toast.error("Erro ao atualizar tipologia. Verifique os dados e tente novamente.");
       console.error(error);
@@ -70,7 +62,9 @@ const TypologyUpdate = () => {
       >
         {(formik) => (
           <Card>
-            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR TIPOLOGIA</h1>
+            <h1 className="text-center text-3xl text-green-900 font-bold mb-8">
+              ATUALIZAR TIPOLOGIA
+            </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               <InputText
@@ -95,7 +89,7 @@ const TypologyUpdate = () => {
             </div>
 
             <div className="flex justify-between mt-8">
-              <BackButton path={"tipology-list"} />
+              <BackButton path="/typology-list" />
               <Button
                 titulo="Atualizar"
                 type="button"

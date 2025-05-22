@@ -1,7 +1,6 @@
 import Button from "../Button";
 import BackButton from "../BackButton";
 
-
 type MenuItem = {
   title: string;
   color: string;
@@ -14,14 +13,16 @@ type ButtonsMenuProps = {
   backDestination?: string;
 };
 
-const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton, backDestination}) => {
+const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton, backDestination }) => {
   return (
     <div className="flex w-full flex-col items-center bg-green-900 p-6 rounded-lg min-h-[5rem]">
-      <div className="flex flex-1 gap-8 items-center justify-center">
+      <div className="flex flex-wrap gap-4 md:gap-8 items-center justify-center w-full">
         {items.map((item, index) => (
           <Button
             key={index}
-            className="w-full max-w-[9rem] min-w-[6rem] h-[6rem] text-center rounded-[20px] flex items-center justify-center font-semibold cursor-pointer hover:shadow-2xl hover:bg-slate-200 border border-green-900 bg-white text-green-900"
+            className="w-full sm:w-[9rem] h-[6rem] text-center rounded-[20px] 
+            flex items-center justify-center font-semibold cursor-pointer 
+            hover:shadow-2xl hover:bg-slate-200 border border-green-900 bg-white text-green-900"
             onClick={() => (window.location.href = item.link)}
             titulo={item.title}
             type="button"
@@ -31,8 +32,8 @@ const ButtonsMenu: React.FC<ButtonsMenuProps> = ({ items, showBackButton, backDe
             </h1>
           </Button>
         ))}
-        
       </div>
+
       {showBackButton && (
         <div className="flex justify-center mt-6">
           <BackButton path={backDestination || "/menu"} />

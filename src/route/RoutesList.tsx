@@ -45,10 +45,10 @@ import OutputMaterialUpdate from "../pages/OutputMaterialPages/OutputMaterialUpd
 import PressingUpdate from "../pages/PressingPages/PressingUpdate";
 import SalesUpdate from "../pages/SalesPages/SalesUpdate";
 import TypologyUpdate from "../pages/TypologyPages/TypologyUpdate";
-import TriageUpdate from "../pages/TriageDrivers/TriageDriversUpdate";
 import VehicleUpdate from "../pages/VehiclePages/VehicleUpdate";
 import DonatorUpdate from "../pages/DonatorPages/DonatorUpdate";
 import SubTypologyUpdate from "../pages/SubTypologyPages/SubtypologyUpdate";
+import TriageUpdate from "../pages/TriagePages/TriageUpdate";
 
 // Rotas comuns (ex: login)
 const commonRoutes = [
