@@ -69,3 +69,7 @@ This is the current tree, not completed feature modularization. ADR-0003 defines
 ## Contribution conventions
 
 Use feature/refactor branches and coherent semantic commits. All maintained documentation, new/changed comments, commit messages and PR descriptions use English. Use TSDoc for TypeScript APIs and JavaDoc in the backend. Credit Enzo Ribas (@oEnzoRibas) for this refactor without replacing previous contributor attribution. Update Swagger-derived contracts and consumers together.
+
+## Backend contract update (ADR-0008)
+
+The backend now requires administrator provisioning through POST /api/users; self-registration is retired. Attachment responses expose only safe metadata, reads/deletes require creator ownership, and deletion returns 202 for queued physical cleanup. The frontend implementation has not yet adopted these contracts. Use the running backend Swagger specification and [ADR-0008](docs/adrs/0008-identity-and-attachment-boundaries.md) before implementing the migration.
