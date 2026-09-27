@@ -73,3 +73,7 @@ Use feature/refactor branches and coherent semantic commits. All maintained docu
 ## Backend contract update (ADR-0008)
 
 The backend now requires administrator provisioning through POST /api/users; self-registration is retired. Attachment responses expose only safe metadata, reads/deletes require creator ownership, and deletion returns 202 for queued physical cleanup. The frontend implementation has not yet adopted these contracts. Use the running backend Swagger specification and [ADR-0008](docs/adrs/0008-identity-and-attachment-boundaries.md) before implementing the migration.
+
+## Organization ownership and infrastructure update
+
+The owner accepted organization-specific catalogs and stock. The backend now exposes explicit organization memberships, with administrator-only grant/revoke and member-only list/read; the existing business APIs are still awaiting organization cutover. See [ADR-0009](docs/adrs/0009-organization-scope-and-catalog-integrity.md). Redis is an internal backend Docker service with no browser connection or frontend credential; see [ADR-0010](docs/adrs/0010-containerized-redis.md). Frontend organization selection and catalog contract migration remain pending.
