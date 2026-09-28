@@ -6,11 +6,9 @@ export default defineConfig(() => {
   return {
     plugins: [react()],
     server: {
-      host: true,
+      host: '127.0.0.1',
       port: 5173,
-      allowedHosts: [
-        'front-irr-production.up.railway.app', // Adiciona o seu host aqui
-      ],
+      strictPort: true,
     },
   };
 });
