@@ -1,11 +1,10 @@
-import React from "react";
 import Button from "./Button";
 
 type DeleteEntityModalProps = {
   id: number;
   isVisible: boolean | null;
-  onAccept: any;
-  onClose: any;
+  onAccept: (id:number)=>void;
+  onClose: ()=>void;
 };
 
 const DeleteEntityModal = ({

@@ -42,10 +42,10 @@ const OutputMaterialUpdate = () => {
         const documentos = response?.data ?? [];
 
         const notasFiscais = documentos.filter(
-          (item: any) => item.tipo === 'NOTA_FISCAL'
+          (item) => item.tipo === 'NOTA_FISCAL'
         );
 
-        const mapped = notasFiscais.map((item: any) => ({
+        const mapped = notasFiscais.map((item) => ({
           name: item.numero ?? item.nome ?? item.id,
           value: item.id,
         }));
@@ -78,9 +78,9 @@ const OutputMaterialUpdate = () => {
     fetchSubtypologies();
     fetchNotaFiscais();
     fetchData();
-  }, [id]);
+  }, [formData.notaFiscalId, id]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -103,7 +103,7 @@ const OutputMaterialUpdate = () => {
   return (
     <Card className="rounded-[50px] shadow-lg d-flex flex-col w-3/4 max-w-4x1 mx-auto p-4">
       <SimpleForm initialValues={formData} onSubmit={handleSubmit} autoSetErrors={true} submitOnChange={false}>
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">ATUALIZAR MATERIAL DE SAÍDA</h1>
 

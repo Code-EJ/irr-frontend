@@ -36,9 +36,9 @@ export interface Donator extends Model {
 }
 
 export interface Collection extends Model {
-  dataRealizacao: Date;
-  dataChegada: Date;
-  dataSaida: Date;
+  dataRealizacao: string;
+  dataChegada: string;
+  dataSaida: string;
   pesagem: number;
   quilometragem: number;
   ativo: boolean;
@@ -64,7 +64,7 @@ export interface SubTypology extends Model {
 }
 
 export interface Triage extends Model {
-  data: Date;
+  data: string;
   tipo: "TOTAL" | "PARCIAL";
   volumeTotal: number;
   volumeRejeito: number;
@@ -74,7 +74,7 @@ export interface Triage extends Model {
 }
 
 export interface Pressing extends Model {
-  data: Date;
+  data: string;
   volumeTotal: number;
   tipoOrigem: "DOACAO" | "COLETA";
   tipoDestino: "DOACAO" | "COLETA";
@@ -95,7 +95,7 @@ export interface OutputMaterial extends Model {
 
 export interface Sale extends Model {
   comprador: string;
-  data: Date;
+  data: string;
   valor: number;
   notaFiscalId: string;
   mtrGeradorId: string;
@@ -109,8 +109,8 @@ export interface Media extends Model {
 
 export interface Document extends Model {
   nome: string;
-  dataDocumento: Date;
-  dataInsercao: Date;
+  dataDocumento: string;
+  dataInsercao: string;
   tipo: "NOTA_FISCAL" | "MTR_GERADOR" | "MTR_TRANSPORTADOR" | "MTR_DESTINADOR" | "DIARIO_COLETA";
   mediaId: string;
   coletasMTRGerador: string;

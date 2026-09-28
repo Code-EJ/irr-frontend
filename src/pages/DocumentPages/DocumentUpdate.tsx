@@ -48,7 +48,7 @@ const DocumentUpdate = () => {
   }, [id]);
 
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | File) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -72,8 +72,8 @@ const DocumentUpdate = () => {
       await DocumentService.update(id!, formDataToSend);
       toast.success("Documento atualizado com sucesso!");
       navigate("/document-list");
-    } catch (error: any) {
-      const msg = error?.response?.data?.message || error.message || "Erro desconhecido";
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Document update failed.";
       toast.error(`Erro ao atualizar documento: ${msg}`);
     }
   };

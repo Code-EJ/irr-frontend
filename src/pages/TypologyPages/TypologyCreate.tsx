@@ -16,7 +16,7 @@ const TypologyCreate = () => {
     valor: "",
   });
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -42,7 +42,7 @@ const TypologyCreate = () => {
         autoSetErrors={true}
         submitOnChange={false}
       >
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">Cadastrar Tipologia</h1>
 

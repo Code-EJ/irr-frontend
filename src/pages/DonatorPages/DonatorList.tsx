@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { DonatorService } from "../../services";
@@ -9,11 +9,11 @@ import { handleExport } from "../../utils/ExportService";
 const DonatorList = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
-  const [data, setData] = useState<Array<any>>([]);
+  const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
 
-  const fetchData = async (page: number | null) => {
+  const fetchData = useCallback(async (page: number | null) => {
     try {
       setLoading(true);
       const response = await DonatorService.getAll(page);
@@ -23,7 +23,7 @@ const DonatorList = () => {
         return [];
       }
 
-      const transformedData = response.data.map((item: any) => ({
+      const transformedData = response.data.map((item) => ({
         Nome: item.nome,
         Endereço: item.endereco,
         Tipo: item.tipo === "PESSOA_FISICA" ? "Pessoa Física" : "Pessoa Jurídica",
@@ -40,14 +40,14 @@ const DonatorList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const handleBack = () => navigate("/distribution-menu");
   const handleCreate = () => navigate("/donator-create");
 
   useEffect(() => {
     fetchData(page);
-  }, [page]);
+  }, [fetchData, page]);
 
   return (
     <Card className="rounded-[30px] p-4 sm:p-6 w-full max-w-full overflow-x-hidden">

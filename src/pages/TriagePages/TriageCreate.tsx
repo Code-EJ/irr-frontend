@@ -55,9 +55,9 @@ const TriageCreate = () => {
       }
     };
     fetchSubtypologies();
-  }, []);
+  }, [formData.subtipologiaId]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -65,7 +65,7 @@ const TriageCreate = () => {
     try {
       await TriageService.create({
         ...formData,
-        data: new Date(formData.data),
+        data: new Date(formData.data).toISOString(),
         tipo: formData.tipo as "TOTAL" | "PARCIAL",
         tipoOrigem: formData.tipoOrigem as "DOACAO" | "COLETA",
         tipoDestino: formData.tipoDestino as "DOACAO" | "COLETA",
@@ -89,7 +89,7 @@ const TriageCreate = () => {
         autoSetErrors={true}
         submitOnChange={false}
       >
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">TRIAGEM</h1>
 

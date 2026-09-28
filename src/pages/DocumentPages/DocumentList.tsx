@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { DocumentService } from "../../services";
@@ -9,10 +9,10 @@ import { handleExport } from "../../utils/ExportService";
 const DocumentList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
+    const [data, setData] = useState<Array<import("../../models/Entities").Document>>([]);
     const documentService = DocumentService;
 
-    const fetchData = async (pageNumber: number) => {
+    const fetchData = useCallback(async (pageNumber: number) => {
         try {
             const response = await documentService.getAll(pageNumber);
             setData(response?.data || []);
@@ -22,11 +22,11 @@ const DocumentList = () => {
             setData([]);
             return [];
         }
-    };
+    }, [documentService]);
 
     useEffect(() => {
         fetchData(page);
-    }, [page]);
+    }, [fetchData, page]);
 
     const handleBack = () => {
         navigate("/menu");
@@ -36,7 +36,7 @@ const DocumentList = () => {
         navigate("/document-create");
     };
 
-    const renderMediaFile = (media: any) => {
+    const renderMediaFile = (media: {dados?:string;tipo?:string;nome?:string} | null) => {
         if (!media || !media.dados) return "Sem arquivo";
 
         const base64Data = media.dados;

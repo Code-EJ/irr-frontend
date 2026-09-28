@@ -41,10 +41,10 @@ export function UserEdit() {
       initialValues={user}
       onSubmit={async (data) => {
         try {
-          await UserService.update(data);
+          await UserService.update(id!, data);
           alert("Usuário atualizado com sucesso!");
           navigate("/profile");
-        } catch (e) {
+        } catch {
           alert("Erro ao atualizar usuário.");
         }
       }}

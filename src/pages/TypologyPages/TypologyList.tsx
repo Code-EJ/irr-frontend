@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { TypologyService } from "../../services";
@@ -9,26 +9,22 @@ import { handleExport } from "../../utils/ExportService";
 const TypologyList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
     const typologyService = TypologyService;
 
-    const fetchData = async (page: number | null) => {
+    const fetchData = useCallback(async (page: number | null) => {
         const response = await typologyService.getAll(page);
         setData(response?.data);
         return response?.data;
-    };
+    }, [typologyService]);
 
     const handleBack = () => {
         navigate("/materials-menu");
     };
 
-    useEffect(() => {
+useEffect(() => {
         fetchData(page);
-    }, []);
-
-    useEffect(() => {
-        fetchData(page);
-    }, [page]);
+    }, [fetchData, page]);
 
     const handleCreate = () => {
         navigate("/typology-create");

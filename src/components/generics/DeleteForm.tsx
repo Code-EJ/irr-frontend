@@ -5,7 +5,7 @@ export function DeleteForm<E extends Model>(
   { setState,
     id,
     restService }: {
-      setState: any;
+      setState: React.Dispatch<React.SetStateAction<import("../Page").PageState>>;
       id: string;
       restService: BaseService<E>
     }
@@ -17,7 +17,7 @@ export function DeleteForm<E extends Model>(
         await restService.delete(id);
         setState({
           status: "LIST",
-          id: null
+          id: undefined
         })
       }}
         className="p-2 bg-green-500 hover:bg-green-700 rounded-md text-white shadow-md mr-2 w-20"
@@ -27,7 +27,7 @@ export function DeleteForm<E extends Model>(
       <button onClick={() => {
         setState({
           status: "LIST",
-          id: null
+          id: undefined
         })
       }}
         className="p-2 bg-red-500 hover:bg-red-700 rounded-md text-white shadow-md w-20"

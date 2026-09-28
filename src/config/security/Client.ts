@@ -1,23 +1,7 @@
-import axios from "axios";
-import { API_HOST } from "../../consts";
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+export { apiClient } from '../../shared/api/client';
+import { session } from '../../shared/api/session';
+export const getToken=session.getToken;
+export const setToken=session.setToken;
+export const deleteToken=session.clear;
 
-const getToken = () => localStorage.getItem("token");
-const setToken = (token: string) => {
-  localStorage.setItem("token", token);
-  apiClient.defaults.headers.Authorization = `Bearer ${token}`;
-};
-const deleteToken = () => localStorage.removeItem("token");
-
-const apiClient = axios.create({
-  baseURL: `${API_HOST}`,
-  headers: {
-    Authorization: `Bearer ${getToken()}`,
-  },
-});
-
-export {
-  apiClient,
-  getToken,
-  setToken,
-  deleteToken,
-}

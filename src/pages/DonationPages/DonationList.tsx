@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { DonationService, DonatorService, TypologyService, SubTypologyService } from "../../services";
@@ -9,12 +9,12 @@ import { handleExport } from "../../utils/ExportService";
 const DonationList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
-    const [typologyMap, setTypologyMap] = useState<Record<string, string>>({});
-    const [subTypologyMap, setSubTypologyMap] = useState<Record<string, string>>({});
-    const [donatorMap, setDonatorMap] = useState<Record<string, string>>({});
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
+    const [, setTypologyMap] = useState<Record<string, string>>({});
+    const [, setSubTypologyMap] = useState<Record<string, string>>({});
+    const [, setDonatorMap] = useState<Record<string, string>>({});
 
-    const fetchData = async (page: number | null) => {
+    const fetchData = useCallback(async (page: number | null) => {
         const [donations, typologies, subTypologies, donators] = await Promise.all([
             DonationService.getAll(page),
             TypologyService.getAll(1, 9999),
@@ -23,24 +23,24 @@ const DonationList = () => {
         ]);
 
         const typologyMap: Record<string, string> = {};
-        typologies?.data?.forEach((item: any) => {
+        typologies?.data?.forEach((item) => {
             typologyMap[item.id] = item.nome;
         });
         setTypologyMap(typologyMap);
 
         const subTypologyMap: Record<string, string> = {};
-        subTypologies?.data?.forEach((item: any) => {
+        subTypologies?.data?.forEach((item) => {
             subTypologyMap[item.id] = item.nome;
         });
         setSubTypologyMap(subTypologyMap);
 
         const donatorMap: Record<string, string> = {};
-        donators?.data?.forEach((item: any) => {
+        donators?.data?.forEach((item) => {
             donatorMap[item.id] = item.nome ?? item.email;
         });
         setDonatorMap(donatorMap);
 
-        const formattedData = donations?.data?.map((item: any) => ({
+        const formattedData = donations?.data?.map((item) => ({
             ...item,
             tipologia: typologyMap[item.tipologiaId] ?? item.tipologiaId,
             subtipologia: subTypologyMap[item.subtipologiaId] ?? item.subtipologiaId,
@@ -48,19 +48,16 @@ const DonationList = () => {
         })) ?? [];
 
         setData(formattedData);
-    };
+        return formattedData;
+    }, []);
 
     const handleBack = () => {
         navigate("/distribution-menu");
     };
 
-    useEffect(() => {
+useEffect(() => {
         fetchData(page);
-    }, []);
-
-    useEffect(() => {
-        fetchData(page);
-    }, [page]);
+    }, [fetchData, page]);
 
     const handleCreate = () => {
         navigate("/donation-create");

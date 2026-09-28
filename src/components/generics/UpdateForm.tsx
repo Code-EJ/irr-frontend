@@ -2,7 +2,6 @@ import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 
 import BaseService from "../../bases/BaseService";
-import { InputField } from "./InputField";
 import { Model } from "../../models/Entities";
 
 /**
@@ -21,7 +20,7 @@ export function UpdateForm<E extends Model>({
   initialValues,
   setState
 }: UpdateFormProps<E>) {
-  const [data, setData] = useState<E>(initialValues);
+  const [data, setData] = useState<Partial<E>>(initialValues);
 
   useEffect(() => {
     async function getUpdatedData(id: string) {
@@ -38,7 +37,7 @@ export function UpdateForm<E extends Model>({
     }
 
     getUpdatedData(id);
-  }, [id]);
+  }, [id, restService]);
 
   return (
     <Formik
@@ -46,7 +45,7 @@ export function UpdateForm<E extends Model>({
       enableReinitialize={true}
       onSubmit={data => {
         try {
-          restService.update(data);
+          restService.update(id, data);
           console.log("registro alterado")
           setState({
             status: "VIEW",
@@ -72,9 +71,9 @@ export function UpdateForm<E extends Model>({
 interface UpdateFormProps<E extends Model> {
   restService: BaseService<E>;
   id: string;
-  children: any;
-  initialValues: any;
-  setState: any;
+  children: React.ReactNode;
+  initialValues: Partial<E>;
+  setState: React.Dispatch<React.SetStateAction<import("../Page").PageState>>;
 }
 
 // export function UpdateDriverForm({ id }: IdProps) {

@@ -1,31 +1,42 @@
-import { useField, useFormikContext } from "formik";
-
-const InputList = ({ onChange, titulo, options, titleStyle, ...props }) => {
-  const [field, meta] = useField(props);
-  const { setFieldValue } = useFormikContext();
-
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+import type { SelectHTMLAttributes } from "react";
+import { useField } from "formik";
+type Props = Omit<SelectHTMLAttributes<HTMLSelectElement>, "onChange"> & {
+  name: string;
+  titulo?: string;
+  titleStyle?: string;
+  options: { value: string | number; name: string }[];
+  onChange?: (value: string) => void;
+};
+export default function InputList({
+  onChange,
+  titulo,
+  options,
+  titleStyle = "",
+  ...props
+}: Props) {
+  const [field, , helpers] = useField<string>(props.name);
   return (
-    <div className="text-black flex flex-col mt-3.5">
-      <div className="w-full flex mb-3.5">
-        <b className={`text-3.5 font-bold ${titleStyle}`}>{titulo}</b>
-      </div>
-      <select className="w-full h-9 rounded-md border border-[rgb(18,61,27)] shadow-lg transition-shadow transition-transform duration-300 hover:shadow-lg focus:shadow-xl focus:outline-none"
+    <div className="flex flex-col my-3 gap-2">
+      <label htmlFor={props.name} className={titleStyle}>
+        {titulo}
+      </label>
+      <select
         {...props}
         {...field}
+        id={props.name}
+        className="h-10 border rounded"
         onChange={(event) => {
-          console.log(field);
-
-          setFieldValue(field.name, event.target.value);
-          if (onChange) {
-            onChange(event.target.value);
-          }
+          void helpers.setValue(event.target.value);
+          onChange?.(event.target.value);
         }}
       >
-        {options.map(opt => (
-          <option value={opt.value}>{opt.name}</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.name}
+          </option>
         ))}
       </select>
     </div>
   );
 }
-export default InputList;

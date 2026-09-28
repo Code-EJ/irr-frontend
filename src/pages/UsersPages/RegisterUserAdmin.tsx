@@ -18,7 +18,7 @@ const RegisterUserAdmin = () => {
     { value: "REPRESENTANTE", name: "Representante de Catadores" },
   ];
 
-  const handleRegister = async (values, { setFieldError, resetForm }) => {
+  const handleRegister = async (values: {nome:string;email:string;senha:string;tipo:string}) => {
     try {
       const payload = {
         nome: values.nome,
@@ -27,16 +27,12 @@ const RegisterUserAdmin = () => {
         tipo: values.tipo,
       };
 
-      await UserService.create(payload);
+      if (!["ADMINISTRADOR","ORGANIZACAO","PREFEITURA","REPRESENTANTE"].includes(payload.tipo)) throw new Error("Invalid role.");
+      await UserService.create({...payload,tipo:payload.tipo as import("../../models/Entities").User["tipo"]});
       toast.success("Usuário cadastrado com sucesso!");
       navigate("/users-management");
     } catch (error) {
-      const message = error.response?.data?.message || "Erro ao cadastrar o usuário.";
-      toast.error(message);
-
-      if (error.response?.data?.errors?.email) {
-        setFieldError("email", error.response.data.errors.email);
-      }
+      toast.error(error instanceof Error ? error.message : "Registration failed.");
     }
   };
 
@@ -57,7 +53,6 @@ const RegisterUserAdmin = () => {
             <InputText
               titulo="E-mail"
               name="email"
-              error={formik.errors.email}
             />
             <InputText titulo="Senha" name="senha" type="password" />
 
@@ -67,7 +62,6 @@ const RegisterUserAdmin = () => {
               type="submit"
               action="primary"
               className="bg-green-950 text-white text-sm"
-              onClick={formik.handleSubmit}
               disabled={formik.isSubmitting}
             />
             <img src={LogoImg} alt="Logo IRR" className="w-24 h-24" />

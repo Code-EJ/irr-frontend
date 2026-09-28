@@ -9,18 +9,11 @@ import InputList from "../../components/InputList";
 import { toast } from "react-toastify";
 import { CollectionService, VehicleService, DriverService, DocumentService } from "../../services";
 
-const tiposDocumento = [
-  "NOTA_FISCAL",
-  "MTR_GERADOR",
-  "MTR_TRANSPORTADOR",
-  "MTR_DESTINADOR",
-  "DIARIO_COLETA",
-];
 
 const CollectionCreate = () => {
   const navigate = useNavigate();
 
-  const [veiculos, setVeiculo] = useState<{ name: any; value: any }[]>([]);
+  const [veiculos, setVeiculo] = useState<{ name: string; value: string }[]>([]);
   const [motoristas, setMotorista] = useState<{ name: string; value: string }[]>([]);
 
   // Estados separados para cada tipo de documento filtrado
@@ -48,7 +41,7 @@ const CollectionCreate = () => {
       try {
         const response = await VehicleService.getAll(1, 9999);
         const veiculo = response?.data ?? [];
-        const mapped = veiculo.map((item: any) => ({
+        const mapped = veiculo.map((item) => ({
           name: item.placa,
           value: item.id,
         }));
@@ -66,7 +59,7 @@ const CollectionCreate = () => {
       try {
         const response = await DriverService.getAll(1, 9999);
         const motorista = response?.data ?? [];
-        const mapped = motorista.map((item: any) => ({
+        const mapped = motorista.map((item) => ({
           name: item.numero ?? item.nome ?? item.id,
           value: item.id,
         }));
@@ -87,20 +80,20 @@ const CollectionCreate = () => {
 
         // Filtrar documentos por tipo para cada categoria
         const geradorDocs = documentos
-          .filter((doc: any) => doc.tipo === "MTR_GERADOR")
-          .map((doc: any) => ({ name: doc.numero ?? doc.nome ?? doc.id, value: doc.id }));
+          .filter((doc) => doc.tipo === "MTR_GERADOR")
+          .map((doc) => ({ name: doc.numero ?? doc.nome ?? doc.id, value: doc.id }));
 
         const destinadorDocs = documentos
-          .filter((doc: any) => doc.tipo === "MTR_DESTINADOR")
-          .map((doc: any) => ({ name: doc.numero ?? doc.nome ?? doc.id, value: doc.id }));
+          .filter((doc) => doc.tipo === "MTR_DESTINADOR")
+          .map((doc) => ({ name: doc.numero ?? doc.nome ?? doc.id, value: doc.id }));
 
         const transportadorDocs = documentos
-          .filter((doc: any) => doc.tipo === "MTR_TRANSPORTADOR")
-          .map((doc: any) => ({ name: doc.numero ?? doc.nome ?? doc.id, value: doc.id }));
+          .filter((doc) => doc.tipo === "MTR_TRANSPORTADOR")
+          .map((doc) => ({ name: doc.numero ?? doc.nome ?? doc.id, value: doc.id }));
 
         const diarioDocs = documentos
-          .filter((doc: any) => doc.tipo === "DIARIO_COLETA")
-          .map((doc: any) => ({ name: doc.numero ?? doc.nome ?? doc.id, value: doc.id }));
+          .filter((doc) => doc.tipo === "DIARIO_COLETA")
+          .map((doc) => ({ name: doc.numero ?? doc.nome ?? doc.id, value: doc.id }));
 
         setMtrGeradorDocs(geradorDocs);
         setMtrDestinadorDocs(destinadorDocs);
@@ -125,9 +118,9 @@ const CollectionCreate = () => {
     fetchVeiculo();
     fetchMotorista();
     fetchDocumento();
-  }, []);
+  }, [formData.motoristaId, formData.veiculoId]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

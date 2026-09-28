@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { SubTypologyService, TypologyService } from "../../services"; 
@@ -9,7 +9,7 @@ import { handleExport } from "../../utils/ExportService";
 const SubTypologyList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
     const [typologies, setTypologies] = useState<{ id: string; nome: string }[]>([]);
 
     const fetchTypologies = async () => {
@@ -21,11 +21,11 @@ const SubTypologyList = () => {
         }
     };
 
-    const fetchData = async (page: number | null) => {
+    const fetchData = useCallback(async (page: number | null) => {
         const response = await SubTypologyService.getAll(page);
-        let subtipologias = response?.data || [];
+        const subtipologias = response?.data || [];
 
-        const subtipologiasComNome = subtipologias.map((item: any) => {
+        const subtipologiasComNome = subtipologias.map((item) => {
             const tipologia = typologies.find(t => t.id === item.tipologiaId);
             return {
                 ...item,
@@ -35,7 +35,7 @@ const SubTypologyList = () => {
 
         setData(subtipologiasComNome);
         return subtipologiasComNome;
-    };
+    }, [typologies]);
 
     useEffect(() => {
         fetchTypologies();
@@ -45,7 +45,7 @@ const SubTypologyList = () => {
         if (typologies.length > 0) {
             fetchData(page);
         }
-    }, [typologies, page]);
+    }, [typologies, page, fetchData]);
 
     const handleBack = () => {
         navigate("/materials-menu");

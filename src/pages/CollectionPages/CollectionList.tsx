@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { CollectionService, VehicleService, DriverService, DocumentService } from "../../services";
@@ -9,12 +9,12 @@ import { handleExport } from "../../utils/ExportService";
 const CollectionList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
-    const [vehicleMap, setVehicleMap] = useState<Record<string, string>>({});
-    const [driverMap, setDriverMap] = useState<Record<string, string>>({});
-    const [documentMap, setDocumentMap] = useState<Record<string, string>>({});
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
+    const [, setVehicleMap] = useState<Record<string, string>>({});
+    const [, setDriverMap] = useState<Record<string, string>>({});
+    const [, setDocumentMap] = useState<Record<string, string>>({});
 
-    const fetchData = async (page: number | null) => {
+    const fetchData = useCallback(async (page: number | null) => {
         const [collectionResponse, vehicleResponse, driverResponse, documentResponse] = await Promise.all([
             CollectionService.getAll(page),
             VehicleService.getAll(1, 9999),
@@ -27,24 +27,24 @@ const CollectionList = () => {
         const documents = documentResponse?.data ?? [];
 
         const vehicleMap: Record<string, string> = {};
-        vehicles.forEach((item: any) => {
+        vehicles.forEach((item) => {
             vehicleMap[item.id] = item.placa ?? `${item.nome} (${item.tipo})`;
         });
         setVehicleMap(vehicleMap);
 
         const driverMap: Record<string, string> = {};
-        drivers.forEach((item: any) => {
+        drivers.forEach((item) => {
             driverMap[item.id] = item.nome ?? item.email;
         });
         setDriverMap(driverMap);
 
         const docMap: Record<string, string> = {};
-        documents.forEach((item: any) => {
+        documents.forEach((item) => {
             docMap[item.id] = item.nome ?? item.numero;
         });
         setDocumentMap(docMap);
 
-        const formattedData = collectionResponse?.data.map((item: any) => ({
+        const formattedData = collectionResponse?.data.map((item) => ({
             ...item,
             veiculo: vehicleMap[item.veiculoId] ?? item.veiculoId,
             motorista: driverMap[item.motoristaId] ?? item.motoristaId,
@@ -55,15 +55,12 @@ const CollectionList = () => {
         })) ?? [];
 
         setData(formattedData);
-    };
-
-    useEffect(() => {
-        fetchData(page);
+        return formattedData;
     }, []);
 
-    useEffect(() => {
+useEffect(() => {
         fetchData(page);
-    }, [page]);
+    }, [fetchData, page]);
 
     const handleCreate = () => {
         navigate("/collection-create");

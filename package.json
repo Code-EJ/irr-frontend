@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "test": "vitest run",
     "api:generate": "openapi-typescript docs/api/openapi.json -o src/shared/api/schema.d.ts",
-    "api:capture": "node scripts/capture-openapi.mjs"
+    "api:capture": "node scripts/capture-openapi.mjs",
+    "test:contract": "vitest run --config vitest.contract.config.js"
   },
   "dependencies": {
     "axios": "^1.7.9",

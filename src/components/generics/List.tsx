@@ -21,13 +21,13 @@ export function List<E extends Model>({
     async function getUpdatedObjects() {
       const updatedData = await restService.getAll();
 
-      if (updatedData) setObjects(updatedData);
+      if (updatedData) setObjects(updatedData.data);
       // TODO: O backend já retorna essas mensagens. Trocar pelas mensagens do backend.
       else toast("Não foi possível recuperar o registro.");
     }
 
     if (!objects) getUpdatedObjects();
-  }, []);
+  }, [objects, restService]);
   return (
     <div className=" overflow-x-auto">
       <table className=" min-w-full bg-white border border-gray-200">

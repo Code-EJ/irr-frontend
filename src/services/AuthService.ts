@@ -1,38 +1,8 @@
-import { apiClient, deleteToken, setToken } from "../config/security/Client";
-
-type loginResponse = {
-  token: string | null;
-  error: string | null;
-  status: number;
-}
-
-const login = async (data: Login): Promise<loginResponse> => {
-  const res = await apiClient.post("/auth/login", data);
-  
-  if (res.status === 200) {
-    const data: LoginResponse = res.data;
-    setToken(data.access_token);
-    return {token: data.access_token, error: null, status: 200};
-  } else {
-    return {token: null, error: "Usuário inválido", status: res.status};
-  }
-};
-
-const logout = () => {
-  deleteToken();
-  window.location.href = "/login";
-};
-
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+import { authenticate } from '../features/identity/api';
+import { session } from '../shared/api/session';
 export default {
-  login,
-  logout,
-}
+ async login(data:{email:string;password:string}){const token=await authenticate(data.email,data.password);session.setToken(token);return {token,error:null,status:200};},
+ logout:()=>session.clear()
+};
 
-interface Login {
-  email: string;
-  senha: string;
-}
-
-interface LoginResponse {
-  "access_token": string;
-}

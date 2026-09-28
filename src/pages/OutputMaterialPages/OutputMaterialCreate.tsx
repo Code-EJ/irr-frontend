@@ -45,10 +45,10 @@ const OutputMaterialCreate = () => {
         const documentos = response?.data ?? [];
 
         const notasFiscais = documentos.filter(
-          (item: any) => item.tipo === 'NOTA_FISCAL'
+          (item) => item.tipo === 'NOTA_FISCAL'
         );
 
-        const mapped = notasFiscais.map((item: any) => ({
+        const mapped = notasFiscais.map((item) => ({
           name: item.numero ?? item.nome ?? item.id,
           value: item.id,
         }));
@@ -66,9 +66,9 @@ const OutputMaterialCreate = () => {
 
     fetchSubtypologies();
     fetchNotaFiscais();
-  }, []);
+  }, [formData.notaFiscalId, formData.subtipologiaId]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -96,7 +96,7 @@ const OutputMaterialCreate = () => {
         autoSetErrors={true}
         submitOnChange={false}
       >
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">MATERIAL DE SAÍDA</h1>
 

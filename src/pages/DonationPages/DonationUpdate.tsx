@@ -39,7 +39,7 @@ const DonationUpdate = () => {
           DonationService.get(id!),
         ]);
 
-        const map = (list: any[], label = "nome") =>
+        const map = (list: {id:string;nome:string}[], label: "nome" = "nome") =>
           list.map((item) => ({ name: item[label], value: item.id }));
 
         setTipologias(map(tipRes.data));
@@ -62,7 +62,7 @@ const DonationUpdate = () => {
     fetchData();
   }, [id]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

@@ -20,7 +20,7 @@ const tiposDocumento = [
 const SalesCreate = () => {
   const navigate = useNavigate();
 
-  const [documentos, setDocumentos] = useState<any[]>([]);
+  const [, setDocumentos] = useState<import("../../models/Entities").Document[]>([]);
 
   const [notaFiscais, setNotaFiscais] = useState<{ name: string; value: string }[]>([]);
   const [mtrGeradores, setMtrGeradores] = useState<{ name: string; value: string }[]>([]);
@@ -43,11 +43,11 @@ const SalesCreate = () => {
         const response = await DocumentService.getAll(1, 9999);
         const data = response?.data ?? [];
 
-        const documentosFiltrados = data.filter((doc: any) => tiposDocumento.includes(doc.tipo));
+        const documentosFiltrados = data.filter((doc) => tiposDocumento.includes(doc.tipo));
 
         setDocumentos(documentosFiltrados);
 
-        const mapOptions = (docs: any[]) =>
+        const mapOptions = (docs: import("../../models/Entities").Document[]) =>
           docs.map((item) => ({
             name: item.numero ?? item.nome ?? item.id,
             value: item.id,
@@ -80,7 +80,7 @@ const SalesCreate = () => {
     fetchDocumentos();
   }, []);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -88,7 +88,7 @@ const SalesCreate = () => {
     try {
       await SaleService.create({
         comprador: formData.comprador,
-        data: new Date(formData.data),
+        data: new Date(formData.data).toISOString(),
         valor: parseFloat(formData.valor),
         notaFiscalId: formData.notaFiscalId,
         mtrGeradorId: formData.mtrGeradorId,

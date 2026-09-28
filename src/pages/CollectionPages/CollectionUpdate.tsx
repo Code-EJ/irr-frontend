@@ -48,21 +48,21 @@ const ColetaUpdate = () => {
         const mot = motResp.data ?? [];
         const docs = docsResp.data ?? [];
 
-        setVeiculos(veic.map((v: any) => ({ name: v.placa, value: v.id })));
-        setMotoristas(mot.map((m: any) => ({ name: m.nome, value: m.id })));
+        setVeiculos(veic.map((v) => ({ name: v.placa, value: v.id })));
+        setMotoristas(mot.map((m) => ({ name: m.nome, value: m.id })));
 
         const geradorDocs = docs
-          .filter((d: any) => d.tipo === "MTR_GERADOR")
-          .map((d: any) => ({ name: d.numero ?? d.nome ?? d.id, value: d.id }));
+          .filter((d) => d.tipo === "MTR_GERADOR")
+          .map((d) => ({ name: d.numero ?? d.nome ?? d.id, value: d.id }));
         const destinadorDocs = docs
-          .filter((d: any) => d.tipo === "MTR_DESTINADOR")
-          .map((d: any) => ({ name: d.numero ?? d.nome ?? d.id, value: d.id }));
+          .filter((d) => d.tipo === "MTR_DESTINADOR")
+          .map((d) => ({ name: d.numero ?? d.nome ?? d.id, value: d.id }));
         const transportadorDocs = docs
-          .filter((d: any) => d.tipo === "MTR_TRANSPORTADOR")
-          .map((d: any) => ({ name: d.numero ?? d.nome ?? d.id, value: d.id }));
+          .filter((d) => d.tipo === "MTR_TRANSPORTADOR")
+          .map((d) => ({ name: d.numero ?? d.nome ?? d.id, value: d.id }));
         const diarioDocs = docs
-          .filter((d: any) => d.tipo === "DIARIO_COLETA")
-          .map((d: any) => ({ name: d.numero ?? d.nome ?? d.id, value: d.id }));
+          .filter((d) => d.tipo === "DIARIO_COLETA")
+          .map((d) => ({ name: d.numero ?? d.nome ?? d.id, value: d.id }));
 
         setMtrGeradorDocs(geradorDocs);
         setMtrDestinadorDocs(destinadorDocs);
@@ -77,7 +77,7 @@ const ColetaUpdate = () => {
     const fetchColeta = async () => {
       try {
         const response = await CollectionService.get(id!);
-        const data = response ?? response.data ?? {};
+        const data = response;
 
         setFormData({
           dataRealizacao: data.dataRealizacao || "",
@@ -102,7 +102,7 @@ const ColetaUpdate = () => {
     if (id) fetchColeta();
   }, [id]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

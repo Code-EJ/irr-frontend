@@ -41,9 +41,9 @@ const SubTypologyCreate = () => {
       }
     };
     fetchTypologies();
-  }, []);
+  }, [formData.tipologiaId]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -69,7 +69,7 @@ const SubTypologyCreate = () => {
         autoSetErrors={true}
         submitOnChange={false}
       >
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">Cadastrar Subtipologia</h1>
 

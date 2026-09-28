@@ -15,7 +15,7 @@ const DonatorCreate = () => {
   const [formData, setFormData] = useState({
     nome: "",
     endereco: "",
-    tipo: "PESSOA_FISICA",
+    tipo: "PESSOA_FISICA" as "PESSOA_FISICA" | "PESSOA_JURIDICA",
     cadastroNacional: "",
   });
 
@@ -24,7 +24,7 @@ const DonatorCreate = () => {
     "PESSOA_JURIDICA"
   ]
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -47,7 +47,7 @@ const DonatorCreate = () => {
         autoSetErrors={true}
         submitOnChange={false}
       >
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">Cadastrar Doador</h1>
 

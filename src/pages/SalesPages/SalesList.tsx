@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { SaleService, DocumentService } from "../../services";
@@ -9,10 +9,10 @@ import { handleExport } from "../../utils/ExportService";
 const SalesList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
-    const [documentMap, setDocumentMap] = useState<Record<string, string>>({});
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
+    const [, setDocumentMap] = useState<Record<string, string>>({});
 
-    const fetchData = async (page: number | null) => {
+    const fetchData = useCallback(async (page: number | null) => {
         const [saleResponse, documentResponse] = await Promise.all([
             SaleService.getAll(page),
             DocumentService.getAll(1, 9999),
@@ -21,12 +21,12 @@ const SalesList = () => {
         const documents = documentResponse?.data ?? [];
 
         const docMap: Record<string, string> = {};
-        documents.forEach((item: any) => {
+        documents.forEach((item) => {
             docMap[item.id] = item.nome ?? item.numero;
         });
         setDocumentMap(docMap);
 
-        const formattedData = saleResponse?.data.map((item: any) => ({
+        const formattedData = saleResponse?.data.map((item) => ({
             ...item,
             mtrGerador: docMap[item.mtrGeradorId] ?? item.mtrGeradorId,
             mtrDestinador: docMap[item.mtrDestinadorId] ?? item.mtrDestinadorId,
@@ -36,19 +36,15 @@ const SalesList = () => {
 
         setData(formattedData);
         return formattedData;
-    };
+    }, []);
 
     const handleBack = () => {
         navigate("/menu");
     };
 
-    useEffect(() => {
+useEffect(() => {
         fetchData(page);
-    }, []);
-
-    useEffect(() => {
-        fetchData(page);
-    }, [page]);
+    }, [fetchData, page]);
 
     const handleCreate = () => {
         navigate("/sales-create");

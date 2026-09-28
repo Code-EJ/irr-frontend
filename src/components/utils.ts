@@ -1,4 +1,4 @@
-const applyMask = (value, mask) => {
+export const applyMask = (value: string, mask: string) => {
     let maskedValue = "";
     let valueIndex = 0;
   

@@ -27,7 +27,7 @@ const DonationCreate = () => {
       try {
         const response = await TypologyService.getAll(1, 9999);
         const tipologia = response?.data ?? [];
-        const mapped = tipologia?.map((item: any) => ({
+        const mapped = tipologia?.map((item) => ({
           name: item.nome,
           value: item.id,
         })) ?? [];
@@ -47,7 +47,7 @@ const DonationCreate = () => {
       try {
         const response = await SubTypologyService.getAll(1, 9999);
         const subtipologia = response?.data ?? [];
-        const mapped = subtipologia?.map((item: any) => ({
+        const mapped = subtipologia?.map((item) => ({
           name: item.nome,
           value: item.id,
         })) ?? [];
@@ -67,7 +67,7 @@ const DonationCreate = () => {
       try {
         const response = await DonatorService.getAll(1, 9999);
         const donator = response?.data ?? [];
-        const mapped = donator?.map((item: any) => ({
+        const mapped = donator?.map((item) => ({
           name: item.nome,
           value: item.id,
         })) ?? [];
@@ -86,9 +86,9 @@ const DonationCreate = () => {
     fetchTipologia();
     fetchSubtipologia();
     fetchDoadores();
-  }, []);
+  }, [formData.doadorId, formData.subtipologiaId, formData.tipologiaId]);
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: string, value: string | File) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

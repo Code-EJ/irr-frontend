@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface BackButtonProps {
     path: string;
+    className?: string;
 }
 
 const BackButton = ({ path }: BackButtonProps) => {

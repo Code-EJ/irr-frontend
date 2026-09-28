@@ -16,7 +16,7 @@ const DriverCreate = () => {
     cpf: "",
   });
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: string, value: string | File) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

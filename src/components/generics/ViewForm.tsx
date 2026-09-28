@@ -14,9 +14,9 @@ export function ViewForm<E extends Model>({
   restService: BaseService<E>;
   id: string;
   fields: Field[],
-  setState: any
+  setState: React.Dispatch<React.SetStateAction<import("../Page").PageState>>
 }) {
-  const [value, setValue] = useState<any>();
+  const [value, setValue] = useState<E>();
 
   useEffect(() => {
     async function getUpdatedValue(id: string) {
@@ -28,7 +28,7 @@ export function ViewForm<E extends Model>({
     }
 
     if (!value) getUpdatedValue(id);
-  }, []);
+  }, [id, restService, value]);
 
   return (
     <div className="flex justify-center items-center p-4">

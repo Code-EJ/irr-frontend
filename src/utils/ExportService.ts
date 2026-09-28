@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-type CSVRow = Record<string, string | number | boolean | null | undefined>;
+export type CSVRow = Record<string, string | number | boolean | null | undefined>;
 
 function convertToCSV(data: CSVRow[]): string {
   if (!data.length) return "";
@@ -31,7 +31,7 @@ function exportToCSV(filename: string, data: CSVRow[]) {
   document.body.removeChild(link);
 }
 
-export async function handleExport(fetchData: Function, page: number, fileName: string) {
+export async function handleExport(fetchData: (page:number)=>Promise<CSVRow[] | undefined>, page: number, fileName: string) {
   if (page) {
     const data = await fetchData(page)
     if ( data ) {

@@ -1,58 +1,54 @@
-import { FieldConfig, useField, useFormikContext } from "formik";
-
-const applyMask = (value, mask) => {
-  let maskedValue = "";
-  let valueIndex = 0;
-
-  for (let i = 0; i < mask.length; i++) {
-    if (mask[i] === "#") {
-      if (value[valueIndex]) {
-        maskedValue += value[valueIndex];
-        valueIndex++;
-      } else {
-        break;
-      }
-    } else {
-      maskedValue += mask[i];
-    }
-  }
-
-  return maskedValue;
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+import type { InputHTMLAttributes } from "react";
+import { useField } from "formik";
+type Props = Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> & {
+  name: string;
+  titulo?: string;
+  titleStyle?: string;
+  mask?: string;
+  onChange?: (value: string) => void;
 };
-
-const InputText = ({ onChange, titulo, className, titleStyle, mask, ...props }) => {
-
-  const [field, meta] = useField({
-    name: props.name
-  });
-  const { setFieldValue } = useFormikContext();
-
+export default function InputText({
+  onChange,
+  titulo,
+  titleStyle = "",
+  className = "",
+  mask,
+  ...props
+}: Props) {
+  const [field, meta, helpers] = useField<string>(props.name);
   return (
-    <div className="text-black flex flex-col mt-3.5">
-      <div className="w-full flex mb-3.5">
-        <b className={`text-3.5 font-bold ${titleStyle}`}>{titulo}</b>
-      </div>
+    <div className="text-black flex flex-col gap-2 my-3">
+      <label className={titleStyle} htmlFor={props.id ?? props.name}>
+        {titulo}
+      </label>
       <input
-        className={`h-9 rounded-md border border-[rgb(18,61,27)] shadow-lg transition-shadow duration-300 hover:shadow-xl focus:outline-none focus:shadow-xl ${className}`}
         {...props}
         {...field}
-        // onChange={(event) => {
-        //   setFieldValue(field.name, event.target.value);
-        //   if (onChange) {
-        //     onChange(event.target.value);
-        //   }
-        // }}
+        id={props.id ?? props.name}
+        className={"h-10 px-3 rounded-md border border-green-900 " + className}
+        aria-invalid={meta.touched && !!meta.error}
+        aria-describedby={meta.error ? props.name + "-error" : undefined}
         onChange={(event) => {
-          const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-digit characters
-          const newValue = mask ? applyMask(rawValue, mask) : event.target.value;
-
-          setFieldValue(field.name, newValue);
-          if (onChange) {
-            onChange(newValue); // Trigger the custom onChange handler with the masked value
+          let value = event.target.value;
+          if (mask) {
+            const digits = value.replace(/\D/g, "");
+            let index = 0;
+            value = "";
+            for (const char of mask) {
+              if (index >= digits.length) break;
+              value += char === "#" ? digits[index++] : char;
+            }
           }
+          void helpers.setValue(value);
+          onChange?.(value);
         }}
       />
+      {meta.touched && meta.error && (
+        <span role="alert" id={props.name + "-error"} className="text-red-800">
+          {meta.error}
+        </span>
+      )}
     </div>
   );
-};
-export default InputText;
+}

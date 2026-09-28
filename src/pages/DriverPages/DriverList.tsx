@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { DriverService } from "../../services";
@@ -9,14 +9,14 @@ import { handleExport } from "../../utils/ExportService";
 const DriverList = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
-  const [data, setData] = useState<Array<any>>([]);
+  const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
   const driverService = DriverService;
 
-  const fetchData = async (page: number | null) => {
+  const fetchData = useCallback(async (page: number | null) => {
     const response = await driverService.getAll(page);
     setData(response?.data);
     return response?.data;
-  };
+  }, [driverService]);
 
   const handleBack = () => {
     navigate("/distribution-menu");
@@ -26,13 +26,9 @@ const DriverList = () => {
     navigate("/driver-create");
   };
 
-  useEffect(() => {
+useEffect(() => {
     fetchData(page);
-  }, []);
-
-  useEffect(() => {
-    fetchData(page);
-  }, [page]);
+  }, [fetchData, page]);
 
   return (
     <Card className="rounded-[30px] p-4 sm:p-6 w-full max-w-full overflow-x-hidden">

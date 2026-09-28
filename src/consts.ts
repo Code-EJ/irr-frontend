@@ -1,1 +1,4 @@
-export const API_HOST = "https://back-irr-production.up.railway.app/";
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+/** Public v1 API root retained for gated legacy imports. */
+export const API_HOST=import.meta.env.VITE_API_BASE_URL;
+

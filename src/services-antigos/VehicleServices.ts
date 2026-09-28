@@ -1,16 +1,16 @@
 import { apiClient } from "../config/security/ApiClient";
 
-export const createVehicle = async (data) => {
+export const createVehicle = async (data: unknown) => {
   const res = await apiClient.post("/novo-veiculo", data);
   return res;
 };
 
-export const deleteVehicle = async (id) => {
+export const deleteVehicle = async (id: string) => {
   const res = await apiClient.delete(`/delete-veiculo/${id}`);
   return res;
 };
 
-export const retrieveVehicle = async (id) => {
+export const retrieveVehicle = async (id: string) => {
   const res = await apiClient.get(`/veiculos/${id}`);
   return res;
 };
