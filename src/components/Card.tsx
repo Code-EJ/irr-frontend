@@ -14,7 +14,7 @@ export default function Card({
 }: CardProps) {
   return (
     <div
-      className={"h-auto p-8 text-black bg-white " + className}
+      className={"surface " + className}
       style={{ width, backgroundColor: bgColor ?? undefined, ...style }}
       {...rest}
     >

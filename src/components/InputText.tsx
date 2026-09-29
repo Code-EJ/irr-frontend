@@ -26,7 +26,7 @@ export default function InputText({
         {...props}
         {...field}
         id={props.id ?? props.name}
-        className={"h-10 px-3 rounded-md border border-green-900 " + className}
+        className={"field-input " + className}
         aria-invalid={meta.touched && !!meta.error}
         aria-describedby={meta.error ? props.name + "-error" : undefined}
         onChange={(event) => {

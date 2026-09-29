@@ -117,6 +117,17 @@ describe("final v1 transport", () => {
     complete?.();
     await expect(pending).rejects.toMatchObject({ code: "ERR_CANCELED" });
   });
+  it("rejects a queued request if its captured organization has already changed", async () => {
+    session.setToken("token");
+    session.selectOrganization("a");
+    const api = client();
+    const adapter = vi.fn();
+    api.defaults.adapter = adapter;
+    const pending = api.get("/vehicles", { headers: organizationHeaders() });
+    session.selectOrganization("b");
+    await expect(pending).rejects.toMatchObject({ code: "ERR_CANCELED" });
+    expect(adapter).not.toHaveBeenCalled();
+  });
   it("clears the session on protected 401, but not on login failure", async () => {
     session.setToken("expired");
     const api = client();
@@ -146,7 +157,7 @@ describe("final v1 transport", () => {
     try {
       await api.put("/vehicles/id", {});
     } catch (error) {
-      expect(errorMessage(error)).toContain("Reload");
+      expect(errorMessage(error)).toContain("Recarregue");
     }
     expect(session.getToken()).toBe("valid");
   });

@@ -15,8 +15,10 @@ export default function VehicleForm() {
   const [error, setError] = useState("");
   useEffect(() => {
     let active = true;
+    setValues({ licensePlate: "", model: "" });
+    setError("");
+    setLoading(!!id);
     if (id) {
-      setLoading(true);
       void fleet
         .get(id)
         .then((data) => {
@@ -40,13 +42,13 @@ export default function VehicleForm() {
   return (
     <Card className="rounded-3xl shadow max-w-xl mx-auto w-full">
       <Link className="underline" to="/vehicle-list">
-        Back to vehicles
+        Voltar para veículos
       </Link>
       <h1 className="text-2xl font-bold mt-4">
-        {id ? "Edit vehicle" : "Add vehicle"}
+        {id ? "Editarar veículo" : "Adicionar veículo"}
       </h1>
       {loading ? (
-        <p role="status">Loading vehicle…</p>
+        <p role="status">Carregando veículo…</p>
       ) : (
         <SimpleForm
           enableReinitialize
@@ -66,13 +68,18 @@ export default function VehicleForm() {
             <>
               <InputText
                 name="licensePlate"
-                titulo="License plate"
+                titulo="Placa"
                 required
                 maxLength={20}
               />
-              <InputText name="model" titulo="Model" required maxLength={100} />
+              <InputText
+                name="model"
+                titulo="Modelo"
+                required
+                maxLength={100}
+              />
               <Button
-                titulo="Save vehicle"
+                titulo="Salvar veículo"
                 type="submit"
                 disabled={formik.isSubmitting || (!!id && !values.licensePlate)}
               />

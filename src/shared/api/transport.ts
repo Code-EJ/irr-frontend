@@ -34,6 +34,14 @@ export function createClient(baseURL: string) {
     )
       throw new Error("Only relative v1 resource paths are supported.");
     const token = session.getToken();
+    const requestedOrganization = config.headers.get("X-Organization-Id");
+    if (
+      requestedOrganization &&
+      requestedOrganization !== session.getOrganization()
+    )
+      throw new CanceledError(
+        "Organization changed before the request was sent.",
+      );
     if (token && config.url !== "/session/authenticate")
       config.headers.set("Authorization", "Bearer " + token);
     else config.headers.delete("Authorization");
@@ -79,16 +87,17 @@ export function errorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const status = error.response?.status;
     const messages: Record<number, string> = {
-      400: "Check the supplied values and organization.",
-      401: "Your session has expired. Sign in again.",
-      403: "You do not have permission for this action.",
-      404: "The record or organization is no longer available.",
-      409: "The record changed or is referenced by another workflow. Reload before trying again.",
-      413: "The file is too large.",
+      400: "Confira os dados informados e a organização selecionada.",
+      401: "Sua sessão expirou. Entre novamente.",
+      403: "Você não tem permissão para realizar esta ação.",
+      404: "O registro ou a organização não está mais disponível.",
+      409: "O registro foi alterado ou está em uso em outra operação. Recarregue antes de tentar novamente.",
+      413: "O arquivo excede o tamanho permitido.",
     };
     return status
-      ? (messages[status] ?? "The server could not complete the request.")
-      : "Cannot reach the backend. Check the connection and try again.";
+      ? (messages[status] ??
+          "Não foi possível concluir a solicitação. Tente novamente.")
+      : "Não foi possível conectar ao serviço. Verifique sua conexão e tente novamente.";
   }
-  return error instanceof Error ? error.message : "The request failed.";
+  return "Não foi possível concluir a solicitação. Tente novamente.";
 }

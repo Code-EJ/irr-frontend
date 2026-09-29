@@ -6,7 +6,7 @@ import Card from "../components/Card";
 import Button from "../components/Button";
 import InputText from "../components/InputText";
 import SimpleForm from "../components/SimpleForm";
-import Logo from "../components/Logo";
+import { Recycle, ArrowUpRight } from "lucide-react";
 import { authenticate } from "../features/identity/api";
 import { session } from "../shared/api/session";
 import { errorMessage } from "../shared/api/transport";
@@ -15,60 +15,98 @@ export default function Login() {
   const navigate = useNavigate();
   if (session.getToken()) return <Navigate to="/menu" replace />;
   return (
-    <Card className="rounded-3xl shadow-lg max-w-md mx-auto w-full">
-      <div className="flex justify-center">
-        <Logo />
-      </div>
-      <h1 className="text-2xl font-bold text-green-950">Sign in to IRR</h1>
-      <p className="my-3">
-        Use your assigned account to access your organization.
-      </p>
-      <SimpleForm
-        initialValues={{ email: "", password: "" }}
-        onSubmit={async (values) => {
-          setError("");
-          try {
-            session.setToken(await authenticate(values.email, values.password));
-            navigate("/menu", { replace: true });
-          } catch (err) {
-            setError(
-              isAxiosError(err) && err.response?.status === 401
-                ? "Invalid email or password."
-                : errorMessage(err),
-            );
-          }
-        }}
-      >
-        {(formik) => (
-          <>
-            <InputText
-              name="email"
-              titulo="Email"
-              type="email"
-              autoComplete="username"
-              required
-            />
-            <InputText
-              name="password"
-              titulo="Password"
-              type="password"
-              autoComplete="current-password"
-              required
-            />
-            {error && (
-              <p role="alert" className="text-red-800 my-3">
-                {error}
-              </p>
+    <div className="login-layout">
+      <section className="login-story">
+        <div className="brand">
+          <Recycle size={32} />
+          <span>
+            IRR<small>Instituto de Resíduos e Reciclagem</small>
+          </span>
+        </div>
+        <div>
+          <span className="status-pill">Cuidar. Reciclar. Transformar.</span>
+          <h2>
+            Novos ciclos.
+            <br />
+            Mais possibilidades.
+          </h2>
+          <p>
+            Uma gestão conectada para transformar resíduos em oportunidades.
+          </p>
+          <Recycle
+            className="login-symbol"
+            aria-hidden="true"
+            strokeWidth={1}
+          />
+        </div>
+        <span className="login-footnote">
+          Juntos por um futuro mais sustentável <ArrowUpRight size={18} />
+        </span>
+      </section>
+      <main className="login-form">
+        <Card className="login-card">
+          <h1 className="text-2xl font-bold text-green-950">
+            Bem-vindo ao IRR
+          </h1>
+          <p className="my-3">
+            Entre com sua conta para acessar sua organização.
+          </p>
+          <SimpleForm
+            initialValues={{ email: "", password: "" }}
+            onSubmit={async (values) => {
+              setError("");
+              try {
+                session.setToken(
+                  await authenticate(values.email, values.password),
+                );
+                navigate("/menu", { replace: true });
+              } catch (err) {
+                setError(
+                  isAxiosError(err) && err.response?.status === 401
+                    ? "E-mail ou senha inválidos."
+                    : errorMessage(err),
+                );
+              }
+            }}
+          >
+            {(formik) => (
+              <>
+                <InputText
+                  name="email"
+                  titulo="E-mail"
+                  type="email"
+                  autoComplete="username"
+                  required
+                />
+                <InputText
+                  name="password"
+                  titulo="Senha"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                />
+                {error && (
+                  <p role="alert" className="text-red-800 my-3">
+                    {error}
+                  </p>
+                )}
+                <Button
+                  titulo={
+                    formik.isSubmitting ? "Entrando…" : "Entrar na plataforma"
+                  }
+                  type="submit"
+                  disabled={formik.isSubmitting}
+                  className="w-full mt-4"
+                />
+              </>
             )}
-            <Button
-              titulo={formik.isSubmitting ? "Signing in…" : "Sign in"}
-              type="submit"
-              disabled={formik.isSubmitting}
-              className="w-full mt-4"
-            />
-          </>
-        )}
-      </SimpleForm>
-    </Card>
+          </SimpleForm>
+          <p className="login-help">
+            Precisa de acesso? Entre em contato com o administrador da sua
+            organização.
+          </p>
+        </Card>
+      </main>
+    </div>
   );
 }

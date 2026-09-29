@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "../../components/Card";
+import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import { fleet, type Vehicle } from "../../features/fleet/api";
 import { useSession } from "../../features/identity/SessionProvider";
@@ -45,16 +46,22 @@ export default function VehicleList() {
   }, [page, filters, revision]);
   return (
     <Card className="rounded-3xl shadow w-full max-w-5xl mx-auto">
-      <div className="flex justify-between gap-4 items-center">
-        <h1 className="text-2xl font-bold">Vehicles</h1>
+      <div className="page-heading">
+        <div>
+          <p className="eyebrow">FROTA</p>
+          <h1>Veículos</h1>
+          <p className="page-description">
+            Consulte e organize os veículos da sua operação.
+          </p>
+        </div>
         {manager && (
-          <Link className="underline" to="/vehicle-create">
-            Add vehicle
+          <Link className="primary-link" to="/vehicle-create">
+            Adicionar veículo
           </Link>
         )}
       </div>
       <form
-        className="flex flex-wrap items-end gap-4 my-5"
+        className="filter-bar"
         onSubmit={(event) => {
           event.preventDefault();
           setPage(0);
@@ -62,7 +69,7 @@ export default function VehicleList() {
         }}
       >
         <label>
-          License plate
+          Placa
           <input
             className="block border rounded p-2"
             value={query.licensePlate}
@@ -72,7 +79,7 @@ export default function VehicleList() {
           />
         </label>
         <label>
-          Model
+          Modelo
           <input
             className="block border rounded p-2"
             value={query.model}
@@ -81,27 +88,33 @@ export default function VehicleList() {
             }
           />
         </label>
-        <Button type="submit" titulo="Search" disabled={busy} />
+        <Button type="submit" titulo="Buscar" disabled={busy} />
       </form>
       {error && (
         <p role="alert" className="text-red-800 my-3">
           {error}{" "}
-          <Button titulo="Retry" onClick={() => setRevision((n) => n + 1)} />
+          <Button
+            titulo="Tentar novamente"
+            onClick={() => setRevision((n) => n + 1)}
+          />
         </p>
       )}
       {busy ? (
-        <p role="status">Loading vehicles…</p>
+        <p role="status">Carregando veículos…</p>
       ) : (
         !error && (
           <>
-            <p className="my-3">{data.total} vehicles</p>
+            <p className="my-3">
+              {data.total.toLocaleString("pt-BR")}{" "}
+              {data.total === 1 ? "veículo" : "veículos"}
+            </p>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
                   <tr>
-                    <th className="p-2">License plate</th>
-                    <th>Model</th>
-                    {manager && <th>Actions</th>}
+                    <th className="p-2">Placa</th>
+                    <th>Modelo</th>
+                    {manager && <th>Ações</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -115,13 +128,13 @@ export default function VehicleList() {
                             className="underline"
                             to={"/vehicle-update/" + item.id}
                           >
-                            Edit
+                            Editar
                           </Link>
                           <button
                             className="underline text-red-800"
                             onClick={() => setSelected(item)}
                           >
-                            Deactivate
+                            Desativar
                           </button>
                         </td>
                       )}
@@ -130,18 +143,22 @@ export default function VehicleList() {
                 </tbody>
               </table>
             </div>
-            {data.items.length === 0 && <p>No vehicles match these filters.</p>}
+            {data.items.length === 0 && (
+              <p>Nenhum veículo encontrado com esses filtros.</p>
+            )}
             <div className="flex items-center gap-4 mt-5">
               <Button
-                titulo="Previous"
+                variant="secondary"
+                titulo="Anterior"
                 disabled={page === 0}
                 onClick={() => setPage((n) => n - 1)}
               />
               <span>
-                Page {page + 1} of {Math.max(1, data.pages)}
+                Página {page + 1} de {Math.max(1, data.pages)}
               </span>
               <Button
-                titulo="Next"
+                variant="secondary"
+                titulo="Próxima"
                 disabled={page + 1 >= data.pages}
                 onClick={() => setPage((n) => n + 1)}
               />
@@ -150,28 +167,27 @@ export default function VehicleList() {
         )
       )}
       {selected && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Deactivate vehicle"
-          className="fixed inset-0 bg-black/50 flex items-center justify-center p-5"
+        <Modal
+          label="Desativar veículo"
+          busy={busy}
+          onClose={() => setSelected(null)}
         >
           <Card className="rounded-2xl max-w-md">
             <h2 className="text-xl font-bold">
-              Deactivate {selected.licensePlate}?
+              Desativar {selected.licensePlate}?
             </h2>
             <p className="my-4">
-              The backend will reject this action if the vehicle is referenced
-              by an operational record.
+              Veículos vinculados a registros operacionais não podem ser
+              desativados. O histórico será preservado.
             </p>
             <div className="flex gap-3">
               <Button
-                titulo="Cancel"
+                titulo="Cancelar"
                 disabled={busy}
                 onClick={() => setSelected(null)}
               />
               <Button
-                titulo="Confirm deactivation"
+                titulo="Confirmar desativação"
                 disabled={busy}
                 onClick={async () => {
                   setBusy(true);
@@ -190,7 +206,7 @@ export default function VehicleList() {
               />
             </div>
           </Card>
-        </div>
+        </Modal>
       )}
     </Card>
   );

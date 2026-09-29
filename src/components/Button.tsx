@@ -11,14 +11,15 @@ export default function Button({
   className = "",
   type = "button",
   action: _action,
-  variant: _variant,
+  variant,
   ...rest
 }: ButtonProps) {
   return (
     <button
       type={type}
       className={
-        "inline-flex justify-center items-center px-5 py-2.5 font-bold rounded-xl bg-green-950 text-white shadow hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed " +
+        "button " +
+        (variant === "secondary" ? "button-secondary " : "button-primary ") +
         className
       }
       {...rest}

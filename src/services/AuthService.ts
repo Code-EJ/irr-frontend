@@ -5,4 +5,3 @@ export default {
  async login(data:{email:string;password:string}){const token=await authenticate(data.email,data.password);session.setToken(token);return {token,error:null,status:200};},
  logout:()=>session.clear()
 };
-
