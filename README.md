@@ -1,79 +1,123 @@
 # IRR frontend
 
-- Documentation maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
+Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
-React 18, TypeScript and Vite interface for waste intake, materials, processing, inventory and sales. The application is in pre-production. Backend/database foundations are being refactored first; frontend integration follows the shared [master plan](docs/adrs/0001-master-plan.md).
+React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend commit **0dc0d1f** and exclusively **/api/v1**. Supported slices are sign-in/current account, organization selection, vehicles and the material category/type/subtype hierarchy. Intake, processing, inventory, sales and reports remain gated while their existing Master Plan slices are implemented. A passing build does not mean the whole application is finished.
 
-## Install and run
+## Run locally, step by step
 
-Use a Node.js runtime compatible with the locked Vite 6 toolchain (Node 22 LTS is a suitable baseline) and npm. From this repository root:
+1. Start the backend from its repository using its README and existing private environment configuration:
 
-~~~sh
-npm ci
+   ~~~powershell
+   Set-Location '../back-irr-v2'
+   docker compose up -d --build --wait
+   ~~~
+
+   Check readiness at http://localhost:9191/actuator/health/readiness. PostgreSQL and Redis are backend-only Docker services. Do not publish them or put their credentials in the browser. Do not delete named volumes to resolve an integration error.
+
+2. Use Node.js 24 and npm. From this frontend repository:
+
+   ~~~powershell
+   npm ci
+   if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+   npm run dev
+   ~~~
+
+3. Open http://localhost:5173. Vite binds to loopback on port 5173 and fails explicitly if that port is occupied. The ignored frontend .env contains only VITE_API_BASE_URL=http://localhost:9191/api/v1. Configuration is embedded at build time. Its value must be an HTTP(S) origin with the /api/v1 path and no credentials, query or fragment. A different browser origin must also be allowed by the backend CORS configuration.
+
+4. Create the local credential reference, then open the ignored **.env-dev** file:
+
+   ~~~powershell
+   $env:IRR_BACKEND_ENV = (Resolve-Path '../back-irr-v2/.env').Path
+   npm run dev:credentials
+   notepad .env-dev
+   ~~~
+
+   Sign in using DEV_ADMIN_EMAIL and DEV_ADMIN_PASSWORD from that file. The command copies the existing backend development bootstrap credentials without printing them or overwriting an existing file. It does not create/reset an account. If the backend bootstrap credentials change, update this local reference to match the actual development account. The private file is excluded from Git and Docker, is not automatically loaded by Vite, and must never be renamed to a Vite environment file. Database/Redis credentials remain in the backend environment; the browser does not connect to them. There is no public signup/reset-password flow in this contract.
+
+5. Select an organization in the header. The development bootstrap normally provides the explicit IRR Development manager association. If the account has no membership, an administrator must grant one through the backend's documented organization API. Platform administrator status alone does not grant business access. Reloading keeps the session but requires explicit organization selection again.
+
+6. Open Vehicles to list, filter, create, edit or deactivate vehicles. MEMBER can read; MANAGER can maintain fleet records. Open Materials to choose a category and type and work with its subtypes. Edits submit the loaded version; on a conflict, reload the current version, review it, then edit again. Category/type deactivation also deactivates descendants when the backend permits it; operational/inventory references can block deactivation. History is retained.
+
+## Run the frontend in Docker
+
+Keep the backend stack running. Stop Vite or preview before using the same frontend port:
+
+~~~powershell
+docker compose up --build -d --wait
+docker compose ps
+~~~
+
+Open http://localhost:5173 and use the credentials in .env-dev. This repository's Compose project only manages the frontend; the backend repository manages its API, PostgreSQL and Redis. The multi-stage image uses npm ci, compiles with Node 24, and serves the SPA with unprivileged Nginx on container port 8080. Its host binding is loopback-only. The runtime has a read-only filesystem, a temporary /tmp, dropped capabilities and a /health readiness check. Deep links fall back to index.html; missing bundled assets return 404.
+
+The Dockerfile pins base-image digests. VITE_API_BASE_URL is a public build argument; rebuild after changing it. Docker must not consume .env-dev, and passwords must never be passed as build arguments. To return to hot-reload development:
+
+~~~powershell
+docker compose stop frontend
 npm run dev
 ~~~
 
-Open http://localhost:5173. npm ci installs the committed lockfile. The current Vite configuration binds to all host interfaces; do not treat it as production hosting.
+If port 5173 is occupied, stop the other frontend process instead of changing origins silently. If sign-in succeeds but the account has no organization, check the backend development bootstrap and membership through Swagger. A connection error requires checking backend readiness and CORS for http://localhost:5173. Do not reset the database to fix frontend configuration.
 
-## Build and checks
+## Official API reference and generated types
 
-~~~sh
-npm run build
-npm run lint
-npx tsc --noEmit
-npm run preview
+- [Swagger UI](http://localhost:9191/swagger-ui/index.html)
+- [Running OpenAPI](http://localhost:9191/v3/api-docs)
+- [Pinned contract metadata](docs/api/baseline.json) and [snapshot](docs/api/openapi.json)
+
+Swagger is the official API documentation. Markdown guides explain integration and operations, not a competing HTTP specification. DTOs are generated into src/shared/api/schema.d.ts. To intentionally review a backend contract change:
+
+~~~powershell
+npm run api:capture
+npm run api:generate
+git diff -- docs/api src/shared/api/schema.d.ts
 ~~~
 
-Build uses Vite and does not prove TypeScript or lint correctness. Historical checks found a broken ESLint configuration and TypeScript errors; ADR-0003 records these findings, which documentation changes do not fix. There is currently no npm test script or established frontend acceptance suite.
+The current capture script records the frozen 0dc0d1f baseline. Before accepting a different backend, update that reference deliberately and validate the matched backend/frontend pair. Do not blindly capture an unrelated running server to make a test pass. CI regenerates types from the pinned snapshot and fails on a tracked diff.
 
-## Backend and official API documentation
+## Verify
 
-Start the backend using its README and Docker Compose instructions. Its default local API is http://localhost:9191. Official contracts are generated by the backend:
+~~~powershell
+npm ci
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm audit
+npm run preview -- --host 127.0.0.1 --port 5173 --strictPort
+~~~
 
-- Swagger UI: http://localhost:9191/swagger-ui/index.html
-- OpenAPI JSON: http://localhost:9191/v3/api-docs
-- OpenAPI YAML: http://localhost:9191/v3/api-docs.yaml
+Stop the development server before previewing on the same port. Type checking covers application, tests and Vite/Vitest configuration. Build includes that gate. Unit tests use synthetic credentials and transport adapters; they do not contact a database. GitHub Actions runs the isolated checks; authoring the workflow does not establish that a remote run has passed.
 
-The current frontend hardcodes API_HOST in src/consts.ts to a legacy Railway URL and contains two Axios clients under src/config/security. Its legacy Portuguese routes, senha/access_token fields, PATCH updates and pagination do not match the new backend. Starting both projects does not establish a compatible release. Migrate the configured origin and contract together; changing only the URL is insufficient.
+For the explicit **local development backend** acceptance suite:
 
-Development administrator credentials belong in the backend's ignored .env (DEV_ADMIN_EMAIL and DEV_ADMIN_PASSWORD) and work through the local Swagger flow. Never place database passwords, private keys or administrator passwords in frontend source or VITE_* variables: browser bundles are public. The login screen still needs its contract migration before local backend credentials can be promised to work through this frontend.
+~~~powershell
+$env:IRR_BACKEND_ENV = (Resolve-Path '../back-irr-v2/.env').Path
+npm run test:contract
+~~~
+
+This command requires a running local backend and administrator credentials from that file. It tests the actual frontend API adapters, scope isolation, member restrictions, immediate revocation, fleet pagination/mutations, material hierarchy and stale-version refusal. It creates uniquely named test organizations, a member and records, then deactivates them through the APIs. Soft-deleted history remains; no SQL reset or volume deletion is performed. It refuses non-loopback API origins. Do not run it against a production service. Runtime failures are sanitized so Axios credential headers and passwords do not enter test reports.
+
+Browser verification and dated results are in [the integration execution record](docs/frontend-integration.md). Test login/logout, organization switching and representative forms against the running backend; a mock test or bundle alone is insufficient acceptance.
 
 ## Repository map
 
-| Directory | Current responsibility |
+| Path | Responsibility |
 | --- | --- |
-| src/pages | Route-level screens |
-| src/components | Shared interface components |
-| src/route | Navigation and route definitions |
-| src/config | HTTP/security setup |
-| src/services | API access |
-| src/services-antigos | Legacy services awaiting consolidation |
-| src/models | TypeScript data shapes |
-| src/bases | Existing base abstractions |
-| src/utils | Supporting helpers |
-| src/assets | Static interface assets |
-| docs/adrs | Architectural decisions and migration plan |
+| src/features/identity | Session bootstrap, current account, organizations and membership |
+| src/features/fleet | Generated vehicle DTOs and v1 adapter/form |
+| src/features/materials | Scoped three-level catalog and optimistic editing |
+| src/shared/api | Single Axios transport, session invalidation and generated schemas |
+| src/route/Router.tsx | Active guarded navigation and pending-workflow gating |
+| src/pages/VehiclePages | Integrated fleet pages |
+| src/components | Existing shared presentation and typed controls |
+| src/pages, src/models, src/services, src/bases | Remaining legacy workflow code, kept for incremental replacement; legacy BaseService fails closed |
+| tests/contract | Opt-in real-backend acceptance |
+| docs/adrs | Historical decisions and ADR-0015 integration decision |
+| docs/api | Pinned executable contract and baseline digest |
 
-This is the current tree, not completed feature modularization. ADR-0003 defines the target organization and dependency decisions. Domain rules and inventory mutations belong to backend use cases; UI authorization is a usability layer.
+## Architecture and contribution
 
-## Shared decisions
+Follow [ADR-0001](docs/adrs/0001-master-plan.md), [ADR-0003](docs/adrs/0003-architecture-and-dependencies.md) and [ADR-0015](docs/adrs/0015-frontend-contract-integration.md). ADR-0014 in the backend supersedes old aliases and transitional references in earlier ADRs. [Dependency notes](docs/dependencies.md) describe the retained stack and precise tooling changes. Inventory arithmetic, authorization and domain transitions remain backend responsibilities; later UI slices preserve decimal strings, versions and idempotency semantics.
 
-- [Master plan](docs/adrs/0001-master-plan.md)
-- [Target database and ERD](docs/adrs/0002-database-schema-redesign.md)
-- [Architecture and dependencies](docs/adrs/0003-architecture-and-dependencies.md)
-- [Readiness review](docs/adrs/0004-implementation-readiness.md)
-- [Docker foundation](docs/adrs/0005-preproduction-docker-foundation.md)
-- [Backend execution evidence](docs/adrs/0006-backend-foundation-execution.md)
-- [Fresh database and incremental migrations](docs/adrs/0007-fresh-database-baseline.md)
-
-## Contribution conventions
-
-Use feature/refactor branches and coherent semantic commits. All maintained documentation, new/changed comments, commit messages and PR descriptions use English. Use TSDoc for TypeScript APIs and JavaDoc in the backend. Credit Enzo Ribas (@oEnzoRibas) for this refactor without replacing previous contributor attribution. Update Swagger-derived contracts and consumers together.
-
-## Backend contract update (ADR-0008)
-
-The backend now requires administrator provisioning through POST /api/users; self-registration is retired. Attachment responses expose only safe metadata, reads/deletes require creator ownership, and deletion returns 202 for queued physical cleanup. The frontend implementation has not yet adopted these contracts. Use the running backend Swagger specification and [ADR-0008](docs/adrs/0008-identity-and-attachment-boundaries.md) before implementing the migration.
-
-## Organization ownership and infrastructure update
-
-The owner accepted organization-specific catalogs and stock. The backend now exposes explicit organization memberships, with administrator-only grant/revoke and member-only list/read; the existing business APIs are still awaiting organization cutover. See [ADR-0009](docs/adrs/0009-organization-scope-and-catalog-integrity.md). Redis is an internal backend Docker service with no browser connection or frontend credential; see [ADR-0010](docs/adrs/0010-containerized-redis.md). Frontend organization selection and catalog contract migration remain pending.
+Use feature/refactor branches and coherent semantic commits. Keep engineering identifiers, documentation and comments in English. All active product UI, accessibility labels and user-facing errors use Brazilian Portuguese (pt-BR), as requested by the owner. ABNT2 refers to the operating-system keyboard layout; the application accepts accented Unicode input without changing the user's keyboard. Use TSDoc/JSDoc in TypeScript and JavaDoc in the backend. Attribute Enzo Ribas (@oEnzoRibas) for these changes without replacing historical contributor credits. Remove legacy code only after the corresponding replacement is verified. No Kubernetes or backend architecture rewrite is part of this frontend phase.
