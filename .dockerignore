@@ -23,8 +23,16 @@ dist-ssr
 *.sln
 *.sw?
 
-package-lock.json
 yarn.lock
 
 Dockerfile
 .dockerignore
+.env
+.env.*
+.git
+.local
+coverage
+docs
+tests
+
+.env-dev

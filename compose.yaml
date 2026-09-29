@@ -1,0 +1,18 @@
+name: irr-frontend-development
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:9191/api/v1}
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-5173}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 128m
+    restart: unless-stopped
