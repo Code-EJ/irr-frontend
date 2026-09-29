@@ -60,3 +60,11 @@ The frontend now has a reproducible multi-stage Docker image and its own Compose
 - Responsive checks: fleet list/form, catalog and its modal inspected at 390 × 844. No horizontal document overflow was observed. The temporary viewport override was reset. Desktop overview and mobile fleet evidence are saved locally under `.local/verification/`; they are not committed or copied into Docker.
 
 Implementation commits: `791eb9f` (catalog/contracts), `29933ee` (Portuguese interface and visual refresh), `8a06cc1` (modal focus restoration), `07311a0` (Docker). All remain on `general-frontend-refactor`. No blocking backend defect was found and no backend file was changed. Remote CI has not been claimed as executed.
+
+## Intake slice: implementation boundaries
+
+The next ADR-0015 slice integrates donors, operational team members and attachments before collections and donations. This uses the existing 0dc0d1f contract and introduces no new architectural decision or backend feature. Organization managers maintain donors/team reference data; members may record intake. Attachment rename/delete is restricted by the server to its uploader or a manager; the public metadata does not expose uploader identity, so the UI must handle denied actions explicitly.
+
+Use exact decimal strings for weights/volumes and a non-authoritative exact sum for the required declared total. The backend validates that sum and owns inventory; raw intake does not credit saleable stock. Dates are entered in local time and sent as offset-aware instants. Collection schedules require both departure and arrival in chronological order; DRIVER staff are selected separately from helpers/operators. Donation edits preserve donor identity because the update DTO does not accept a donor change. Processed intake is immutable and returns a conflict; never simulate a successful edit or silently retry it.
+
+Acceptance requires donor/team maintenance and permission checks, paginated reference selection, protected upload/download/rename/delete, collection/donation creation and editing with decimal strings, organization isolation, processed-record conflict handling, browser verification and fixture cleanup. New routes must remain scoped; obsolete pages are removed only after replacements pass these checks. Remaining processing/sales/reporting workflows stay gated.
