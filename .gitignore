@@ -29,3 +29,6 @@ yarn.lock
 .local/
 coverage/
 
+
+# Private local development credentials
+.env-dev

@@ -5,15 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start": "vite --host",
+    "start": "vite",
     "build": "npm run typecheck && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.tests.json",
     "test": "vitest run",
     "api:generate": "openapi-typescript docs/api/openapi.json -o src/shared/api/schema.d.ts",
     "api:capture": "node scripts/capture-openapi.mjs",
-    "test:contract": "vitest run --config vitest.contract.config.js"
+    "test:contract": "vitest run --config vitest.contract.config.js",
+    "api:check": "node scripts/check-openapi.mjs",
+    "dev:credentials": "node scripts/development-credentials.mjs"
   },
   "dependencies": {
     "axios": "^1.7.9",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@types/node": "^24.19.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",

@@ -40,6 +40,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   });
   useEffect(() => session.subscribe(() => setRevision((n) => n + 1)), []);
   useEffect(() => {
+    const synchronize = (event: StorageEvent) => {
+      if (event.key === "token" || event.key === null)
+        session.selectOrganization(null);
+    };
+    window.addEventListener("storage", synchronize);
+    return () => window.removeEventListener("storage", synchronize);
+  }, []);
+  useEffect(() => {
     let active = true;
     if (!session.getToken()) {
       setState({

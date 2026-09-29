@@ -6,6 +6,7 @@ import { isAxiosError } from "axios";
 import { apiClient } from "../../src/shared/api/client";
 import { session } from "../../src/shared/api/session";
 import { fleet } from "../../src/features/fleet/api";
+import { catalog, type CatalogLevel } from "../../src/features/materials/api";
 import { authenticate, currentAccount } from "../../src/features/identity/api";
 
 const envFile = process.env.IRR_BACKEND_ENV;
@@ -31,6 +32,7 @@ vi.stubGlobal("localStorage", {
 const suffix = randomUUID().slice(0, 8);
 const organizationIds: string[] = [];
 const vehicles: string[] = [];
+const materials: { level: CatalogLevel; id: string }[] = [];
 let adminToken = "";
 let adminId = "";
 let memberId = "";
@@ -165,10 +167,78 @@ it("deactivates a real vehicle without expecting a response body", async () => {
   vehicles.shift();
 });
 
+it("integrates the complete hierarchy, parent filters and stale-version refusal", async () => {
+  manager();
+  const category = await safe(
+    catalog.create("categories", "Category " + suffix),
+  );
+  materials.push({ level: "categories", id: category.id });
+  const type = await safe(
+    catalog.create("types", "Type " + suffix, category.id),
+  );
+  materials.push({ level: "types", id: type.id });
+  const subtype = await safe(
+    catalog.create("subtypes", "Subtype " + suffix, type.id),
+  );
+  materials.push({ level: "subtypes", id: subtype.id });
+  expect(
+    (await safe(catalog.list("types", 0, suffix, category.id))).items.map(
+      (item) => item.id,
+    ),
+  ).toEqual([type.id]);
+  expect(
+    (await safe(catalog.list("subtypes", 0, suffix, type.id))).items.map(
+      (item) => item.id,
+    ),
+  ).toEqual([subtype.id]);
+  const updated = await safe(
+    catalog.update(
+      "subtypes",
+      subtype.id,
+      "Renamed " + suffix,
+      subtype.version,
+    ),
+  );
+  expect(updated.version).toBeGreaterThan(subtype.version);
+  expect(
+    await status(
+      catalog.update("subtypes", subtype.id, "Stale write", subtype.version),
+    ),
+  ).toBe(409);
+  expect((await safe(catalog.get("subtypes", subtype.id))).name).toBe(
+    "Renamed " + suffix,
+  );
+});
+
+it("isolates the catalog and rejects member catalog writes", async () => {
+  manager(organizationIds[1]);
+  expect(await status(catalog.get("categories", materials[0].id))).toBe(404);
+  expect((await safe(catalog.list("categories", 0, ""))).items).toEqual([]);
+  await safe(
+    apiClient.put(`/organizations/${organizationIds[0]}/members/${memberId}`, {
+      role: "MEMBER",
+    }),
+  );
+  session.setToken(memberToken);
+  session.selectOrganization(organizationIds[0]);
+  expect((await safe(catalog.list("categories", 0, suffix))).total).toBe(1);
+  expect(await status(catalog.create("categories", "Denied"))).toBe(403);
+});
+
+it("deactivates an unused hierarchy with the backend descendant cascade", async () => {
+  manager();
+  await safe(catalog.deactivate("categories", materials[0].id));
+  for (const item of materials)
+    expect(await status(catalog.get(item.level, item.id))).toBe(404);
+  materials.length = 0;
+});
+
 afterAll(async () => {
   if (!adminToken) return;
   manager();
   for (const id of vehicles) await safe(fleet.deactivate(id));
+  for (const item of [...materials].reverse())
+    await safe(catalog.deactivate(item.level, item.id));
   if (memberId) await safe(apiClient.delete(`/users/${memberId}`));
   for (const id of organizationIds)
     await safe(apiClient.delete(`/organizations/${id}`));

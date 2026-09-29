@@ -5,10 +5,10 @@ export type Account = components["schemas"]["UserResponse"];
 export type Organization = components["schemas"]["Organization"];
 export type Membership = components["schemas"]["Membership"];
 export async function authenticate(email: string, password: string) {
-  const { data } = await apiClient.post<{ token: string }>(
-    "/session/authenticate",
-    { email, password },
-  );
+  const input: components["schemas"]["LoginRequestDTO"] = { email, password };
+  const { data } = await apiClient.post<
+    components["schemas"]["LoginResponseDTO"]
+  >("/session/authenticate", input);
   if (!data.token) throw new Error("Invalid authentication response.");
   return data.token;
 }
@@ -37,7 +37,14 @@ export async function organizations() {
   }
 }
 export async function membership(id: string) {
-  return (
+  const data = (
     await apiClient.get<Membership>("/organizations/" + id + "/membership")
   ).data;
+  if (
+    data.organizationId !== id ||
+    !data.active ||
+    !["MEMBER", "MANAGER"].includes(data.role ?? "")
+  )
+    throw new Error("The organization membership is no longer available.");
+  return data;
 }
