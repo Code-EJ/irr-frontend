@@ -5,12 +5,19 @@ import {
   sumWeights,
   displayDecimal,
   localDateTime,
+  submittedInstant,
 } from "./quantities";
 it("preserves four decimal places and adds without binary rounding", () => {
   expect(decimal(" 0,1000 ")).toBe("0.1000");
   expect(sumWeights(["0.1000", "0.2000"])).toBe("0.3000");
   expect(sumWeights(["99999999999.9999", "0.0001"])).toBe("100000000000.0000");
   expect(displayDecimal("123.4500")).toBe("123,4500");
+});
+it("preserves untouched timestamp precision while converting deliberate local edits", () => {
+  const original = "2026-09-28T12:30:47.123456Z";
+  expect(submittedInstant(localDateTime(original), original)).toBe(original);
+  const edited = localDateTime("2026-09-28T13:45:00Z");
+  expect(submittedInstant(edited, original)).toBe("2026-09-28T13:45:00.000Z");
 });
 it.each(["-1", "0", "1e3", "NaN", "1.00001", "1.234,56", "100000000000", ""])(
   "rejects invalid or out-of-contract line quantity %s",

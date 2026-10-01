@@ -55,3 +55,9 @@ export function localDateTime(value?: string) {
     pad(date.getMinutes())
   );
 }
+/** Retains the original instant, including sub-minute precision, when its displayed value is unchanged. */
+export function submittedInstant(local: string, original?: string): string {
+  return original && local === localDateTime(original)
+    ? original
+    : new Date(local).toISOString();
+}

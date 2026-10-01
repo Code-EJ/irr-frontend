@@ -732,3 +732,171 @@ td button {
   border: 0;
   width: 100%;
 }
+
+/* Scoped intake and reference workflows. */
+.sidebar {
+  overflow-y: auto;
+}
+.sidebar-note {
+  margin-top: 28px;
+}
+.table-scroll {
+  overflow-x: auto;
+  margin-top: 24px;
+}
+.table-scroll table {
+  width: 100%;
+  text-align: left;
+}
+.row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+.empty-state {
+  padding: 28px 0;
+  color: #728779;
+  font-size: 14px;
+}
+.stack-form {
+  display: grid;
+  gap: 19px;
+  margin-top: 24px;
+}
+.stack-form label,
+.reference-picker label {
+  display: grid;
+  gap: 7px;
+}
+.stack-form input,
+.stack-form select,
+.reference-picker select {
+  width: 100%;
+  min-width: 0;
+}
+.stack-form .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.stack-form .checkbox-label input {
+  width: auto;
+}
+.form-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.workflow-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 24px 0;
+  border-bottom: 1px solid #dce7df;
+}
+.workflow-tabs a {
+  padding: 12px 20px;
+  color: #698474;
+  font-size: 14px;
+}
+.workflow-tabs a.active {
+  border-bottom: 3px solid #237249;
+  color: #176b49;
+  font-weight: 600;
+}
+.intake-form fieldset {
+  border: 1px solid #e1e9e3;
+  padding: 22px;
+  border-radius: 12px;
+  min-width: 0;
+}
+.intake-form legend {
+  padding: 0 9px;
+  font-weight: 600;
+  font-size: 15px;
+}
+.intake-form textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid #d8e2db;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 20px;
+}
+.intake-line {
+  padding: 18px;
+  border: 1px solid #e3eae4;
+  background: #f9fbf8;
+  border-radius: 10px;
+  display: grid;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.intake-line h3 {
+  font-size: 13px;
+  font-weight: 700;
+}
+.intake-line > .button {
+  justify-self: start;
+}
+.reference-picker {
+  min-width: 0;
+}
+.reference-picker small {
+  color: #7f9085;
+  font-size: 10px;
+}
+.reference-picker .pagination {
+  margin-top: 8px;
+  gap: 8px;
+}
+.reference-picker .button {
+  font-size: 11px;
+  padding: 6px 9px;
+}
+.line-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 15px 0;
+}
+.line-row > .reference-picker {
+  flex: 1;
+}
+[role="alert"] {
+  color: #9b3434;
+  margin: 15px 0;
+  font-size: 14px;
+}
+@media (max-width: 700px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .intake-form fieldset {
+    padding: 14px;
+  }
+  .intake-line {
+    padding: 12px;
+  }
+  .line-row {
+    flex-wrap: wrap;
+  }
+  .line-row > .reference-picker {
+    flex-basis: 100%;
+  }
+}

@@ -81,7 +81,10 @@ export default function ResourcePicker({
       )}
       {!busy && !error && (
         <>
-          <small>{data.items.length} opções nesta página</small>
+          <small>
+            {data.items.length} {data.items.length === 1 ? "opção" : "opções"}{" "}
+            nesta página
+          </small>
           {data.pages > 1 && (
             <Pagination page={page} pages={data.pages} onChange={setPage} />
           )}

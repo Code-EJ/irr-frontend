@@ -17,6 +17,11 @@ import Login from "../pages/Login";
 import VehicleList from "../pages/VehiclePages/VehicleList";
 import VehicleForm from "../features/fleet/VehicleForm";
 import MaterialsPage from "../features/materials/MaterialsPage";
+import DonorsPage from "../features/parties/DonorsPage";
+import TeamPage from "../features/parties/TeamPage";
+import DocumentsPage from "../features/documents/DocumentsPage";
+import IntakeList from "../features/intake/IntakeList";
+import IntakeForm from "../features/intake/IntakeForm";
 import UserDetails from "../pages/Profile/UserDetails";
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -28,6 +33,10 @@ import {
   UserRound,
   ArrowUpRight,
   LogOut,
+  HandHeart,
+  UsersRound,
+  Files,
+  PackagePlus,
 } from "lucide-react";
 function Protected() {
   const state = useSession();
@@ -72,6 +81,22 @@ function Protected() {
           <NavLink to="/profile">
             <UserRound size={19} />
             Minha conta
+          </NavLink>
+          <NavLink to="/donors">
+            <HandHeart size={19} />
+            Doadores
+          </NavLink>
+          <NavLink to="/team">
+            <UsersRound size={19} />
+            Equipe
+          </NavLink>
+          <NavLink to="/documents">
+            <Files size={19} />
+            Documentos
+          </NavLink>
+          <NavLink to="/intake">
+            <PackagePlus size={19} />
+            Entradas
           </NavLink>
         </nav>
         <div className="sidebar-note">
@@ -204,21 +229,21 @@ function Home() {
           <p>Organize categorias, tipos e subtipos de resíduos.</p>
           <strong>Acessar catálogo →</strong>
         </Link>
-        <Link to="/profile" className="quick-card">
+        <Link to="/intake/donations" className="quick-card">
           <span className="quick-icon">
-            <UserRound />
+            <PackagePlus />
           </span>
           <ArrowUpRight className="quick-arrow" />
-          <h3>Minha conta</h3>
-          <p>Confira seus dados de acesso à plataforma.</p>
-          <strong>Ver minha conta →</strong>
+          <h3>Entradas</h3>
+          <p>Registre coletas e doações, com materiais e comprovantes.</p>
+          <strong>Acessar entradas →</strong>
         </Link>
       </div>
       <div className="coming-next">
         <span className="status-pill">Em breve</span>
         <p>
-          Entradas de resíduos, processamento, estoque e vendas estarão
-          disponíveis nas próximas etapas.
+          Processamento, estoque e vendas estarão disponíveis nas próximas
+          etapas.
         </p>
       </div>
     </div>
@@ -234,6 +259,39 @@ export default function AppRouter() {
             <Route path="/menu" element={<Home />} />
             <Route path="/profile" element={<UserDetails />} />
             <Route element={<Scoped />}>
+              <Route path="/donors" element={<DonorsPage />} />
+              <Route path="/team" element={<TeamPage />} />
+              <Route path="/documents" element={<DocumentsPage />} />
+              <Route
+                path="/intake"
+                element={<Navigate to="/intake/donations" replace />}
+              />
+              <Route
+                path="/intake/donations"
+                element={<IntakeList key="donations" kind="donations" />}
+              />
+              <Route
+                path="/intake/collections"
+                element={<IntakeList key="collections" kind="collections" />}
+              />
+              <Route
+                path="/intake/donations/new"
+                element={<IntakeForm key="new-donation" kind="donations" />}
+              />
+              <Route
+                path="/intake/collections/new"
+                element={<IntakeForm key="new-collection" kind="collections" />}
+              />
+              <Route
+                path="/intake/donations/:id"
+                element={<IntakeForm key="edit-donation" kind="donations" />}
+              />
+              <Route
+                path="/intake/collections/:id"
+                element={
+                  <IntakeForm key="edit-collection" kind="collections" />
+                }
+              />
               <Route path="/materials" element={<MaterialsPage />} />
               <Route path="/vehicle-list" element={<VehicleList />} />
               <Route element={<Scoped manager />}>
