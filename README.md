@@ -2,7 +2,7 @@
 
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
-React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend commit **0dc0d1f** and exclusively **/api/v1**. Supported slices are sign-in/current account, organization selection, vehicles and the material category/type/subtype hierarchy. Intake, processing, inventory, sales and reports remain gated while their existing Master Plan slices are implemented. A passing build does not mean the whole application is finished.
+React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend commit **0dc0d1f** and exclusively **/api/v1**. Supported slices are sign-in/current account, organization selection, vehicles, the material category/type/subtype hierarchy, donors, operational staff, documents, collections and donations. Processing, inventory, sales and reports remain gated while their existing Master Plan slices are implemented. A passing build does not mean the whole application is finished.
 
 ## Run locally, step by step
 
@@ -38,6 +38,12 @@ React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface f
 5. Select an organization in the header. The development bootstrap normally provides the explicit IRR Development manager association. If the account has no membership, an administrator must grant one through the backend's documented organization API. Platform administrator status alone does not grant business access. Reloading keeps the session but requires explicit organization selection again.
 
 6. Open Vehicles to list, filter, create, edit or deactivate vehicles. MEMBER can read; MANAGER can maintain fleet records. Open Materials to choose a category and type and work with its subtypes. Edits submit the loaded version; on a conflict, reload the current version, review it, then edit again. Category/type deactivation also deactivates descendants when the backend permits it; operational/inventory references can block deactivation. History is retained.
+
+7. Prepare intake references in **Doadores**, **Equipe**, **Veículos** and **Materiais**. A manager maintains these records; operational staff are distinct from application user accounts. Collections require a staff member with the DRIVER role. Reference selectors are paginated; use the next page if the required driver or material is not on the current page.
+
+8. Upload optional PDF/PNG/JPEG evidence (up to 10 MiB) in **Documentos** before starting an intake form. Downloads use authenticated requests. The server permits rename/delete only for the uploader or a manager; a linked document cannot be removed. An authorization or history conflict is displayed rather than silently ignored.
+
+9. Open **Entradas**, choose **Doações** or **Coletas**, and register the receipt. Enter kg and m³ with a decimal comma or point, up to four decimal places and no thousands separator. Collection distance accepts three decimal places; departure/arrival must be supplied together in chronological order. Dates use local browser time and are transmitted as instants. Editing another field preserves the original timestamp precision when the displayed date is unchanged. Donation edits preserve the original donor. Confirmed deactivation is available for unprocessed intake; the backend refuses edits/deactivation once sorting history exists. Intake alone does not create saleable inventory.
 
 ## Run the frontend in Docker
 
@@ -96,7 +102,7 @@ $env:IRR_BACKEND_ENV = (Resolve-Path '../back-irr-v2/.env').Path
 npm run test:contract
 ~~~
 
-This command requires a running local backend and administrator credentials from that file. It tests the actual frontend API adapters, scope isolation, member restrictions, immediate revocation, fleet pagination/mutations, material hierarchy and stale-version refusal. It creates uniquely named test organizations, a member and records, then deactivates them through the APIs. Soft-deleted history remains; no SQL reset or volume deletion is performed. It refuses non-loopback API origins. Do not run it against a production service. Runtime failures are sanitized so Axios credential headers and passwords do not enter test reports.
+This command requires a running local backend and administrator credentials from that file. It tests the actual frontend API adapters, scope isolation, member restrictions, immediate revocation, fleet pagination/mutations, material hierarchy and stale-version refusal. Intake checks cover donor/staff rules, document upload/download/ownership, exact quantities, schedules, paginated driver selection and processed-record conflicts. It creates uniquely named test organizations, members and records, reverses test sorting stock movements and deactivates disposable records and organizations through their APIs. History-bound intake/references remain inside inactive test organizations; no SQL reset or volume deletion is performed. It refuses non-loopback API origins. Do not run it against a production service. Runtime failures are sanitized so Axios credential headers and passwords do not enter test reports.
 
 Browser verification and dated results are in [the integration execution record](docs/frontend-integration.md). Test login/logout, organization switching and representative forms against the running backend; a mock test or bundle alone is insufficient acceptance.
 
@@ -107,6 +113,10 @@ Browser verification and dated results are in [the integration execution record]
 | src/features/identity | Session bootstrap, current account, organizations and membership |
 | src/features/fleet | Generated vehicle DTOs and v1 adapter/form |
 | src/features/materials | Scoped three-level catalog and optimistic editing |
+| src/features/parties | Organization donors and operational staff maintenance |
+| src/features/documents | Protected multipart uploads, downloads and attachment maintenance |
+| src/features/intake | Collection/donation workflows, generated DTOs and exact quantity handling |
+| src/shared/ui | Paginated reference selection and scoped page loading |
 | src/shared/api | Single Axios transport, session invalidation and generated schemas |
 | src/route/Router.tsx | Active guarded navigation and pending-workflow gating |
 | src/pages/VehiclePages | Integrated fleet pages |

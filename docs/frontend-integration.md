@@ -35,7 +35,7 @@ Fleet supports scoped paginated/filterable lists, UUID-preserving navigation, cr
 
 The browser fixture `FE-0928-BROWSER` was deactivated after verification. Checks do not certify intake, processing, sales or reporting UI. There was no blocking backend contract defect in the implemented slice. Swagger's generated success/error descriptions are sparse; runtime tests verify actual empty-success behavior without assuming every delete returns a JSON body.
 
-The next existing Master Plan step is intake and its donor/team/document prerequisites, followed by processing, inventory, sales and reporting. These workflows are not yet integrated.
+At that checkpoint, the next existing Master Plan step was intake and its donor/team/document prerequisites. The intake execution below advances that step; processing, inventory, sales and reporting remain pending.
 
 ## Material slice and presentation consolidation
 
@@ -68,3 +68,26 @@ The next ADR-0015 slice integrates donors, operational team members and attachme
 Use exact decimal strings for weights/volumes and a non-authoritative exact sum for the required declared total. The backend validates that sum and owns inventory; raw intake does not credit saleable stock. Dates are entered in local time and sent as offset-aware instants. Collection schedules require both departure and arrival in chronological order; DRIVER staff are selected separately from helpers/operators. Donation edits preserve donor identity because the update DTO does not accept a donor change. Processed intake is immutable and returns a conflict; never simulate a successful edit or silently retry it.
 
 Acceptance requires donor/team maintenance and permission checks, paginated reference selection, protected upload/download/rename/delete, collection/donation creation and editing with decimal strings, organization isolation, processed-record conflict handling, browser verification and fixture cleanup. New routes must remain scoped; obsolete pages are removed only after replacements pass these checks. Remaining processing/sales/reporting workflows stay gated.
+
+## Intake execution and verification, 2026-09-29 through 2026-09-30
+
+ADR-0015 step 4 now has scoped donor, operational staff, document, donation and collection screens. No additional ADR was needed: the implementation follows ADR-0001/0003 and the accepted integration sequence, with ADR-0014 and backend `0dc0d1f` remaining authoritative. No backend source was changed and no blocking backend contract defect was discovered. The running OpenAPI was structurally equal to the pinned contract; formatting/order differences alone do not justify replacing the baseline.
+
+Donor/staff maintenance is manager-only. Members can record intake. Paginated selectors hydrate existing UUID references, including values outside the current option page. Driver selection filters the current staff page while preserving server pagination, so a page containing only helpers does not hide drivers on later pages. The donor is read-only on donation edits. Attachments use multipart `documento`, authenticated blob downloads and the server's ownership rules. Metadata does not expose uploader identity, so rename/delete authorization remains a server decision with an explicit error in the UI.
+
+Quantities remain decimal strings. BigInt arithmetic computes only the required declared weight; the server validates totals and owns inventory. The form rejects totals outside the backend precision, duplicate collection crew, repeated drivers and incomplete/reversed schedules. An unchanged displayed timestamp retains its original instant and sub-minute precision rather than truncating it during an unrelated edit. Mutations are never silently replayed after conflicts.
+
+Removed 15 replaced create/list/update pages under `DonatorPages`, `DriverPages`, `DocumentPages`, `DonationPages` and `CollectionPages` after real contract and browser verification. The redundant explicit CollectionCreate compiler include was removed; the complete `src` tree remains checked. Legacy services/models still needed by gated processing screens remain until their replacements work.
+
+Verification evidence:
+
+- `npm run lint`, `npm run typecheck`, `npm test` and `npm run build` passed. There are 38 passing unit tests, including decimal validation, exact sums, unchanged timestamp preservation, scoped pagination and multipart/empty-response adapters.
+- `npm run test:contract` passed all 15 tests against the running Docker backend. New coverage includes donor addresses, manager/member permissions, a driver on page two, upload/download/rename/ownership, donation and collection edits, total mismatch, invalid crew/schedules, cross-organization denial and history-bound deactivation conflicts. Sorting a test donation verifies the backend refuses subsequent intake editing/deactivation.
+- Browser checks created a donor and driver, uploaded and renamed evidence, created/edited/deactivated a donation, and created/edited/deactivated a collection with vehicle, driver, route and schedule. Donation weight `0.2345` remained persisted after container restart; collection weight changed from `12.3456` to `13.4567` and appeared correctly in the list. The browser download event timed out, but the actual downloaded file existed and its hash matched the uploaded fixture; event capture was not used to claim a failed application download.
+- Collection list and form were inspected at a 390 × 844 viewport. No horizontal document overflow was present; wide tables scroll inside their own container. The temporary viewport was reset. Local screenshots are under `.local/verification/intake-desktop.png` and `intake-mobile.png`, excluded from source control and the image.
+- Test fixtures were cleaned through supported APIs. Both browser intake records were deactivated and their isolated organization was deactivated. Contract tests reversed their sorting movements and deactivated temporary users/organizations; references required by history remain inside inactive test organizations. Existing development data and database volumes were preserved.
+- `docker compose up --build -d --wait` rebuilt the frontend successfully and reported it healthy. Backend, PostgreSQL and Redis were restarted with existing volumes and reported healthy. No remote CI or production deployment is claimed.
+
+The next existing ADR-0015 step is sorting, pressing, read-only inventory and draft/post/reverse sales, followed by reporting. These must preserve backend idempotency, reversal and stock semantics; the remaining legacy screens are still gated. Intake acceptance does not establish completion of the whole frontend.
+
+Implementation commits on `general-frontend-refactor`: `d19834c` (acceptance boundaries), `98c3a7f` (contracts, exact quantities and acceptance tests), and `26677b4` (screens, timestamp preservation and legacy retirement). The final Docker bundle was reloaded after rebuilding, and the deactivated browser test organization no longer appeared in the membership selector.
