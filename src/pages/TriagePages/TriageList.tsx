@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { TriageService, SubTypologyService } from "../../services";
@@ -9,10 +9,10 @@ import { handleExport } from "../../utils/ExportService";
 const TriageList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
-    const [subtypologyMap, setSubtypologyMap] = useState<Record<string, string>>({});
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
+    const [, setSubtypologyMap] = useState<Record<string, string>>({});
     
-    const fetchData = async (page: number | null) => {
+    const fetchData = useCallback(async (page: number | null) => {
         const [triageResponse, subtypologyResponse] = await Promise.all([
             TriageService.getAll(page),
             SubTypologyService.getAll(1, 9999),
@@ -20,18 +20,19 @@ const TriageList = () => {
 
         const subtypologies = subtypologyResponse?.data ?? [];
         const subMap: Record<string, string> = {};
-        subtypologies.forEach((item: any) => {
+        subtypologies.forEach((item) => {
             subMap[item.id] = item.nome;
         });
         setSubtypologyMap(subMap);
 
-        const triageData = triageResponse?.data.map((item: any) => ({
+        const triageData = triageResponse?.data.map((item) => ({
             ...item,
             subtipologia: subMap[item.subtipologiaId] ?? item.subtipologiaId,
         })) ?? [];
 
         setData(triageData);
-    };
+        return triageData;
+    }, []);
 
     const handleBack = () => {
         navigate("/treatment-menu");
@@ -39,7 +40,7 @@ const TriageList = () => {
 
     useEffect(() => {
         fetchData(page);
-    }, [page]);
+    }, [fetchData, page]);
 
     const handleCreate = () => {
         navigate("/triage-create");

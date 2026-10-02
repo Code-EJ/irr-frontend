@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { OutputMaterialService, SubTypologyService, DocumentService } from "../../services";
@@ -9,11 +9,11 @@ import { handleExport } from "../../utils/ExportService";
 const OutputMaterialList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
-    const [subtypologyMap, setSubtypologyMap] = useState<Record<string, string>>({});
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
+    const [, setSubtypologyMap] = useState<Record<string, string>>({});
     const [notaFiscalMap, setNotaFiscalMap] = useState<Record<string, string>>({});
 
-    const fetchData = async (page: number | null) => {
+    const fetchData = useCallback(async (page: number | null) => {
         const [outputMaterialResponse, subtypologyResponse, notaFiscalResponse] = await Promise.all([
             OutputMaterialService.getAll(page),
             SubTypologyService.getAll(1, 9999),
@@ -22,33 +22,30 @@ const OutputMaterialList = () => {
 
         const subtypologies = subtypologyResponse?.data ?? [];
         const subMap: Record<string, string> = {};
-        subtypologies.forEach((item: any) => {
+        subtypologies.forEach((item) => {
             subMap[item.id] = item.nome;
         });
         setSubtypologyMap(subMap);
 
         const notaFiscal = notaFiscalResponse?.data ?? [];
         const subMap2: Record<string, string> = {};
-        notaFiscal.forEach((item: any) => {
+        notaFiscal.forEach((item) => {
             subMap2[item.id] = item.nome;
         });
         setNotaFiscalMap(subMap2);
 
-        const outputMaterialData = outputMaterialResponse?.data.map((item: any) => ({
+        const outputMaterialData = outputMaterialResponse?.data.map((item) => ({
             ...item,
             subtipologia: subMap[item.subtipologiaId] ?? item.subtipologiaId,
             notaFiscal: notaFiscalMap[item.notaFiscalId] ?? item.notaFiscalId,
         })) ?? [];
         setData(outputMaterialData);
-    };
+        return outputMaterialData;
+    }, [notaFiscalMap]);
 
-    useEffect(() => {
+useEffect(() => {
         fetchData(page);
-    }, []);
-
-    useEffect(() => {
-        fetchData(page);
-    }, [page]);
+    }, [fetchData, page]);
 
     const handleBack = () => {
         navigate("/stock-menu");

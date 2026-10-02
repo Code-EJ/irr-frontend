@@ -1,0 +1,27 @@
+name: Frontend verification
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run api:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+        env:
+          VITE_API_BASE_URL: http://localhost:9191/api/v1
+      - run: npm run build
+        env:
+          VITE_API_BASE_URL: http://localhost:9191/api/v1
+      - run: npm run api:generate
+      - run: git diff --exit-code -- src/shared/api/schema.d.ts

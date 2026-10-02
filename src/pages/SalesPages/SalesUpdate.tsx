@@ -21,7 +21,7 @@ const SalesUpdate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [documentos, setDocumentos] = useState<any[]>([]);
+  const [, setDocumentos] = useState<import("../../models/Entities").Document[]>([]);
   const [notaFiscais, setNotaFiscais] = useState<{ name: string; value: string }[]>([]);
   const [mtrGeradores, setMtrGeradores] = useState<{ name: string; value: string }[]>([]);
   const [mtrTransportadores, setMtrTransportadores] = useState<{ name: string; value: string }[]>([]);
@@ -42,9 +42,9 @@ const SalesUpdate = () => {
       try {
         const response = await DocumentService.getAll(1, 9999);
         const data = response?.data ?? [];
-        const documentosFiltrados = data.filter((doc: any) => tiposDocumento.includes(doc.tipo));
+        const documentosFiltrados = data.filter((doc) => tiposDocumento.includes(doc.tipo));
 
-        const mapOptions = (docs: any[]) =>
+        const mapOptions = (docs: import("../../models/Entities").Document[]) =>
           docs.map((item) => ({
             name: item.numero ?? item.nome ?? item.id,
             value: item.id,
@@ -92,7 +92,7 @@ const SalesUpdate = () => {
     fetchAll();
   }, [id]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -101,7 +101,7 @@ const SalesUpdate = () => {
     try {
       await SaleService.update(id!, {
         comprador: formData.comprador,
-        data: new Date(formData.data),
+        data: new Date(formData.data).toISOString(),
         valor: parseFloat(formData.valor),
         notaFiscalId: formData.notaFiscalId,
         mtrGeradorId: formData.mtrGeradorId,

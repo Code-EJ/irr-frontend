@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { PressingService, SubTypologyService } from "../../services";
@@ -9,7 +9,7 @@ import { handleExport } from "../../utils/ExportService";
 const PressingList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
     const [subtypologiesMap, setSubtypologiesMap] = useState<Record<string, string>>({});
     const pressingService = PressingService;
 
@@ -18,7 +18,7 @@ const PressingList = () => {
         const fetchSubtypologies = async () => {
             const response = await SubTypologyService.getAll(1, 9999);
             const map: Record<string, string> = {};
-            (response?.data ?? []).forEach((item: any) => {
+            (response?.data ?? []).forEach((item) => {
                 map[item.id] = item.nome;
             });
             setSubtypologiesMap(map);
@@ -26,19 +26,21 @@ const PressingList = () => {
         fetchSubtypologies();
     }, []);
 
-    useEffect(() => {
-        fetchData(page);
-    }, [page, subtypologiesMap]);
 
-    const fetchData = async (page: number | null) => {
+
+    const fetchData = useCallback(async (page: number | null) => {
         const response = await pressingService.getAll(page);
-        const transformedData = response?.data.map((item: any) => ({
+        const transformedData = response?.data.map((item) => ({
             ...item,
             subtipologia: subtypologiesMap[item.subtipologiaId] ?? "N/A"
         }));
         setData(transformedData);
         return transformedData;
-    };
+    }, [pressingService, subtypologiesMap]);
+
+    useEffect(() => {
+        fetchData(page);
+    }, [fetchData, page, subtypologiesMap]);
 
     const handleBack = () => {
         navigate("/treatment-menu");

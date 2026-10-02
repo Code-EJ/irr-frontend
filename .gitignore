@@ -23,6 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 
-package-lock.json
 yarn.lock
 .env
+
+.local/
+coverage/
+
+
+# Private local development credentials
+.env-dev

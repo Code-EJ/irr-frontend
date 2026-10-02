@@ -1,4 +1,4 @@
-import { Field, FieldType, InputField } from "./generics/InputField";
+import { Field, InputField } from "./generics/InputField";
 import { useState } from "react";
 
 import BaseService from "../bases/BaseService";
@@ -20,13 +20,13 @@ export function Page<E extends Model>({
   });
 
   function fieldsToInitialValues(fields: Field[]) {
-    const initialValues = {};
+    const initialValues: Record<string,string> = {};
 
     fields.forEach(field => {
       initialValues[field.identifier] = "";
     })
 
-    return initialValues;
+    return initialValues as Partial<E>;
   }
 
   function render() {
@@ -49,7 +49,7 @@ export function Page<E extends Model>({
           <UpdateForm restService={restService} id={pageState.id!} initialValues={fieldsToInitialValues(fields)} setState={setPageState}>
             {fields.map(field => {
               return (
-                <InputField label={field.label} id={field.identifier} type={field.type} key={field.identifier} />
+                <InputField label={field.label} identifier={field.identifier} type={field.type} key={field.identifier} />
               )
             })}
           </UpdateForm>

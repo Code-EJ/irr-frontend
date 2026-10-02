@@ -1,163 +1,133 @@
-# Frontend — Projeto IRR
+# IRR frontend
 
-## Visão Geral
+Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
-O frontend do Projeto IRR é responsável pela interface da aplicação, permitindo a interação do usuário com o sistema de controle e acompanhamento de entradas e saídas de materiais.
+React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend commit **0dc0d1f** and exclusively **/api/v1**. Supported slices are sign-in/current account, organization selection, vehicles, the material category/type/subtype hierarchy, donors, operational staff, documents, collections and donations. Processing, inventory, sales and reports remain gated while their existing Master Plan slices are implemented. A passing build does not mean the whole application is finished.
 
-A aplicação consome uma API REST desenvolvida em Spring Boot, sendo responsável por exibir dados, permitir operações de cadastro e consulta, e facilitar a navegação entre os diferentes módulos do sistema.
+## Run locally, step by step
 
-Este projeto também tem como objetivo servir como ambiente de aprendizado e desenvolvimento para os membros da equipe.
+1. Start the backend from its repository using its README and existing private environment configuration:
 
----
+   ~~~powershell
+   Set-Location '../back-irr-v2'
+   docker compose up -d --build --wait
+   ~~~
 
-## Objetivo
+   Check readiness at http://localhost:9191/actuator/health/readiness. PostgreSQL and Redis are backend-only Docker services. Do not publish them or put their credentials in the browser. Do not delete named volumes to resolve an integration error.
 
-O frontend tem como principais objetivos:
+2. Use Node.js 24 and npm. From this frontend repository:
 
-- Exibir informações do sistema de forma clara e organizada
-- Permitir interação com os dados através de operações de cadastro e consulta
-- Facilitar a visualização de entradas e saídas de materiais
-- Integrar com o backend por meio de requisições HTTP
+   ~~~powershell
+   npm ci
+   if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+   npm run dev
+   ~~~
 
----
+3. Open http://localhost:5173. Vite binds to loopback on port 5173 and fails explicitly if that port is occupied. The ignored frontend .env contains only VITE_API_BASE_URL=http://localhost:9191/api/v1. Configuration is embedded at build time. Its value must be an HTTP(S) origin with the /api/v1 path and no credentials, query or fragment. A different browser origin must also be allowed by the backend CORS configuration.
 
-## Tecnologias Utilizadas
+4. Create the local credential reference, then open the ignored **.env-dev** file:
 
-- React
-- TypeScript
-- Vite
-- React Router
-- Axios ou Fetch API
-- CSS ou outra abordagem de estilização utilizada no projeto
+   ~~~powershell
+   $env:IRR_BACKEND_ENV = (Resolve-Path '../back-irr-v2/.env').Path
+   npm run dev:credentials
+   notepad .env-dev
+   ~~~
 
----
+   Sign in using DEV_ADMIN_EMAIL and DEV_ADMIN_PASSWORD from that file. The command copies the existing backend development bootstrap credentials without printing them or overwriting an existing file. It does not create/reset an account. If the backend bootstrap credentials change, update this local reference to match the actual development account. The private file is excluded from Git and Docker, is not automatically loaded by Vite, and must never be renamed to a Vite environment file. Database/Redis credentials remain in the backend environment; the browser does not connect to them. There is no public signup/reset-password flow in this contract.
 
-## Estrutura do Projeto
+5. Select an organization in the header. The development bootstrap normally provides the explicit IRR Development manager association. If the account has no membership, an administrator must grant one through the backend's documented organization API. Platform administrator status alone does not grant business access. Reloading keeps the session but requires explicit organization selection again.
 
-A aplicação segue uma estrutura baseada em separação de responsabilidades:
+6. Open Vehicles to list, filter, create, edit or deactivate vehicles. MEMBER can read; MANAGER can maintain fleet records. Open Materials to choose a category and type and work with its subtypes. Edits submit the loaded version; on a conflict, reload the current version, review it, then edit again. Category/type deactivation also deactivates descendants when the backend permits it; operational/inventory references can block deactivation. History is retained.
 
-```
-src/
-│
-├── components/       # Componentes reutilizáveis da interface
-├── pages/            # Páginas da aplicação
-├── services/         # Comunicação com a API (requisições HTTP)
-├── routes/           # Configuração de rotas da aplicação
-├── hooks/            # Hooks customizados (se aplicável)
-├── utils/            # Funções utilitárias
-├── assets/           # Imagens, ícones e arquivos estáticos
-└── main.tsx          # Ponto de entrada da aplicação
-```
+7. Prepare intake references in **Doadores**, **Equipe**, **Veículos** and **Materiais**. A manager maintains these records; operational staff are distinct from application user accounts. Collections require a staff member with the DRIVER role. Reference selectors are paginated; use the next page if the required driver or material is not on the current page.
 
----
+8. Upload optional PDF/PNG/JPEG evidence (up to 10 MiB) in **Documentos** before starting an intake form. Downloads use authenticated requests. The server permits rename/delete only for the uploader or a manager; a linked document cannot be removed. An authorization or history conflict is displayed rather than silently ignored.
 
-## Como Executar o Projeto
+9. Open **Entradas**, choose **Doações** or **Coletas**, and register the receipt. Enter kg and m³ with a decimal comma or point, up to four decimal places and no thousands separator. Collection distance accepts three decimal places; departure/arrival must be supplied together in chronological order. Dates use local browser time and are transmitted as instants. Editing another field preserves the original timestamp precision when the displayed date is unchanged. Donation edits preserve the original donor. Confirmed deactivation is available for unprocessed intake; the backend refuses edits/deactivation once sorting history exists. Intake alone does not create saleable inventory.
 
-### Pré-requisitos
+## Run the frontend in Docker
 
-- Node.js instalado
-- npm ou yarn
+Keep the backend stack running. Stop Vite or preview before using the same frontend port:
 
----
+~~~powershell
+docker compose up --build -d --wait
+docker compose ps
+~~~
 
-### Instalação
+Open http://localhost:5173 and use the credentials in .env-dev. This repository's Compose project only manages the frontend; the backend repository manages its API, PostgreSQL and Redis. The multi-stage image uses npm ci, compiles with Node 24, and serves the SPA with unprivileged Nginx on container port 8080. Its host binding is loopback-only. The runtime has a read-only filesystem, a temporary /tmp, dropped capabilities and a /health readiness check. Deep links fall back to index.html; missing bundled assets return 404.
 
-```bash
-npm install
-```
+The Dockerfile pins base-image digests. VITE_API_BASE_URL is a public build argument; rebuild after changing it. Docker must not consume .env-dev, and passwords must never be passed as build arguments. To return to hot-reload development:
 
-ou
-
-```bash
-yarn install
-```
-
----
-
-### Execução
-
-```bash
+~~~powershell
+docker compose stop frontend
 npm run dev
-```
+~~~
 
-ou
+If port 5173 is occupied, stop the other frontend process instead of changing origins silently. If sign-in succeeds but the account has no organization, check the backend development bootstrap and membership through Swagger. A connection error requires checking backend readiness and CORS for http://localhost:5173. Do not reset the database to fix frontend configuration.
 
-```bash
-yarn dev
-```
+## Official API reference and generated types
 
-A aplicação será iniciada em:
+- [Swagger UI](http://localhost:9191/swagger-ui/index.html)
+- [Running OpenAPI](http://localhost:9191/v3/api-docs)
+- [Pinned contract metadata](docs/api/baseline.json) and [snapshot](docs/api/openapi.json)
 
-```
-http://localhost:5173
-```
+Swagger is the official API documentation. Markdown guides explain integration and operations, not a competing HTTP specification. DTOs are generated into src/shared/api/schema.d.ts. To intentionally review a backend contract change:
 
----
+~~~powershell
+npm run api:capture
+npm run api:generate
+git diff -- docs/api src/shared/api/schema.d.ts
+~~~
 
-## Integração com o Backend
+The current capture script records the frozen 0dc0d1f baseline. Before accepting a different backend, update that reference deliberately and validate the matched backend/frontend pair. Do not blindly capture an unrelated running server to make a test pass. CI regenerates types from the pinned snapshot and fails on a tracked diff.
 
-O frontend se comunica com o backend através de uma API REST.
+## Verify
 
-As requisições são realizadas via HTTP, utilizando Axios ou Fetch.
+~~~powershell
+npm ci
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm audit
+npm run preview -- --host 127.0.0.1 --port 5173 --strictPort
+~~~
 
-Exemplos de endpoints:
+Stop the development server before previewing on the same port. Type checking covers application, tests and Vite/Vitest configuration. Build includes that gate. Unit tests use synthetic credentials and transport adapters; they do not contact a database. GitHub Actions runs the isolated checks; authoring the workflow does not establish that a remote run has passed.
 
-```
-GET /usuarios
-POST /doacoes
-GET /materialEntrada
-GET /materialSaida
-```
+For the explicit **local development backend** acceptance suite:
 
-A configuração da URL base da API deve ser definida nos arquivos de serviço:
+~~~powershell
+$env:IRR_BACKEND_ENV = (Resolve-Path '../back-irr-v2/.env').Path
+npm run test:contract
+~~~
 
-```ts
-const API_URL = "http://localhost:8080";
-```
+This command requires a running local backend and administrator credentials from that file. It tests the actual frontend API adapters, scope isolation, member restrictions, immediate revocation, fleet pagination/mutations, material hierarchy and stale-version refusal. Intake checks cover donor/staff rules, document upload/download/ownership, exact quantities, schedules, paginated driver selection and processed-record conflicts. It creates uniquely named test organizations, members and records, reverses test sorting stock movements and deactivates disposable records and organizations through their APIs. History-bound intake/references remain inside inactive test organizations; no SQL reset or volume deletion is performed. It refuses non-loopback API origins. Do not run it against a production service. Runtime failures are sanitized so Axios credential headers and passwords do not enter test reports.
 
----
+Browser verification and dated results are in [the integration execution record](docs/frontend-integration.md). Test login/logout, organization switching and representative forms against the running backend; a mock test or bundle alone is insufficient acceptance.
 
-## Funcionalidades
+## Repository map
 
-O sistema contempla funcionalidades como:
+| Path | Responsibility |
+| --- | --- |
+| src/features/identity | Session bootstrap, current account, organizations and membership |
+| src/features/fleet | Generated vehicle DTOs and v1 adapter/form |
+| src/features/materials | Scoped three-level catalog and optimistic editing |
+| src/features/parties | Organization donors and operational staff maintenance |
+| src/features/documents | Protected multipart uploads, downloads and attachment maintenance |
+| src/features/intake | Collection/donation workflows, generated DTOs and exact quantity handling |
+| src/shared/ui | Paginated reference selection and scoped page loading |
+| src/shared/api | Single Axios transport, session invalidation and generated schemas |
+| src/route/Router.tsx | Active guarded navigation and pending-workflow gating |
+| src/pages/VehiclePages | Integrated fleet pages |
+| src/components | Existing shared presentation and typed controls |
+| src/pages, src/models, src/services, src/bases | Remaining legacy workflow code, kept for incremental replacement; legacy BaseService fails closed |
+| tests/contract | Opt-in real-backend acceptance |
+| docs/adrs | Historical decisions and ADR-0015 integration decision |
+| docs/api | Pinned executable contract and baseline digest |
 
-- Autenticação de usuários
-- Cadastro e listagem de dados
-- Registro de entradas de materiais
-- Registro de saídas de materiais
-- Visualização de informações do sistema
-- Navegação entre módulos
+## Architecture and contribution
 
----
+Follow [ADR-0001](docs/adrs/0001-master-plan.md), [ADR-0003](docs/adrs/0003-architecture-and-dependencies.md) and [ADR-0015](docs/adrs/0015-frontend-contract-integration.md). ADR-0014 in the backend supersedes old aliases and transitional references in earlier ADRs. [Dependency notes](docs/dependencies.md) describe the retained stack and precise tooling changes. Inventory arithmetic, authorization and domain transitions remain backend responsibilities; later UI slices preserve decimal strings, versions and idempotency semantics.
 
-## Boas Práticas
-
-- Manter componentes reutilizáveis na pasta `components`
-- Centralizar chamadas de API em `services`
-- Evitar lógica de negócio dentro de componentes visuais
-- Seguir padronização de código e nomenclatura
-- Criar componentes pequenos e reutilizáveis
-
----
-
-## Observações
-
-> Este projeto está em fase de desenvolvimento e pode sofrer alterações ao longo do tempo.  
-> A integração com o backend pode estar incompleta ou em evolução.
-
----
-
-## Contribuição
-
-Para contribuir com o projeto:
-
-1. Criar uma branch para a funcionalidade ou correção  
-2. Desenvolver a alteração proposta  
-3. Realizar commits claros e organizados  
-4. Abrir um Pull Request para revisão  
-
----
-
-## Projeto IRR
-
-Este frontend faz parte do Projeto IRR, desenvolvido pela Code JR, com foco em aprendizado, organização e evolução contínua dos membros da equipe.
+Use feature/refactor branches and coherent semantic commits. Keep engineering identifiers, documentation and comments in English. All active product UI, accessibility labels and user-facing errors use Brazilian Portuguese (pt-BR), as requested by the owner. ABNT2 refers to the operating-system keyboard layout; the application accepts accented Unicode input without changing the user's keyboard. Use TSDoc/JSDoc in TypeScript and JavaDoc in the backend. Attribute Enzo Ribas (@oEnzoRibas) for these changes without replacing historical contributor credits. Remove legacy code only after the corresponding replacement is verified. No Kubernetes or backend architecture rewrite is part of this frontend phase.

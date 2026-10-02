@@ -9,8 +9,8 @@ import { UserService } from "../../services";
 
 const ManageUsers = () => {
   const [selectedFilter, setSelectedFilter] = useState("Todos");
-  const [selectedUserIndex, setSelectedUserIndex] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [selectedUserIndex, setSelectedUserIndex] = useState<number | null>(null);
+  const [users, setUsers] = useState<import("../../models/Entities").User[]>([]);
 
   const filters = ["Todos", "Administrador", "Organizacao", "Prefeitura", "Representante"];
 
@@ -34,7 +34,7 @@ const ManageUsers = () => {
     return user.tipo.toLowerCase() === selectedFilter.toLowerCase();
   });
 
-  const handleDeactivateById = async (id) => {
+  const handleDeactivateById = async (id: string) => {
     try {
       await UserService.delete(id);
       toast.success("Usuário desativado com sucesso!");
@@ -45,7 +45,7 @@ const ManageUsers = () => {
     }
   };
 
-  const handleDeactivate = async (values, { resetForm, setFieldValue }) => {
+  const handleDeactivate = async (values: {email:string}) => {
     try {
       const userToDeactivate = users.find(
         (user) => user.email.toLowerCase() === values.email.toLowerCase()

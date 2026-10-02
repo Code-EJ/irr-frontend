@@ -15,7 +15,7 @@ export function InputField<M extends Model = Model>({
 
     const { restService, identity } = referenceConfig;
     const references = await restService.getAll();
-    return references?.map((reference) => (
+    return references?.data.map((reference) => (
       <option key={reference.id} value={reference.id}>
         {reference[identity]}
       </option>
@@ -91,7 +91,7 @@ interface Option {
   identifier: string;
 }
 
-export interface Field<M extends Model> {
+export interface Field<M extends Model = Model> {
   label: string;
   identifier: string;
   type: FieldType;

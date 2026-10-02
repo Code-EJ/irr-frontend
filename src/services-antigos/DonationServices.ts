@@ -1,16 +1,16 @@
 import { apiClient } from "../config/security/ApiClient";
 
-export const createDonation = async (data) => {
+export const createDonation = async (data: unknown) => {
     const res = await apiClient.post("/nova-doacao", data)
     return res
 };
 
-export const deleteDonation = async (id) => {
+export const deleteDonation = async (id: string) => {
     const res = await apiClient.delete(`/delete-doacao/${id}`)
     return res
 };
 
-export const retrieveDonation = async (id) => {
+export const retrieveDonation = async (id: string) => {
     const res = await apiClient.get(`/doecoes/${id}`)
     return res
 };

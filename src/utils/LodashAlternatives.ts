@@ -1,12 +1,10 @@
-export const get = (obj, path, defaultValue = undefined) => {
-  const travel = (regexp) =>
-    String.prototype.split
-      .call(path, regexp)
-      .filter(Boolean)
-      .reduce(
-        (res, key) => (res !== null && res !== undefined ? res[key] : res),
-        obj,
-      );
-  const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
-  return result === undefined || result === obj ? defaultValue : result;
-};
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+/** Reads a nested value without evaluating property expressions. */
+export function get(obj:unknown,path:string,defaultValue?:unknown):unknown{
+ let result:unknown=obj;
+ for(const key of path.split(/[,[\].]+/).filter(Boolean)){
+   if(typeof result!=='object'||result===null)return defaultValue;
+   result=(result as Record<string,unknown>)[key];
+ }
+ return result===undefined?defaultValue:result;
+}

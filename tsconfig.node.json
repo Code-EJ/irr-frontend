@@ -12,6 +12,8 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
 
     /* Linting */
     "strict": true,
@@ -20,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.js", "vitest.config.js", "vitest.contract.config.js"]
 }

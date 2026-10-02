@@ -48,9 +48,9 @@ const PressingCreate = () => {
       }
     };
     fetchSubtypologies();
-  }, []);
+  }, [formData.subtipologiaId]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -58,7 +58,7 @@ const PressingCreate = () => {
     try {
       await PressingService.create({
         ...formData,
-        data: new Date(formData.data),
+        data: new Date(formData.data).toISOString(),
         volumeTotal: Number(formData.volumeTotal),
         tipoOrigem: formData.tipoOrigem as "DOACAO" | "COLETA",
         tipoDestino: formData.tipoDestino as "DOACAO" | "COLETA",
@@ -79,7 +79,7 @@ const PressingCreate = () => {
         autoSetErrors={true}
         submitOnChange={false}
       >
-        {(formik) => (
+        {() => (
           <Card>
             <h1 className="text-center text-3xl text-green-900 font-bold mb-8">PRENSAGEM</h1>
 

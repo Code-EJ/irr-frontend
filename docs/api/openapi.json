@@ -1,0 +1,6639 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "IRR Backend API",
+    "description": "Pre-production waste management API. This specification documents the current contract; business operations require explicit organization membership. Decimal quantities and money are JSON strings. Posted operations are corrected through audited reversals.",
+    "contact": {
+      "name": "Enzo Ribas",
+      "url": "https://github.com/oEnzoRibas"
+    },
+    "version": "0.0.1-SNAPSHOT"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9191",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/vehicles/{id}": {
+      "get": {
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "Get by ID — Vehicles",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "Update — Vehicles",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleUpdateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "Deactivate — Vehicles",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "deactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/vehicles/batch": {
+      "put": {
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "Update a batch — Vehicles",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "bulkUpdate",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleBulkUpdateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VehicleResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "Create a batch — Vehicles",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "bulkCreate",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleBulkCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VehicleResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "tags": [
+          "Partners"
+        ],
+        "summary": "Process request — Partners",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Partners"
+        ],
+        "summary": "Update — Partners",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePartnerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Partners"
+        ],
+        "summary": "Process request — Partners",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/team-members/{id}": {
+      "get": {
+        "tags": [
+          "Team members"
+        ],
+        "summary": "Get teamMember",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "get_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamMemberResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Team members"
+        ],
+        "summary": "Update teamMember",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamMemberResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Team members"
+        ],
+        "summary": "Deactivate teamMember",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{id}": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Process request — Sales",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "get_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaleResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Update — Sales",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "update_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleDraftRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaleResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Process request — Sales",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "delete_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{id}": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Get my organization",
+        "description": "Missing, inactive and foreign organizations all return 404.",
+        "operationId": "get_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Update — Organizations",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "update_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrganization"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Deactivate — Organizations",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "deactivate_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{id}/members/{userId}": {
+      "put": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Grant organization membership",
+        "description": "ADMINISTRATOR only. Requires active organization/account, records changes in the audit log, and reactivates revoked memberships. MEMBER and MANAGER are organization-local roles; neither grants platform administration. Repeating the same active grant is idempotent.",
+        "operationId": "grant",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrantMembership"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Membership"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Revoke organization membership",
+        "description": "ADMINISTRATOR only. Retains the membership row and writes an audit event. Further organization reads fail immediately. Business APIs require the organization header and current membership.",
+        "operationId": "revoke",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Membership revoked; audit committed"
+          }
+        }
+      }
+    },
+    "/api/v1/materials/types/{id}": {
+      "get": {
+        "tags": [
+          "Material types"
+        ],
+        "summary": "Get by ID — Material types",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "getById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialTypeResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Material types"
+        ],
+        "summary": "Update — Material types",
+        "description": "Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.",
+        "operationId": "update_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialTypeUpdateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialTypeResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Material types"
+        ],
+        "summary": "Deactivate — Material types",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "deactivate_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/materials/subtypes/{id}": {
+      "get": {
+        "tags": [
+          "Material subtypes"
+        ],
+        "summary": "Get by ID — Material subtypes",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "getById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialSubtypeResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Material subtypes"
+        ],
+        "summary": "Update — Material subtypes",
+        "description": "Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.",
+        "operationId": "update_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialSubtypeUpdateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialSubtypeResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Material subtypes"
+        ],
+        "summary": "Deactivate — Material subtypes",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "deactivate_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/materials/categories/{id}": {
+      "get": {
+        "tags": [
+          "Material categories"
+        ],
+        "summary": "Get by ID — Material categories",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "getById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialCategoryResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Material categories"
+        ],
+        "summary": "Update — Material categories",
+        "description": "Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.",
+        "operationId": "update_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialCategoryUpdateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialCategoryResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Material categories"
+        ],
+        "summary": "Deactivate — Material categories",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "deactivate_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/donors/{id}": {
+      "get": {
+        "tags": [
+          "Donors"
+        ],
+        "summary": "Get by ID — Donors",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "getById_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonorResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Donors"
+        ],
+        "summary": "Update — Donors",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "update_8",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DonorUpdateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonorResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Donors"
+        ],
+        "summary": "Deactivate — Donors",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "deactivate_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/donations/{id}": {
+      "get": {
+        "tags": [
+          "Donations"
+        ],
+        "summary": "Get by ID — Donations",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "getById_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonationResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Donations"
+        ],
+        "summary": "Update — Donations",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "update_9",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DonationUpdateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonationResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Donations"
+        ],
+        "summary": "Deactivate — Donations",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "deactivate_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{id}": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Process request — Attachments",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "get_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Process request — Attachments",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "rename",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenameAttachment"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Delete an owned attachment",
+        "description": "The uploader or an organization manager may delete an unreferenced attachment. Referenced attachments return 409. Metadata removal commits before asynchronous physical cleanup; failures are retried.",
+        "operationId": "delete_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Metadata removed and durable cleanup accepted"
+          }
+        }
+      }
+    },
+    "/api/v1/collections/{id}": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "summary": "Process request — Collections",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "get_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Collections"
+        ],
+        "summary": "Update — Collections",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "update_10",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Collections"
+        ],
+        "summary": "Process request — Collections",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "delete_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/buyers/{id}": {
+      "get": {
+        "tags": [
+          "Buyers"
+        ],
+        "summary": "Get buyer",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "get_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuyerResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Buyers"
+        ],
+        "summary": "Update buyer",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "update_11",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuyerResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Buyers"
+        ],
+        "summary": "Deactivate buyer",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "delete_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/vehicles": {
+      "get": {
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "List — Vehicles",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "list",
+        "parameters": [
+          {
+            "name": "licensePlate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageVehicleResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Vehicles"
+        ],
+        "summary": "Create — Vehicles",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "create",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "tags": [
+          "Partners"
+        ],
+        "summary": "List — Partners",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "list_1",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUserResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Partners"
+        ],
+        "summary": "Create — Partners",
+        "description": "Declared method authorization: hasRole('ADMINISTRATOR'). Organization ownership is checked by the application service.",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartnerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Partner created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/team-members": {
+      "get": {
+        "tags": [
+          "Team members"
+        ],
+        "summary": "List team-members",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "list_2",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageTeamMemberResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Team members"
+        ],
+        "summary": "Create teamMember",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "create_2",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamMemberResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sortings": {
+      "get": {
+        "tags": [
+          "Sorting"
+        ],
+        "summary": "List — Sorting",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "list_3",
+        "parameters": [
+          {
+            "name": "sortingType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "GROSS",
+                "PRIMARY",
+                "FINE"
+              ]
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageSortingResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sorting"
+        ],
+        "summary": "Create — Sorting",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "create_3",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SortingCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SortingResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sortings/{id}/reverse": {
+      "post": {
+        "tags": [
+          "Processing reversals"
+        ],
+        "summary": "Process request — Processing reversals",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "sorting",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/session/authenticate": {
+      "post": {
+        "tags": [
+          "Sessions"
+        ],
+        "summary": "Authenticate a user — Sessions",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "authenticate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/sales": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "List — Sales",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "list_4",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageSaleResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Create — Sales",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "create_4",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleDraftRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{id}/reverse": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Process request — Sales",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "reverse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleTransitionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{id}/post": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Process request — Sales",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "post",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleTransitionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaleResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pressings": {
+      "get": {
+        "tags": [
+          "Pressing"
+        ],
+        "summary": "List — Pressing",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "list_5",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagePressingResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pressing"
+        ],
+        "summary": "Create — Pressing",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "create_5",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PressingCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PressingResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pressings/{id}/reverse": {
+      "post": {
+        "tags": [
+          "Processing reversals"
+        ],
+        "summary": "Process request — Processing reversals",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "pressing",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Result"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organizations": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "List my organizations",
+        "description": "Returns only organizations with an active membership for the current active user. Platform administrators have no automatic membership bypass.",
+        "operationId": "list_6",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationPage"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Create an organization",
+        "description": "ADMINISTRATOR only. Creates an audit event in the same transaction. Classification is descriptive and never grants permissions. Add members explicitly afterward.",
+        "operationId": "create_6",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrganization"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Organization created without implicit memberships",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/materials/types": {
+      "get": {
+        "tags": [
+          "Material types"
+        ],
+        "summary": "List — Material types",
+        "description": "Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.",
+        "operationId": "list_7",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageMaterialTypeResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Material types"
+        ],
+        "summary": "Create — Material types",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "create_7",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialTypeCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialTypeResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/materials/subtypes": {
+      "get": {
+        "tags": [
+          "Material subtypes"
+        ],
+        "summary": "List — Material subtypes",
+        "description": "Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.",
+        "operationId": "list_8",
+        "parameters": [
+          {
+            "name": "typeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageMaterialSubtypeResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Material subtypes"
+        ],
+        "summary": "Create — Material subtypes",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "create_8",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialSubtypeCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialSubtypeResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/materials/categories": {
+      "get": {
+        "tags": [
+          "Material categories"
+        ],
+        "summary": "List — Material categories",
+        "description": "Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.",
+        "operationId": "list_9",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageMaterialCategoryResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Material categories"
+        ],
+        "summary": "Create — Material categories",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "create_9",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialCategoryCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialCategoryResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/donors": {
+      "get": {
+        "tags": [
+          "Donors"
+        ],
+        "summary": "List — Donors",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "list_10",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageDonorResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Donors"
+        ],
+        "summary": "Create — Donors",
+        "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
+        "operationId": "create_10",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DonorCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonorResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/donations": {
+      "get": {
+        "tags": [
+          "Donations"
+        ],
+        "summary": "List — Donations",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "list_11",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageDonationResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Donations"
+        ],
+        "summary": "Create — Donations",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "create_11",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DonationCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonationResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "List — Attachments",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "list_12",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageAttachmentResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Upload an attachment",
+        "description": "Authenticated creators may upload PDF, PNG or JPEG content up to 10 MiB. Signature checks are not malware scanning. The legacy multipart name documento is retained.",
+        "operationId": "upload",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "documento": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "documento"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Safe attachment metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/collections": {
+      "get": {
+        "tags": [
+          "Collections"
+        ],
+        "summary": "List — Collections",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "list_13",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageCollectionResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Collections"
+        ],
+        "summary": "Create — Collections",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "create_12",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionCreateRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/buyers": {
+      "get": {
+        "tags": [
+          "Buyers"
+        ],
+        "summary": "List buyers",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "list_14",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageBuyerResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Buyers"
+        ],
+        "summary": "Create buyer",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "create_13",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuyerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "tags": [
+          "Partners"
+        ],
+        "summary": "Process request — Partners",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "me",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sortings/{id}": {
+      "get": {
+        "tags": [
+          "Sorting"
+        ],
+        "summary": "Get by ID — Sorting",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "getById_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SortingResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/summary": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Process request — Reports",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "summary",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Summary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/summary.csv": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "summary": "Process request — Reports",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "csv",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pressings/{id}": {
+      "get": {
+        "tags": [
+          "Pressing"
+        ],
+        "summary": "Get by ID — Pressing",
+        "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
+        "operationId": "getById_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PressingResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{id}/membership": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Process request — Organizations",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "membership",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Membership"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/reconciliation": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Process request — Inventory",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "reconcile",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Reconciliation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/movements": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Process request — Inventory",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "movements",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageMovement"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/lots": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Process request — Inventory",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "lots",
+        "parameters": [
+          {
+            "name": "materialSubtypeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageLot"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventory/balances": {
+      "get": {
+        "tags": [
+          "Inventory"
+        ],
+        "summary": "Process request — Inventory",
+        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "operationId": "balances",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageBalance"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{id}/download": {
+      "get": {
+        "tags": [
+          "Attachments"
+        ],
+        "summary": "Download an owned attachment",
+        "description": "Active organization members can download the attachment. Missing and foreign IDs both return 404.",
+        "operationId": "download",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "VehicleUpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "licensePlate": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "model": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "isActive",
+          "licensePlate"
+        ]
+      },
+      "VehicleResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "licensePlate": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "creatorId": {
+            "type": "string"
+          }
+        }
+      },
+      "VehicleBulkUpdateItemDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "licensePlate": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "model": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "isActive",
+          "licensePlate"
+        ]
+      },
+      "VehicleBulkUpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "vehicles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehicleBulkUpdateItemDTO"
+            },
+            "maxItems": 100,
+            "minItems": 0
+          }
+        },
+        "required": [
+          "vehicles"
+        ]
+      },
+      "UpdatePartnerRequest": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "userRole": {
+            "type": "string",
+            "enum": [
+              "ADMINISTRATOR",
+              "CITY_HALL",
+              "ORGANIZATION",
+              "REPRESENTATIVE"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "fullName",
+          "userRole"
+        ]
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "userRole": {
+            "type": "string",
+            "enum": [
+              "ADMINISTRATOR",
+              "CITY_HALL",
+              "ORGANIZATION",
+              "REPRESENTATIVE"
+            ]
+          }
+        }
+      },
+      "TeamMemberRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "DRIVER|HELPER|OPERATOR"
+          }
+        },
+        "required": [
+          "name",
+          "role"
+        ]
+      },
+      "TeamMemberResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SaleDraftRequest": {
+        "type": "object",
+        "properties": {
+          "saleDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "buyerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nfeAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mtrAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cdfAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleLineRequest"
+            },
+            "maxItems": 200,
+            "minItems": 0
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "buyerId",
+          "items",
+          "saleDate"
+        ]
+      },
+      "SaleLineRequest": {
+        "type": "object",
+        "properties": {
+          "stockLotId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "volumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "unitPrice": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        },
+        "required": [
+          "materialSubtypeId",
+          "stockLotId",
+          "unitPrice",
+          "volumeM3",
+          "weightKg"
+        ]
+      },
+      "SaleLineResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stockLotId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "volumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "unitPrice": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "lineTotal": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        }
+      },
+      "SaleResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "saleDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "buyerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nfeAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mtrAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cdfAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "totalValue": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleLineResponse"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateOrganization": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "organizationType": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "name",
+          "organizationType"
+        ]
+      },
+      "Organization": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "organizationType": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "GrantMembership": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "MEMBER",
+              "MANAGER"
+            ]
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
+      "Membership": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "MEMBER",
+              "MANAGER"
+            ]
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "MaterialTypeUpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "name",
+          "version"
+        ]
+      },
+      "MaterialTypeResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MaterialSubtypeUpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "name",
+          "version"
+        ]
+      },
+      "MaterialSubtypeResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "typeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MaterialCategoryUpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "name",
+          "version"
+        ]
+      },
+      "MaterialCategoryResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DonorUpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "document": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "address": {
+            "$ref": "#/components/schemas/PostalAddressDTO"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "PostalAddressDTO": {
+        "type": "object",
+        "properties": {
+          "line1": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "region": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "postalCode": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "countryCode": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "[A-Z]{2}"
+          }
+        },
+        "required": [
+          "city",
+          "countryCode",
+          "line1",
+          "postalCode",
+          "region"
+        ]
+      },
+      "DonorResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "document": {
+            "type": "string"
+          },
+          "donorType": {
+            "type": "string",
+            "enum": [
+              "PF",
+              "PJ"
+            ]
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "address": {
+            "$ref": "#/components/schemas/PostalAddressDTO"
+          }
+        }
+      },
+      "DonationUpdateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "donationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "proofAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inputItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputItemRequestDTO"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "inputItems",
+          "totalWeightKg"
+        ]
+      },
+      "InputItemRequestDTO": {
+        "type": "object",
+        "properties": {
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "volumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        },
+        "required": [
+          "materialSubtypeId",
+          "volumeM3",
+          "weightKg"
+        ]
+      },
+      "DonationResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "donationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "donorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "proofAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "inputItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputItemResponseDTO"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "InputItemResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "collectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "donationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "volumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RenameAttachment": {
+        "type": "object",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "fileName"
+        ]
+      },
+      "AttachmentResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CollectionCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "realizationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "vehicleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "driverId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mtrGeneratorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mtrDestinatorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "collectionDiaryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamMemberIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uniqueItems": true
+          },
+          "inputItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputItemRequestDTO"
+            },
+            "maxItems": 200,
+            "minItems": 0
+          },
+          "routeDescription": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 0
+          },
+          "departureAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "arrivalAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "distanceKm": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "scheduleValid": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "driverId",
+          "inputItems",
+          "realizationDate",
+          "totalWeightKg",
+          "vehicleId"
+        ]
+      },
+      "CollectionResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "realizationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "vehicleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "driverId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mtrGeneratorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mtrDestinatorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "collectionDiaryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "teamMemberIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "uniqueItems": true
+          },
+          "inputItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputItemResponseDTO"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "routeDescription": {
+            "type": "string"
+          },
+          "departureAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "arrivalAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "distanceKm": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        }
+      },
+      "BuyerRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "document": {
+            "type": "string",
+            "pattern": "(?:[0-9]{11}|[0-9]{14})?"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "BuyerResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "document": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "VehicleCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "licensePlate": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "model": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "licensePlate",
+          "model"
+        ]
+      },
+      "VehicleBulkCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "vehicles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehicleCreateRequestDTO"
+            },
+            "maxItems": 100,
+            "minItems": 0
+          }
+        },
+        "required": [
+          "vehicles"
+        ]
+      },
+      "CreatePartnerRequest": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 8,
+            "writeOnly": true
+          },
+          "userRole": {
+            "type": "string",
+            "enum": [
+              "REPRESENTATIVE",
+              "ORGANIZATION",
+              "CITY_HALL"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "fullName",
+          "password",
+          "userRole"
+        ]
+      },
+      "SortedItemRequestDTO": {
+        "type": "object",
+        "properties": {
+          "inputItemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "volumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "rejectWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "rejectVolumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "destinationType": {
+            "type": "string",
+            "enum": [
+              "STOCK",
+              "SALE",
+              "PRESSING"
+            ]
+          },
+          "destinationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rejectWeightValid": {
+            "type": "boolean"
+          },
+          "rejectVolumeValid": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "inputItemId",
+          "materialSubtypeId",
+          "volumeM3",
+          "weightKg"
+        ]
+      },
+      "SortingCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "sortingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sortingType": {
+            "type": "string",
+            "enum": [
+              "GROSS",
+              "PRIMARY",
+              "FINE"
+            ]
+          },
+          "sortedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortedItemRequestDTO"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "sortedItems",
+          "sortingType"
+        ]
+      },
+      "SortedItemResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sortingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inputItemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "volumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "rejectWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "rejectVolumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "destinationType": {
+            "type": "string",
+            "enum": [
+              "STOCK",
+              "SALE",
+              "PRESSING"
+            ]
+          },
+          "destinationId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "SortingResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sortingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sortingType": {
+            "type": "string",
+            "enum": [
+              "GROSS",
+              "PRIMARY",
+              "FINE"
+            ]
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "sortedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortedItemResponseDTO"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Result": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "reversalOperationId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "LoginRequestDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginResponseDTO": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "SaleTransitionRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "PressedBaleRequestDTO": {
+        "type": "object",
+        "properties": {
+          "sortedItemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "initialVolumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "finalVolumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "destinationType": {
+            "type": "string",
+            "enum": [
+              "STOCK",
+              "SALE",
+              "PRESSING"
+            ]
+          },
+          "destinationId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "finalVolumeM3",
+          "initialVolumeM3",
+          "materialSubtypeId",
+          "sortedItemId",
+          "weightKg"
+        ]
+      },
+      "PressingCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "pressingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "pressedBales": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PressedBaleRequestDTO"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "pressedBales"
+        ]
+      },
+      "PressedBaleResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pressingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sortedItemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "initialVolumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "finalVolumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "destinationType": {
+            "type": "string",
+            "enum": [
+              "STOCK",
+              "SALE",
+              "PRESSING"
+            ]
+          },
+          "destinationId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "PressingResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pressingDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "pressedBales": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PressedBaleResponseDTO"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "MaterialTypeCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "categoryId",
+          "name"
+        ]
+      },
+      "MaterialSubtypeCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "typeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "name",
+          "typeId"
+        ]
+      },
+      "MaterialCategoryCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "DonorCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "document": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "donorType": {
+            "type": "string",
+            "enum": [
+              "PF",
+              "PJ"
+            ]
+          },
+          "address": {
+            "$ref": "#/components/schemas/PostalAddressDTO"
+          }
+        },
+        "required": [
+          "document",
+          "donorType",
+          "name"
+        ]
+      },
+      "DonationCreateRequestDTO": {
+        "type": "object",
+        "properties": {
+          "donationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "donorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "proofAttachmentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inputItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputItemRequestDTO"
+            }
+          }
+        },
+        "required": [
+          "donorId",
+          "totalWeightKg"
+        ]
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PageVehicleResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehicleResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "paged": {
+            "type": "boolean"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "unpaged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": {
+            "type": "boolean"
+          },
+          "sorted": {
+            "type": "boolean"
+          },
+          "unsorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageUserResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageTeamMemberResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TeamMemberResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageSortingResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortingResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageSaleResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SaleResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Summary": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date"
+          },
+          "to": {
+            "type": "string",
+            "format": "date"
+          },
+          "collectionWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "donationWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "sortedWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "rejectedWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "pressedWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "soldWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "revenueBrl": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "currentStockWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "currentStockVolumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        }
+      },
+      "PagePressingResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PressingResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "OrganizationPage": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Organization"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PageMaterialTypeResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialTypeResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageMaterialSubtypeResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialSubtypeResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageMaterialCategoryResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MaterialCategoryResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Reconciliation": {
+        "type": "object",
+        "properties": {
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ledgerWeightDifference": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "ledgerVolumeDifference": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "lotWeightDifference": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "lotVolumeDifference": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "consistent": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Movement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "operationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "weightDeltaKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "volumeDeltaM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actorId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "PageMovement": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Movement"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Lot": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialName": {
+            "type": "string"
+          },
+          "sortedItemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pressedBaleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "availableWeightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "availableVolumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageLot": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Lot"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Balance": {
+        "type": "object",
+        "properties": {
+          "materialSubtypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "materialName": {
+            "type": "string"
+          },
+          "weightKg": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "volumeM3": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "PageBalance": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Balance"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageDonorResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DonorResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageDonationResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DonationResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageAttachmentResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageCollectionResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectionResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageBuyerResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BuyerResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

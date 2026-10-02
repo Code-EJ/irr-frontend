@@ -68,9 +68,9 @@ const PressingUpdate = () => {
 
     fetchSubtypologies();
     fetchData();
-  }, [id]);
+  }, [formData.subtipologiaId, id]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -78,7 +78,7 @@ const PressingUpdate = () => {
     try {
       await PressingService.update(id!, {
         ...formData,
-        data: new Date(formData.data),
+        data: new Date(formData.data).toISOString(),
         volumeTotal: Number(formData.volumeTotal),
         tipoOrigem: formData.tipoOrigem as "DOACAO" | "COLETA",
         tipoDestino: formData.tipoDestino as "DOACAO" | "COLETA",

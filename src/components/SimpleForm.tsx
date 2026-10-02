@@ -1,46 +1,23 @@
-import { Formik, Form } from "formik";
-import { get } from "../utils/LodashAlternatives";
-
-const SimpleForm = ({
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+import {
+  Formik,
+  Form,
+  type FormikConfig,
+  type FormikValues,
+  type FormikProps,
+} from "formik";
+type Props<V extends FormikValues> = Omit<FormikConfig<V>, "children"> & {
+  children: (formik: FormikProps<V>) => React.ReactNode;
+  autoSetErrors?: boolean;
+  submitOnChange?: boolean;
+};
+export default function SimpleForm<V extends FormikValues>({
   children,
-  initialValues,
-  onSubmit,
-  autoSetErrors,
-  submitOnChange,
-  ...rest
-}) => (
-  <Formik
-    initialValues={initialValues}
-    {...rest}
-    onSubmit={async (values, { setFieldError, setSubmitting }) => {
-      try {
-        await onSubmit(values, { setFieldError });
-      } catch (err) {
-        if (autoSetErrors) {
-          const status = get(err, "response.status", "-");
-          const errors = get(err, "response.data", "-");
-          if (status === 400) {
-            Object.keys(errors).forEach((field) => {
-              if (field === "non_field_errors") {
-              } else {
-                try {
-                  setFieldError(field, errors[field]);
-                } catch (e) {
-                  // DO NOTHING
-                }
-              }
-            });
-          } else {
-            console.log(err);
-          }
-        }
-      }
-
-      setSubmitting(false);
-    }}
-  >
-    {(formik) => <Form>{children(formik)}</Form>}
-  </Formik>
-);
-
-export default SimpleForm;
+  autoSetErrors: _autoSetErrors,
+  submitOnChange: _submitOnChange,
+  ...config
+}: Props<V>) {
+  return (
+    <Formik {...config}>{(formik) => <Form>{children(formik)}</Form>}</Formik>
+  );
+}

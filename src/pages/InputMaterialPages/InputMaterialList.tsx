@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import { InputMaterialService, SubTypologyService } from "../../services";
@@ -9,11 +9,11 @@ import { handleExport } from "../../utils/ExportService";
 const InputMaterialList = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState<number>(1);
-    const [data, setData] = useState<Array<any>>([]);
-    const [subtypologyMap, setSubtypologyMap] = useState<Record<string, string>>({});
+    const [data, setData] = useState<Array<import("../../utils/ExportService").CSVRow>>([]);
+    const [, setSubtypologyMap] = useState<Record<string, string>>({});
     const inputMaterialService = InputMaterialService;
 
-    const fetchData = async (page: number | null) => {
+    const fetchData = useCallback(async (page: number | null) => {
         try {
             const [inputResponse, subtypologyResponse] = await Promise.all([
                 inputMaterialService.getAll(page),
@@ -22,26 +22,27 @@ const InputMaterialList = () => {
 
             const subtypologies = subtypologyResponse?.data ?? [];
             const subMap: Record<string, string> = {};
-            subtypologies.forEach((item: any) => {
+            subtypologies.forEach((item) => {
                 subMap[item.id] = item.nome;
             });
             setSubtypologyMap(subMap);
             
 
-            const inputData = inputResponse?.data?.map((item: any) => ({
+            const inputData = inputResponse?.data?.map((item) => ({
                 ...item,
                 subtipologia: subMap[item.subtipologiaId] ?? item.subtipologiaId,
             })) ?? [];
 
             setData(inputData);
+        return inputData;
         } catch (error) {
             console.error("Erro ao buscar materiais de entrada:", error);
         }
-    };
+    }, [inputMaterialService]);
 
     useEffect(() => {
         fetchData(page);
-    }, [page]);
+    }, [fetchData, page]);
 
     const handleBack = () => {
         navigate("/stock-menu");

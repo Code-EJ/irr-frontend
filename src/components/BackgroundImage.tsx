@@ -1,6 +1,7 @@
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
 import Image from "../assets/imgs/background1.jpg";
 
-const BackgroundImage = ({children}) => {
+const BackgroundImage = ({children}: {children: React.ReactNode}) => {
     return (<div
         className="h-full w-full flex justify-center items-center p-8"
         style={{
