@@ -984,3 +984,44 @@ td button {
     flex-basis: 100%;
   }
 }
+/* Routes planning and execution surfaces. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas). */
+.route-actions { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+.route-link { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border: 1px solid #dce5de; border-radius: 10px; padding: .7rem 1rem; font-weight: 600; color: #315342; background: #fff; }
+.route-link-primary { color: #fff; background: #176947; border-color: #176947; }
+.route-back { display: inline-block; color: #496956; margin-bottom: 1rem; font-size: .9rem; }
+.route-heading-icon { color: #176947; }
+.route-toggle { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.5rem; color: #53645a; }
+.route-toggle input, .route-coverage input { width: 17px; height: 17px; accent-color: #176947; }
+.route-muted { display: block; font-size: .875rem; color: #65756b; margin-top: .35rem; }
+.route-empty { display: grid; justify-items: center; gap: .65rem; text-align: center; padding: 3rem 1rem; color: #65756b; }
+.route-empty h2 { font-size: 1.15rem; color: #243c2d; }
+.route-form { max-width: 960px; }
+.route-form fieldset { border: 0; display: grid; gap: 1rem; padding: 0; margin: 0; min-width: 0; }
+.route-form fieldset:disabled { opacity: .85; }
+.route-section { border-top: 1px solid #e5ebe6; padding-top: 1.5rem; margin-top: 1.5rem; }
+.route-section h2, .route-facts h2 { font-size: 1.1rem; font-weight: 700; color: #243c2d; }
+.route-area-editor { display: flex; gap: 1rem; border: 1px solid #dfe7e1; border-radius: 12px; padding: 1rem; margin: 1rem 0; background: #fafcf9; align-items: flex-start; }
+.route-sequence { display: inline-grid; place-items: center; background: #e8f2eb; color: #176947; width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; font-weight: 700; }
+.route-area-fields { flex: 1; display: grid; gap: .75rem; min-width: 0; }
+.route-area-tools { display: flex; gap: .25rem; }
+.route-area-tools button { padding: .5rem; border-radius: 8px; color: #536b5c; }
+.route-area-tools button:hover { background: #e8f2eb; }
+.route-area-tools button:disabled { opacity: .3; }
+.route-summary { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; padding: 1rem; background: #f3f7f2; border-radius: 12px; margin-bottom: 1.5rem; color: #53645a; }
+.route-summary a { color: #176947; font-weight: 600; }
+.route-filters { max-width: 800px; margin-bottom: 1.5rem; align-items: start; }
+.route-facts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
+.route-facts > div { padding: 1.25rem; border: 1px solid #e3ebe4; border-radius: 12px; }
+.route-facts dt { font-size: .8rem; color: #65756b; margin-top: 1rem; }
+.route-facts dd { margin-top: .25rem; color: #263e2f; overflow-wrap: anywhere; }
+.route-coverage { padding: 0; list-style: none; margin: 1rem 0; }
+.route-coverage li { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #e5ebe6; }
+.route-coverage li > div { flex: 1; }
+.route-coverage li span:not(.route-sequence) { display: block; color: #65756b; margin-top: .3rem; }
+.route-coverage label { display: flex; gap: .5rem; align-items: center; }
+.route-command-bar { margin-top: 1.5rem; }
+.route-history { margin: 1rem 0; padding: 0; list-style: none; display: grid; gap: .75rem; }
+.route-history li { border-left: 3px solid #dce8de; padding-left: 1rem; display: grid; gap: .25rem; }
+.route-history span { font-size: .85rem; color: #65756b; }
+.route-history a { color: #176947; }
+@media (max-width: 720px) { .route-facts { grid-template-columns: 1fr; } .route-area-editor { flex-wrap: wrap; } .route-area-tools { margin-left: 3rem; } .route-coverage li { flex-wrap: wrap; } .route-actions > .route-link { flex: 1; } }
