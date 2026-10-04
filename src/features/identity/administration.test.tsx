@@ -12,6 +12,7 @@ import {SessionProvider,useSession} from "./SessionProvider";
 import UserPage from "./UserPage";
 import {ResponsibleOnboarding,OrganizationPage} from "./OrganizationsPage";
 import RecoveryPage,{ResetPasswordPage} from "./RecoveryPage";
+import {MembershipEditor} from "./MembershipPanel";
 
 const actor={id:"global",fullName:"Global fixture",email:"global@example.test",userRole:"ADMINISTRATOR",mustChangePassword:false};
 function response(config:InternalAxiosRequestConfig,data:unknown=null,status=200){return {config,data,status,statusText:"Fixture",headers:new AxiosHeaders()};}
@@ -58,7 +59,7 @@ it("displays the last-administrator conflict without hiding administrator lifecy
 
 it("creates an organization before responsible onboarding",async()=>{
   let creates=0;apiClient.defaults.adapter=async config=>{
-    if(config.method==="post"){creates++;expect(JSON.parse(config.data)).toEqual({name:"New organization",organizationType:"COOPERATIVE"});return response(config,{id:"new-org",name:"New organization",organizationType:"COOPERATIVE"},201);}
+    if(config.method==="post"){creates++;expect(JSON.parse(config.data)).toEqual({name:"New organization",organizationType:"Cooperativa"});return response(config,{id:"new-org",name:"New organization",organizationType:"COOPERATIVE"},201);}
     return response(config,config.url==="/users/me"?actor:{content:[],totalElements:0});
   };
   const user=userEvent.setup();render(<MemoryRouter><SessionProvider><OrganizationPage/></SessionProvider></MemoryRouter>);
@@ -98,4 +99,49 @@ it("handles used recovery authorization without exposing provider diagnostics",a
   apiClient.defaults.adapter=async config=>{throw reject(config,400);};const user=userEvent.setup();render(<MemoryRouter><ResetPasswordPage/></MemoryRouter>);
   await user.type(screen.getByLabelText("Nova senha"),"new-password");await user.type(screen.getByLabelText("Confirmar nova senha"),"new-password");await user.click(screen.getByRole("button",{name:"Salvar nova senha"}));
   expect((await screen.findByRole("alert")).textContent).toContain("expirou ou já foi utilizado");expect(screen.queryByLabelText("Nova senha")).toBeNull();
+});
+
+it("keeps a valid recovery link usable when the proposed password is unchanged",async()=>{
+  window.history.replaceState({},"",`/reset-password#token=${"c".repeat(43)}`);
+  apiClient.defaults.adapter=async config=>{throw new AxiosError("Fixture","400",config,undefined,response(config,{message:"Choose a different password"},400));};
+  const user=userEvent.setup();render(<MemoryRouter><ResetPasswordPage/></MemoryRouter>);
+  await user.type(screen.getByLabelText("Nova senha"),"old-password");await user.type(screen.getByLabelText("Confirmar nova senha"),"old-password");await user.click(screen.getByRole("button",{name:"Salvar nova senha"}));
+  expect((await screen.findByRole("alert")).textContent).toContain("diferente da atual");expect(screen.getByLabelText("Nova senha")).not.toBeNull();
+});
+
+it("handles unavailable recovery explicitly instead of reporting successful delivery",async()=>{
+  apiClient.defaults.adapter=async config=>{throw reject(config,503);};const user=userEvent.setup();render(<MemoryRouter><RecoveryPage/></MemoryRouter>);
+  await user.type(screen.getByLabelText("E-mail"),"fixture@example.test");await user.click(screen.getByRole("button",{name:"Enviar instruções"}));
+  expect((await screen.findByRole("alert")).textContent).toContain("temporariamente indisponível");expect(screen.queryByRole("status")).toBeNull();
+});
+
+it("changes MEMBER to MANAGER and requires confirmation before revoking membership",async()=>{
+  const writes:string[]=[];
+  apiClient.defaults.adapter=async config=>{if(config.method==="put"){writes.push("grant");expect(JSON.parse(config.data)).toEqual({role:"MANAGER"});return response(config,{role:"MANAGER",active:true});}
+    if(config.method==="delete"){writes.push("revoke");return response(config,null,204);}return response(config,{role:"MEMBER",active:true});};
+  const user=userEvent.setup();render(<MembershipEditor organization={{id:"org",name:"Organization"}} userId="user" onClose={()=>{}}/>);
+  await screen.findByText("Vínculo ativo: Membro");await user.selectOptions(screen.getByLabelText("Permissão na organização"),"MANAGER");await user.click(screen.getByRole("button",{name:"Salvar vínculo"}));
+  await screen.findByText("Vínculo ativo: Administrador da Organização");await user.click(screen.getByRole("button",{name:"Revogar vínculo"}));expect(writes).toEqual(["grant"]);
+  await user.click(screen.getByRole("button",{name:"Confirmar revogação"}));await screen.findByText("Sem vínculo ativo");expect(writes).toEqual(["grant","revoke"]);
+});
+
+it("edits administrator metadata through the supported user editor",async()=>{
+  let writes=0;
+  apiClient.defaults.adapter=async config=>{if(config.method==="put"){writes++;expect(JSON.parse(config.data).fullName).toBe("Edited global account");return response(config,{...actor,id:"target",fullName:"Edited global account"});}
+    return response(config,config.url==="/users/me"?actor:config.url==="/users/target"?{...actor,id:"target"}:{content:[],totalElements:0});};
+  const user=userEvent.setup();render(<MemoryRouter initialEntries={["/users/target"]}><SessionProvider><Routes><Route path="/users/:id" element={<UserPage/>}/></Routes></SessionProvider></MemoryRouter>);
+  const name=await screen.findByLabelText("Nome completo");await user.clear(name);await user.type(name,"Edited global account");await user.click(screen.getByRole("button",{name:"Salvar usuário"}));
+  await screen.findByText("Conta atualizada.");expect(writes).toBe(1);
+});
+
+it("updates organization metadata and confirms deactivation before leaving details",async()=>{
+  let updates=0,deletions=0;
+  apiClient.defaults.adapter=async config=>{
+    if(config.method==="put"){updates++;return response(config,{id:"org",name:"Updated organization",organizationType:"ASSOCIATION"});}
+    if(config.method==="delete"){deletions++;return response(config,null,204);}
+    return response(config,config.url==="/users/me"?actor:config.url==="/organizations/org"?{id:"org",name:"Original organization",organizationType:"ASSOCIATION"}:{content:[],totalElements:0});
+  };
+  const user=userEvent.setup();render(<MemoryRouter initialEntries={["/organizations/org"]}><SessionProvider><Routes><Route path="/organizations/:id" element={<OrganizationPage/>}/><Route path="/organizations" element={<p>Organization list</p>}/></Routes></SessionProvider></MemoryRouter>);
+  const name=await screen.findByLabelText("Nome da organização");await user.clear(name);await user.type(name,"Updated organization");await user.click(screen.getByRole("button",{name:"Salvar organização"}));await screen.findByText("Organização atualizada.");expect(updates).toBe(1);
+  await user.click(screen.getByRole("button",{name:"Desativar organização"}));expect(deletions).toBe(0);await user.click(screen.getByRole("button",{name:"Confirmar desativação"}));await screen.findByText("Organization list");expect(deletions).toBe(1);
 });

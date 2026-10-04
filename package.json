@@ -15,7 +15,8 @@
     "api:capture": "node scripts/capture-openapi.mjs",
     "test:contract": "vitest run --config vitest.contract.config.js",
     "api:check": "node scripts/check-openapi.mjs",
-    "dev:credentials": "node scripts/development-credentials.mjs"
+    "dev:credentials": "node scripts/development-credentials.mjs",
+    "verify:production": "node scripts/verify-production-bundle.mjs"
   },
   "dependencies": {
     "axios": "^1.7.9",

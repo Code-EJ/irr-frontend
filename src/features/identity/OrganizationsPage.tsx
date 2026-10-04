@@ -18,7 +18,7 @@ export default function OrganizationsPage(){
   const {data,busy,error}=usePage(administration.list,page,revision);
   return <Card className="identity-card"><p className="eyebrow">ADMINISTRAÇÃO GLOBAL</p><h1>Organizações</h1>
     <p>Gerencie as unidades operacionais e seus responsáveis. Cada organização mantém seus próprios dados.</p>
-    <Link className="button-link" to="/organizations/new">Criar organização</Link>
+    <Link className="button button-primary" to="/organizations/new">Criar organização</Link>
     {busy?<p role="status">Carregando organizações…</p>:error?<><p role="alert">{error}</p><Button titulo="Tentar novamente" onClick={()=>setRevision(n=>n+1)}/></>:<>
       {!data.items.length&&<p>Nenhuma organização ativa cadastrada.</p>}
       <ul className="membership-list">{data.items.map(org=><li key={org.id}><div><strong>{org.name}</strong><p>{org.organizationType}</p></div><Link to={`/organizations/${org.id}`}>Gerenciar organização</Link></li>)}</ul>
@@ -43,7 +43,7 @@ export function OrganizationPage(){
 /** Keeps completed onboarding steps so retries never duplicate a created organization or user. */
 function OrganizationEditor({initial}:{initial:Organization|null}){
   const state=useSession(),navigate=useNavigate();const [organization,setOrganization]=useState(initial);
-  const [input,setInput]=useState<OrganizationInput>({name:initial?.name??"",organizationType:initial?.organizationType??"COOPERATIVE"});
+  const [input,setInput]=useState<OrganizationInput>({name:initial?.name??"",organizationType:initial?.organizationType??"Cooperativa"});
   const [busy,setBusy]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState("");
   const [deactivate,setDeactivate]=useState(false),[manage,setManage]=useState(false),[member,setMember]=useState<Account|null>(null);
   return <Card className="identity-card"><Link to="/organizations">← Organizações</Link><p className="eyebrow">ADMINISTRAÇÃO GLOBAL</p><h1>{initial?"Gerenciar organização":"Nova organização"}</h1>
@@ -97,7 +97,7 @@ export function ResponsibleOnboarding({organization,onComplete}:{organization:Or
       }}><fieldset disabled={busy}><label>Nome do responsável<input required maxLength={255} value={name} onChange={e=>setName(e.target.value)}/></label><label>E-mail do responsável<input required type="email" maxLength={255} value={email} onChange={e=>setEmail(e.target.value)}/></label>
         <label>Senha inicial<input required type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)}/></label><label>Confirmar senha inicial<input required type="password" autoComplete="new-password" value={confirmation} onChange={e=>setConfirmation(e.target.value)}/></label><Button type="submit" titulo={busy?"Criando…":"Criar conta do responsável"}/>
       </fieldset></form>}</>}
-    {user&&<><p>Responsável selecionado: <strong>{user.fullName}</strong> · {user.email}</p><p>O vínculo MANAGER permite administrar somente esta organização. O perfil global da conta permanece inalterado.</p>
+    {user&&<><p>Responsável selecionado: <strong>{user.fullName}</strong> · {user.email}</p><p>A permissão de Administrador da Organização permite administrar somente esta organização. O perfil global da conta permanece inalterado.</p>
       <Button titulo={busy?"Associando…":"Confirmar responsável"} disabled={busy} onClick={()=>{setBusy(true);setError("");void administration.grant(organization.id!,user.id!,"MANAGER").then(onComplete).catch(err=>setError(errorMessage(err))).finally(()=>setBusy(false));}}/>
       <Button variant="secondary" titulo="Selecionar outra pessoa" disabled={busy} onClick={()=>setUser(null)}/>
     </>}
