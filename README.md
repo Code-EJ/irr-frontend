@@ -136,6 +136,8 @@ Use feature/refactor branches and coherent semantic commits. Keep engineering id
 
 ## Identity & Access completion
 
+The next Master Plan gate is first deployment/homologation. [Pair verification instructions](docs/homologation-verification.md) describe `npm run verify:homologation`, which checks health, pinned OpenAPI, exact CORS, direct SPA routes and served API configuration without changing accounts or business data. Local results do not replace external email smoke or operator release approval.
+
 [ADR-0016](docs/adrs/0016-global-identity-and-recovery-integration.md) extends the existing integration; backend ADR-0017/0018 own global authority and recovery policy. Administrador Geral can manage users/organizations and operate in any selected active organization without membership. Administrador da Organização reuses MANAGER and stays local. User creation includes ADMINISTRATOR; the server protects the last active global administrator with 409.
 
 Use Organizations to create/edit/deactivate units and manage MEMBER/MANAGER/revocation. New organization onboarding creates the unit, then creates or selects the responsible user, then grants MANAGER. A failed grant retains the created identifiers for retry. If you leave the page, resume through organization member management. Credentials never belong to Organization or browser storage.
