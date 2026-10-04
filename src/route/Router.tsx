@@ -23,12 +23,21 @@ import TeamPage from "../features/parties/TeamPage";
 import DocumentsPage from "../features/documents/DocumentsPage";
 import IntakeList from "../features/intake/IntakeList";
 import IntakeForm from "../features/intake/IntakeForm";
+import RoutesPage from "../features/routes/RoutesPage";
+import RouteForm from "../features/routes/RouteForm";
+import ExecutionsPage from "../features/routes/ExecutionsPage";
+import ExecutionForm from "../features/routes/ExecutionForm";
+import ExecutionPage from "../features/routes/ExecutionPage";
 import ProfilePage from "../features/identity/ProfilePage";
 import PasswordPage from "../features/identity/PasswordPage";
 import UsersPage from "../features/identity/UsersPage";
 import UserPage from "../features/identity/UserPage";
-import RecoveryPage,{ResetPasswordPage} from "../features/identity/RecoveryPage";
-import OrganizationsPage,{OrganizationPage} from "../features/identity/OrganizationsPage";
+import RecoveryPage, {
+  ResetPasswordPage,
+} from "../features/identity/RecoveryPage";
+import OrganizationsPage, {
+  OrganizationPage,
+} from "../features/identity/OrganizationsPage";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import {
@@ -43,6 +52,7 @@ import {
   UsersRound,
   Files,
   PackagePlus,
+  MapPinned,
 } from "lucide-react";
 function Protected() {
   const state = useSession();
@@ -58,9 +68,13 @@ function Protected() {
       </Card>
     );
   if (state.account?.mustChangePassword)
-    return location.pathname === "/profile/password"
-      ? <main className="restricted-account"><PasswordPage mandatory /></main>
-      : <Navigate to="/profile/password" replace />;
+    return location.pathname === "/profile/password" ? (
+      <main className="restricted-account">
+        <PasswordPage mandatory />
+      </main>
+    ) : (
+      <Navigate to="/profile/password" replace />
+    );
   return (
     <div className="app-shell">
       <a href="#main-content" className="skip-link">
@@ -93,7 +107,18 @@ function Protected() {
             <UserRound size={19} />
             Minha conta
           </NavLink>
-          {state.account?.userRole === "ADMINISTRATOR" && <><NavLink to="/users"><UsersRound size={19}/>Usuários</NavLink><NavLink to="/organizations"><UsersRound size={19}/>Organizações</NavLink></>}
+          {state.account?.userRole === "ADMINISTRATOR" && (
+            <>
+              <NavLink to="/users">
+                <UsersRound size={19} />
+                Usuários
+              </NavLink>
+              <NavLink to="/organizations">
+                <UsersRound size={19} />
+                Organizações
+              </NavLink>
+            </>
+          )}
           <NavLink to="/donors">
             <HandHeart size={19} />
             Doadores
@@ -109,6 +134,10 @@ function Protected() {
           <NavLink to="/intake">
             <PackagePlus size={19} />
             Entradas
+          </NavLink>
+          <NavLink to="/routes">
+            <MapPinned size={19} />
+            Rotas
           </NavLink>
         </nav>
         <div className="sidebar-note">
@@ -144,11 +173,13 @@ function Protected() {
             <span>
               {state.account?.fullName}
               <small>
-                {state.account?.userRole === "ADMINISTRATOR" ? "Administrador Geral" : state.membership
-                  ? state.membership.role === "MANAGER"
-                    ? "Administrador da Organização"
-                    : "Membro da organização"
-                  : "Selecione uma organização"}
+                {state.account?.userRole === "ADMINISTRATOR"
+                  ? "Administrador Geral"
+                  : state.membership
+                    ? state.membership.role === "MANAGER"
+                      ? "Administrador da Organização"
+                      : "Membro da organização"
+                    : "Selecione uma organização"}
               </small>
             </span>
           </div>
@@ -169,9 +200,15 @@ function Protected() {
 }
 /** UI guard complements server-side authorization and works without organization selection. */
 function AdministratorOnly() {
-  return useSession().account?.userRole === "ADMINISTRATOR"
-    ? <Outlet />
-    : <Card><h1>Acesso restrito</h1><p role="alert">Somente administradores podem gerenciar usuários.</p><Link to="/menu">Voltar ao início</Link></Card>;
+  return useSession().account?.userRole === "ADMINISTRATOR" ? (
+    <Outlet />
+  ) : (
+    <Card>
+      <h1>Acesso restrito</h1>
+      <p role="alert">Somente administradores podem gerenciar usuários.</p>
+      <Link to="/menu">Voltar ao início</Link>
+    </Card>
+  );
 }
 function Scoped({ manager = false }: { manager?: boolean }) {
   const state = useSession();
@@ -190,7 +227,8 @@ function Scoped({ manager = false }: { manager?: boolean }) {
     return (
       <Card>
         <p role="alert">
-          Somente administradores da organização ou Administradores Gerais podem alterar veículos.
+          Somente administradores da organização ou Administradores Gerais podem
+          alterar veículos.
         </p>
         <Link to="/vehicle-list">Voltar para veículos</Link>
       </Card>
@@ -229,6 +267,15 @@ function Home() {
         <span>Seu dia a dia, mais simples</span>
       </div>
       <div className="quick-grid">
+        <Link to="/routes" className="quick-card">
+          <span className="quick-icon">
+            <MapPinned />
+          </span>
+          <ArrowUpRight className="quick-arrow" />
+          <h3>Rotas</h3>
+          <p>Planeje a cobertura e acompanhe execuções de coleta.</p>
+          <strong>Acessar rotas →</strong>
+        </Link>
         <Link to="/vehicle-list" className="quick-card">
           <span className="quick-icon">
             <Truck />
@@ -281,13 +328,25 @@ export default function AppRouter() {
             <Route path="/profile/password" element={<PasswordPage />} />
             <Route element={<AdministratorOnly />}>
               <Route path="/organizations" element={<OrganizationsPage />} />
-              <Route path="/organizations/new" element={<OrganizationPage key="new" />} />
+              <Route
+                path="/organizations/new"
+                element={<OrganizationPage key="new" />}
+              />
               <Route path="/organizations/:id" element={<OrganizationPage />} />
               <Route path="/users" element={<UsersPage />} />
               <Route path="/users/new" element={<UserPage key="new" />} />
               <Route path="/users/:id" element={<UserPage />} />
             </Route>
             <Route element={<Scoped />}>
+              <Route path="/routes" element={<RoutesPage />} />
+              <Route
+                path="/routes/new"
+                element={<RouteForm key="new-route" />}
+              />
+              <Route path="/routes/:id" element={<RouteForm />} />
+              <Route path="/route-executions" element={<ExecutionsPage />} />
+              <Route path="/route-executions/new" element={<ExecutionForm />} />
+              <Route path="/route-executions/:id" element={<ExecutionPage />} />
               <Route path="/donors" element={<DonorsPage />} />
               <Route path="/team" element={<TeamPage />} />
               <Route path="/documents" element={<DocumentsPage />} />
