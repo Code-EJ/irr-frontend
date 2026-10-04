@@ -64,19 +64,19 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Process request — Partners
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * Process request — Accounts
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["get"];
         /**
-         * Update — Partners
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * Update — Accounts
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         put: operations["update_1"];
         post?: never;
         /**
-         * Process request — Partners
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * Process request — Accounts
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         delete: operations["delete"];
         options?: never;
@@ -94,7 +94,7 @@ export interface paths {
         get?: never;
         /**
          * Reset partner password
-         * @description ADMINISTRATOR only. Rejects administrator targets. Revokes existing tokens and requires a different password before business access. No credential is returned.
+         * @description ADMINISTRATOR only. Revokes existing tokens and requires a different password before business access. No credential is returned.
          */
         put: operations["resetPassword"];
         post?: never;
@@ -112,8 +112,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Process request — Partners
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * Process request — Accounts
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["me"];
         /**
@@ -157,18 +157,18 @@ export interface paths {
         };
         /**
          * Get teamMember
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["get_1"];
         /**
          * Update teamMember
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         put: operations["update_2"];
         post?: never;
         /**
          * Deactivate teamMember
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         delete: operations["delete_1"];
         options?: never;
@@ -185,18 +185,18 @@ export interface paths {
         };
         /**
          * Process request — Sales
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["get_2"];
         /**
          * Update — Sales
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         put: operations["update_3"];
         post?: never;
         /**
          * Process request — Sales
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         delete: operations["delete_2"];
         options?: never;
@@ -212,19 +212,19 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Get my organization
+         * Get an accessible organization
          * @description Missing, inactive and foreign organizations all return 404.
          */
         get: operations["get_3"];
         /**
          * Update — Organizations
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         put: operations["update_4"];
         post?: never;
         /**
          * Deactivate — Organizations
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         delete: operations["deactivate_1"];
         options?: never;
@@ -252,7 +252,7 @@ export interface paths {
         post?: never;
         /**
          * Revoke organization membership
-         * @description ADMINISTRATOR only. Retains the membership row and writes an audit event. Further organization reads fail immediately. Business APIs require the organization header and current membership.
+         * @description ADMINISTRATOR only. Retains the membership row and writes an audit event. Further organization reads fail immediately. Business APIs require the organization header and global authority or current membership.
          */
         delete: operations["revoke"];
         options?: never;
@@ -409,12 +409,12 @@ export interface paths {
         };
         /**
          * Process request — Attachments
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["get_4"];
         /**
          * Process request — Attachments
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         put: operations["rename"];
         post?: never;
@@ -437,18 +437,18 @@ export interface paths {
         };
         /**
          * Process request — Collections
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["get_5"];
         /**
          * Update — Collections
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         put: operations["update_10"];
         post?: never;
         /**
          * Process request — Collections
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         delete: operations["delete_4"];
         options?: never;
@@ -465,18 +465,18 @@ export interface paths {
         };
         /**
          * Get buyer
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["get_6"];
         /**
          * Update buyer
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         put: operations["update_11"];
         post?: never;
         /**
          * Deactivate buyer
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         delete: operations["delete_5"];
         options?: never;
@@ -516,13 +516,13 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List — Partners
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * List — Accounts
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["list_1"];
         put?: never;
         /**
-         * Create — Partners
+         * Create — Accounts
          * @description Declared method authorization: hasRole('ADMINISTRATOR'). Organization ownership is checked by the application service.
          */
         post: operations["create_1"];
@@ -541,13 +541,13 @@ export interface paths {
         };
         /**
          * List team-members
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["list_2"];
         put?: never;
         /**
          * Create teamMember
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["create_2"];
         delete?: never;
@@ -591,9 +591,49 @@ export interface paths {
         put?: never;
         /**
          * Process request — Processing reversals
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["sorting"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/session/password-recovery/request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request a password recovery link
+         * @description Public. Returns 202 without revealing account existence or rate-limit state. Disabled/unavailable infrastructure returns 503 for all accounts.
+         */
+        post: operations["request"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/session/password-recovery/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm password recovery
+         * @description Public. Valid one-use link returns 204. Invalid, expired, used or revoked links return 400. New credentials follow the BCrypt UTF-8 policy. Previous sessions are revoked.
+         */
+        post: operations["confirm"];
         delete?: never;
         options?: never;
         head?: never;
@@ -611,7 +651,7 @@ export interface paths {
         put?: never;
         /**
          * Authenticate a user — Sessions
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["authenticate"];
         delete?: never;
@@ -629,13 +669,13 @@ export interface paths {
         };
         /**
          * List — Sales
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["list_4"];
         put?: never;
         /**
          * Create — Sales
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["create_4"];
         delete?: never;
@@ -655,7 +695,7 @@ export interface paths {
         put?: never;
         /**
          * Process request — Sales
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["reverse"];
         delete?: never;
@@ -675,7 +715,7 @@ export interface paths {
         put?: never;
         /**
          * Process request — Sales
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["post"];
         delete?: never;
@@ -719,7 +759,7 @@ export interface paths {
         put?: never;
         /**
          * Process request — Processing reversals
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["pressing"];
         delete?: never;
@@ -736,8 +776,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List my organizations
-         * @description Returns only organizations with an active membership for the current active user. Platform administrators have no automatic membership bypass.
+         * List accessible organizations
+         * @description Global administrators see all active organizations. Other accounts require active membership.
          */
         get: operations["list_6"];
         put?: never;
@@ -881,7 +921,7 @@ export interface paths {
         };
         /**
          * List — Attachments
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["list_12"];
         put?: never;
@@ -905,13 +945,13 @@ export interface paths {
         };
         /**
          * List — Collections
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["list_13"];
         put?: never;
         /**
          * Create — Collections
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["create_12"];
         delete?: never;
@@ -929,13 +969,13 @@ export interface paths {
         };
         /**
          * List buyers
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["list_14"];
         put?: never;
         /**
          * Create buyer
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         post: operations["create_13"];
         delete?: never;
@@ -973,7 +1013,7 @@ export interface paths {
         };
         /**
          * Process request — Reports
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["summary"];
         put?: never;
@@ -993,7 +1033,7 @@ export interface paths {
         };
         /**
          * Process request — Reports
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["csv"];
         put?: never;
@@ -1033,29 +1073,9 @@ export interface paths {
         };
         /**
          * Process request — Organizations
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["membership"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/organizations/admin": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List organizations for administration
-         * @description ADMINISTRATOR only. Metadata access does not confer organization membership or business data access.
-         */
-        get: operations["administrativeList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1073,7 +1093,7 @@ export interface paths {
         };
         /**
          * Process request — Inventory
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["reconcile"];
         put?: never;
@@ -1093,7 +1113,7 @@ export interface paths {
         };
         /**
          * Process request — Inventory
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["movements"];
         put?: never;
@@ -1113,7 +1133,7 @@ export interface paths {
         };
         /**
          * Process request — Inventory
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["lots"];
         put?: never;
@@ -1133,7 +1153,7 @@ export interface paths {
         };
         /**
          * Process request — Inventory
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["balances"];
         put?: never;
@@ -1618,7 +1638,7 @@ export interface components {
             email: string;
             password: string;
             /** @enum {string} */
-            userRole: "REPRESENTATIVE" | "ORGANIZATION" | "CITY_HALL";
+            userRole: "ADMINISTRATOR" | "REPRESENTATIVE" | "ORGANIZATION" | "CITY_HALL";
         };
         SortedItemRequestDTO: {
             /** Format: uuid */
@@ -1720,6 +1740,14 @@ export interface components {
             status?: string;
             /** Format: uuid */
             reversalOperationId?: string;
+        };
+        RecoveryRequest: {
+            /** Format: email */
+            email: string;
+        };
+        RecoveryConfirmation: {
+            token: string;
+            newPassword: string;
         };
         LoginRequestDTO: {
             /** Format: email */
@@ -2335,7 +2363,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2360,7 +2388,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2389,7 +2417,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2412,7 +2440,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -2439,7 +2467,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -2624,7 +2652,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2649,7 +2677,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2678,7 +2706,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2701,7 +2729,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2726,7 +2754,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2757,7 +2785,7 @@ export interface operations {
                 version: number;
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2919,7 +2947,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2944,7 +2972,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2973,7 +3001,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -2996,7 +3024,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3021,7 +3049,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3050,7 +3078,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3073,7 +3101,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3098,7 +3126,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3127,7 +3155,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3150,7 +3178,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3175,7 +3203,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3204,7 +3232,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3227,7 +3255,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3252,7 +3280,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3281,7 +3309,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3304,7 +3332,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3329,7 +3357,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3358,7 +3386,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3381,7 +3409,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3406,7 +3434,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3435,7 +3463,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3458,7 +3486,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3483,7 +3511,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3512,7 +3540,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -3539,7 +3567,7 @@ export interface operations {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -3562,7 +3590,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -3637,7 +3665,7 @@ export interface operations {
                 page: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -3660,7 +3688,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -3690,7 +3718,7 @@ export interface operations {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -3713,7 +3741,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
                 /** @description Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409. */
                 "Idempotency-Key": string;
@@ -3742,7 +3770,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
                 /** @description Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409. */
                 "Idempotency-Key": string;
@@ -3762,6 +3790,50 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["Result"];
                 };
+            };
+        };
+    };
+    request: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecoveryRequest"];
+            };
+        };
+        responses: {
+            /** @description Request accepted without account disclosure */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecoveryConfirmation"];
+            };
+        };
+        responses: {
+            /** @description Password changed and recovery token consumed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -3795,7 +3867,7 @@ export interface operations {
                 page: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -3818,7 +3890,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -3845,7 +3917,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
                 /** @description Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409. */
                 "Idempotency-Key": string;
@@ -3876,7 +3948,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
                 /** @description Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409. */
                 "Idempotency-Key": string;
@@ -3909,7 +3981,7 @@ export interface operations {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -3932,7 +4004,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
                 /** @description Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409. */
                 "Idempotency-Key": string;
@@ -3961,7 +4033,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
                 /** @description Organization-scoped command key. Repeat with the same payload to replay the committed response; changed payload returns 409. */
                 "Idempotency-Key": string;
@@ -4039,7 +4111,7 @@ export interface operations {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4062,7 +4134,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4093,7 +4165,7 @@ export interface operations {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4116,7 +4188,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4146,7 +4218,7 @@ export interface operations {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4169,7 +4241,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4198,7 +4270,7 @@ export interface operations {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4221,7 +4293,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4250,7 +4322,7 @@ export interface operations {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4273,7 +4345,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4302,7 +4374,7 @@ export interface operations {
                 page: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4325,7 +4397,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4357,7 +4429,7 @@ export interface operations {
                 page: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4380,7 +4452,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4409,7 +4481,7 @@ export interface operations {
                 page: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4432,7 +4504,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4459,7 +4531,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -4487,7 +4559,7 @@ export interface operations {
                 to?: string;
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4513,7 +4585,7 @@ export interface operations {
                 to?: string;
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4536,7 +4608,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {
@@ -4579,34 +4651,11 @@ export interface operations {
             };
         };
     };
-    administrativeList: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OrganizationPage"];
-                };
-            };
-        };
-    };
     reconcile: {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4631,7 +4680,7 @@ export interface operations {
                 page: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4657,7 +4706,7 @@ export interface operations {
                 page: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4682,7 +4731,7 @@ export interface operations {
                 page: components["schemas"]["Pageable"];
             };
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path?: never;
@@ -4705,7 +4754,7 @@ export interface operations {
         parameters: {
             query?: never;
             header: {
-                /** @description Explicit active organization membership; platform administrator status is not a bypass */
+                /** @description Active organization selection; global authority or an active membership is required */
                 "X-Organization-Id": string;
             };
             path: {

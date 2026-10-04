@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "IRR Backend API",
-    "description": "Pre-production waste management API. This specification documents the current contract; business operations require explicit organization membership. Decimal quantities and money are JSON strings. Posted operations are corrected through audited reversals.",
+    "description": "Pre-production waste management API. This specification documents the current contract; business operations require global authority or explicit organization membership. Decimal quantities and money are JSON strings. Posted operations are corrected through audited reversals.",
     "contact": {
       "name": "Enzo Ribas",
       "url": "https://github.com/oEnzoRibas"
@@ -42,7 +42,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -83,7 +83,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -134,7 +134,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -161,7 +161,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -206,7 +206,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -244,10 +244,10 @@
     "/api/v1/users/{id}": {
       "get": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
-        "summary": "Process request — Partners",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "summary": "Process request — Accounts",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "get",
         "parameters": [
           {
@@ -275,10 +275,10 @@
       },
       "put": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
-        "summary": "Update — Partners",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "summary": "Update — Accounts",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "update_1",
         "parameters": [
           {
@@ -316,10 +316,10 @@
       },
       "delete": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
-        "summary": "Process request — Partners",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "summary": "Process request — Accounts",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "delete",
         "parameters": [
           {
@@ -342,10 +342,10 @@
     "/api/v1/users/{id}/password": {
       "put": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
         "summary": "Reset partner password",
-        "description": "ADMINISTRATOR only. Rejects administrator targets. Revokes existing tokens and requires a different password before business access. No credential is returned.",
+        "description": "ADMINISTRATOR only. Revokes existing tokens and requires a different password before business access. No credential is returned.",
         "operationId": "resetPassword",
         "parameters": [
           {
@@ -378,10 +378,10 @@
     "/api/v1/users/me": {
       "get": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
-        "summary": "Process request — Partners",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "summary": "Process request — Accounts",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "me",
         "responses": {
           "200": {
@@ -398,7 +398,7 @@
       },
       "put": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
         "summary": "Update my profile",
         "description": "Only fullName and email are writable; platform and organization roles are unchanged. Email conflicts return 409.",
@@ -430,7 +430,7 @@
     "/api/v1/users/me/password": {
       "put": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
         "summary": "Change my password",
         "description": "Requires the current password. Incorrect current password returns 403. Success invalidates all existing tokens and clears mandatory change state.",
@@ -458,7 +458,7 @@
           "Team members"
         ],
         "summary": "Get teamMember",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "get_1",
         "parameters": [
           {
@@ -473,7 +473,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -499,7 +499,7 @@
           "Team members"
         ],
         "summary": "Update teamMember",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "update_2",
         "parameters": [
           {
@@ -514,7 +514,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -550,7 +550,7 @@
           "Team members"
         ],
         "summary": "Deactivate teamMember",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "delete_1",
         "parameters": [
           {
@@ -565,7 +565,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -586,7 +586,7 @@
           "Sales"
         ],
         "summary": "Process request — Sales",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "get_2",
         "parameters": [
           {
@@ -601,7 +601,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -627,7 +627,7 @@
           "Sales"
         ],
         "summary": "Update — Sales",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "update_3",
         "parameters": [
           {
@@ -642,7 +642,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -678,7 +678,7 @@
           "Sales"
         ],
         "summary": "Process request — Sales",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "delete_2",
         "parameters": [
           {
@@ -702,7 +702,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -722,7 +722,7 @@
         "tags": [
           "Organizations"
         ],
-        "summary": "Get my organization",
+        "summary": "Get an accessible organization",
         "description": "Missing, inactive and foreign organizations all return 404.",
         "operationId": "get_3",
         "parameters": [
@@ -754,7 +754,7 @@
           "Organizations"
         ],
         "summary": "Update — Organizations",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "update_4",
         "parameters": [
           {
@@ -795,7 +795,7 @@
           "Organizations"
         ],
         "summary": "Deactivate — Organizations",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "deactivate_1",
         "parameters": [
           {
@@ -911,7 +911,7 @@
           "Organizations"
         ],
         "summary": "Revoke organization membership",
-        "description": "ADMINISTRATOR only. Retains the membership row and writes an audit event. Further organization reads fail immediately. Business APIs require the organization header and current membership.",
+        "description": "ADMINISTRATOR only. Retains the membership row and writes an audit event. Further organization reads fail immediately. Business APIs require the organization header and global authority or current membership.",
         "operationId": "revoke",
         "parameters": [
           {
@@ -961,7 +961,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1002,7 +1002,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1053,7 +1053,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1089,7 +1089,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1130,7 +1130,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1181,7 +1181,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1217,7 +1217,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1258,7 +1258,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1309,7 +1309,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1345,7 +1345,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1386,7 +1386,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1437,7 +1437,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1473,7 +1473,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1514,7 +1514,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1565,7 +1565,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1586,7 +1586,7 @@
           "Attachments"
         ],
         "summary": "Process request — Attachments",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "get_4",
         "parameters": [
           {
@@ -1601,7 +1601,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1627,7 +1627,7 @@
           "Attachments"
         ],
         "summary": "Process request — Attachments",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "rename",
         "parameters": [
           {
@@ -1642,7 +1642,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1693,7 +1693,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1714,7 +1714,7 @@
           "Collections"
         ],
         "summary": "Process request — Collections",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "get_5",
         "parameters": [
           {
@@ -1729,7 +1729,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1755,7 +1755,7 @@
           "Collections"
         ],
         "summary": "Update — Collections",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "update_10",
         "parameters": [
           {
@@ -1770,7 +1770,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1806,7 +1806,7 @@
           "Collections"
         ],
         "summary": "Process request — Collections",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "delete_4",
         "parameters": [
           {
@@ -1821,7 +1821,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1842,7 +1842,7 @@
           "Buyers"
         ],
         "summary": "Get buyer",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "get_6",
         "parameters": [
           {
@@ -1857,7 +1857,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1883,7 +1883,7 @@
           "Buyers"
         ],
         "summary": "Update buyer",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "update_11",
         "parameters": [
           {
@@ -1898,7 +1898,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -1934,7 +1934,7 @@
           "Buyers"
         ],
         "summary": "Deactivate buyer",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "delete_5",
         "parameters": [
           {
@@ -1949,7 +1949,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2000,7 +2000,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2032,7 +2032,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2067,10 +2067,10 @@
     "/api/v1/users": {
       "get": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
-        "summary": "List — Partners",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "summary": "List — Accounts",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "list_1",
         "parameters": [
           {
@@ -2097,9 +2097,9 @@
       },
       "post": {
         "tags": [
-          "Partners"
+          "Accounts"
         ],
-        "summary": "Create — Partners",
+        "summary": "Create — Accounts",
         "description": "Declared method authorization: hasRole('ADMINISTRATOR'). Organization ownership is checked by the application service.",
         "operationId": "create_1",
         "requestBody": {
@@ -2132,7 +2132,7 @@
           "Team members"
         ],
         "summary": "List team-members",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "list_2",
         "parameters": [
           {
@@ -2146,7 +2146,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2172,13 +2172,13 @@
           "Team members"
         ],
         "summary": "Create teamMember",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "create_2",
         "parameters": [
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2243,7 +2243,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2275,7 +2275,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2324,7 +2324,7 @@
           "Processing reversals"
         ],
         "summary": "Process request — Processing reversals",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "sorting",
         "parameters": [
           {
@@ -2339,7 +2339,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2372,13 +2372,65 @@
         }
       }
     },
+    "/api/v1/session/password-recovery/request": {
+      "post": {
+        "tags": [
+          "Password recovery"
+        ],
+        "summary": "Request a password recovery link",
+        "description": "Public. Returns 202 without revealing account existence or rate-limit state. Disabled/unavailable infrastructure returns 503 for all accounts.",
+        "operationId": "request",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecoveryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Request accepted without account disclosure"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/session/password-recovery/confirm": {
+      "post": {
+        "tags": [
+          "Password recovery"
+        ],
+        "summary": "Confirm password recovery",
+        "description": "Public. Valid one-use link returns 204. Invalid, expired, used or revoked links return 400. New credentials follow the BCrypt UTF-8 policy. Previous sessions are revoked.",
+        "operationId": "confirm",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecoveryConfirmation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Password changed and recovery token consumed"
+          }
+        },
+        "security": []
+      }
+    },
     "/api/v1/session/authenticate": {
       "post": {
         "tags": [
           "Sessions"
         ],
         "summary": "Authenticate a user — Sessions",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "authenticate",
         "requestBody": {
           "content": {
@@ -2411,7 +2463,7 @@
           "Sales"
         ],
         "summary": "List — Sales",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "list_4",
         "parameters": [
           {
@@ -2425,7 +2477,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2451,13 +2503,13 @@
           "Sales"
         ],
         "summary": "Create — Sales",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "create_4",
         "parameters": [
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2495,7 +2547,7 @@
           "Sales"
         ],
         "summary": "Process request — Sales",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "reverse",
         "parameters": [
           {
@@ -2510,7 +2562,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2559,7 +2611,7 @@
           "Sales"
         ],
         "summary": "Process request — Sales",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "post",
         "parameters": [
           {
@@ -2574,7 +2626,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2637,7 +2689,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2669,7 +2721,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2718,7 +2770,7 @@
           "Processing reversals"
         ],
         "summary": "Process request — Processing reversals",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "pressing",
         "parameters": [
           {
@@ -2733,7 +2785,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2771,8 +2823,8 @@
         "tags": [
           "Organizations"
         ],
-        "summary": "List my organizations",
-        "description": "Returns only organizations with an active membership for the current active user. Platform administrators have no automatic membership bypass.",
+        "summary": "List accessible organizations",
+        "description": "Global administrators see all active organizations. Other accounts require active membership.",
         "operationId": "list_6",
         "parameters": [
           {
@@ -2877,7 +2929,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2909,7 +2961,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -2978,7 +3030,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3010,7 +3062,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3070,7 +3122,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3102,7 +3154,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3154,7 +3206,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3186,7 +3238,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3238,7 +3290,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3270,7 +3322,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3308,7 +3360,7 @@
           "Attachments"
         ],
         "summary": "List — Attachments",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "list_12",
         "parameters": [
           {
@@ -3322,7 +3374,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3354,7 +3406,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3400,7 +3452,7 @@
           "Collections"
         ],
         "summary": "List — Collections",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "list_13",
         "parameters": [
           {
@@ -3414,7 +3466,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3440,13 +3492,13 @@
           "Collections"
         ],
         "summary": "Create — Collections",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "create_12",
         "parameters": [
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3484,7 +3536,7 @@
           "Buyers"
         ],
         "summary": "List buyers",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "list_14",
         "parameters": [
           {
@@ -3498,7 +3550,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3524,13 +3576,13 @@
           "Buyers"
         ],
         "summary": "Create buyer",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "create_13",
         "parameters": [
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3583,7 +3635,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3611,7 +3663,7 @@
           "Reports"
         ],
         "summary": "Process request — Reports",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "summary",
         "parameters": [
           {
@@ -3635,7 +3687,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3663,7 +3715,7 @@
           "Reports"
         ],
         "summary": "Process request — Reports",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "csv",
         "parameters": [
           {
@@ -3687,7 +3739,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3730,7 +3782,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3758,7 +3810,7 @@
           "Organizations"
         ],
         "summary": "Process request — Organizations",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "membership",
         "parameters": [
           {
@@ -3785,63 +3837,19 @@
         }
       }
     },
-    "/api/v1/organizations/admin": {
-      "get": {
-        "tags": [
-          "Organizations"
-        ],
-        "summary": "List organizations for administration",
-        "description": "ADMINISTRATOR only. Metadata access does not confer organization membership or business data access.",
-        "operationId": "administrativeList",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 20
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrganizationPage"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/inventory/reconciliation": {
       "get": {
         "tags": [
           "Inventory"
         ],
         "summary": "Process request — Inventory",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "reconcile",
         "parameters": [
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3872,7 +3880,7 @@
           "Inventory"
         ],
         "summary": "Process request — Inventory",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "movements",
         "parameters": [
           {
@@ -3886,7 +3894,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3914,7 +3922,7 @@
           "Inventory"
         ],
         "summary": "Process request — Inventory",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "lots",
         "parameters": [
           {
@@ -3937,7 +3945,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -3965,7 +3973,7 @@
           "Inventory"
         ],
         "summary": "Process request — Inventory",
-        "description": "Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "balances",
         "parameters": [
           {
@@ -3979,7 +3987,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -4022,7 +4030,7 @@
           {
             "name": "X-Organization-Id",
             "in": "header",
-            "description": "Explicit active organization membership; platform administrator status is not a bypass",
+            "description": "Active organization selection; global authority or an active membership is required",
             "required": true,
             "schema": {
               "type": "string",
@@ -5236,6 +5244,7 @@
           "userRole": {
             "type": "string",
             "enum": [
+              "ADMINISTRATOR",
               "REPRESENTATIVE",
               "ORGANIZATION",
               "CITY_HALL"
@@ -5465,6 +5474,39 @@
             "format": "uuid"
           }
         }
+      },
+      "RecoveryRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "RecoveryConfirmation": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "[A-Za-z0-9_-]{43}"
+          },
+          "newPassword": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 8
+          }
+        },
+        "required": [
+          "newPassword",
+          "token"
+        ]
       },
       "LoginRequestDTO": {
         "type": "object",
