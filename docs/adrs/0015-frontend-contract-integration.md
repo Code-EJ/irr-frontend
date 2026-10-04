@@ -1,5 +1,8 @@
 # ADR-0015: Incremental frontend integration with the final backend contract
 
+> **PARTIALLY SUPERSEDED BY ADR-0017 / ADR-0018 (2026-10-04).** Global administrator creation and cross-organization authority, final BOOTSTRAP_ADMIN_* names and public email recovery now follow those backend decisions. Historical contrary statements below are retained as decision history, not current policy. Unrelated decisions remain applicable.
+
+
 - Status: Accepted; execution in progress. Acceptance is recorded per slice, not inferred from a successful bundle.
 - Date: 2026-09-28.
 - Author and documentation maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
