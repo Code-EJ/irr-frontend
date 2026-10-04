@@ -84,6 +84,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/users/{id}/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Reset partner password
+         * @description ADMINISTRATOR only. Rejects administrator targets. Revokes existing tokens and requires a different password before business access. No credential is returned.
+         */
+        put: operations["resetPassword"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Process request — Partners
+         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["me"];
+        /**
+         * Update my profile
+         * @description Only fullName and email are writable; platform and organization roles are unchanged. Email conflicts return 409.
+         */
+        put: operations["updateMe"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Change my password
+         * @description Requires the current password. Incorrect current password returns 403. Success invalidates all existing tokens and clears mandatory change state.
+         */
+        put: operations["changePassword"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/team-members/{id}": {
         parameters: {
             query?: never;
@@ -175,7 +239,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Inspect user membership
+         * @description ADMINISTRATOR only. Includes previously revoked membership state; missing organization, account or association returns 404.
+         */
+        get: operations["administrativeMembership"];
         /**
          * Grant organization membership
          * @description ADMINISTRATOR only. Requires active organization/account, records changes in the audit log, and reactivates revoked memberships. MEMBER and MANAGER are organization-local roles; neither grants platform administration. Repeating the same active grant is idempotent.
@@ -876,26 +944,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/users/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Process request — Partners
-         * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
-         */
-        get: operations["me"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/sortings/{id}": {
         parameters: {
             query?: never;
@@ -988,6 +1036,26 @@ export interface paths {
          * @description Authenticated access is checked by the application service. Business records require current organization membership; platform administration uses the administrator role.
          */
         get: operations["membership"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List organizations for administration
+         * @description ADMINISTRATOR only. Metadata access does not confer organization membership or business data access.
+         */
+        get: operations["administrativeList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1141,6 +1209,19 @@ export interface components {
             email?: string;
             /** @enum {string} */
             userRole?: "ADMINISTRATOR" | "CITY_HALL" | "ORGANIZATION" | "REPRESENTATIVE";
+            mustChangePassword?: boolean;
+        };
+        ResetPasswordRequest: {
+            temporaryPassword: string;
+        };
+        UpdateProfileRequest: {
+            fullName: string;
+            /** Format: email */
+            email: string;
+        };
+        ChangePasswordRequest: {
+            currentPassword: string;
+            newPassword: string;
         };
         TeamMemberRequest: {
             name: string;
@@ -1647,6 +1728,7 @@ export interface components {
         };
         LoginResponseDTO: {
             token?: string;
+            mustChangePassword?: boolean;
         };
         SaleTransitionRequest: {
             /** Format: int64 */
@@ -2448,6 +2530,96 @@ export interface operations {
             };
         };
     };
+    resetPassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description Temporary credential set; mandatory change required */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
+    updateMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProfileRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
+    changePassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangePasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description Password changed; authenticate again */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     get_1: {
         parameters: {
             query?: never;
@@ -2669,6 +2841,29 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    administrativeMembership: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membership"];
+                };
             };
         };
     };
@@ -4260,26 +4455,6 @@ export interface operations {
             };
         };
     };
-    me: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["UserResponse"];
-                };
-            };
-        };
-    };
     getById_6: {
         parameters: {
             query?: never;
@@ -4400,6 +4575,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Membership"];
+                };
+            };
+        };
+    };
+    administrativeList: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrganizationPage"];
                 };
             };
         };
