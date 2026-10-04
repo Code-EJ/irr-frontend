@@ -1,7 +1,7 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
 import { useState } from "react";
 import { isAxiosError } from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import InputText from "../components/InputText";
@@ -13,6 +13,7 @@ import { errorMessage } from "../shared/api/transport";
 export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   if (session.getToken()) return <Navigate to="/menu" replace />;
   return (
     <div className="login-layout">
@@ -51,6 +52,7 @@ export default function Login() {
           <p className="my-3">
             Entre com sua conta para acessar sua organização.
           </p>
+          {location.state?.passwordChanged && <p role="status">Senha alterada. Entre com sua nova senha.</p>}
           <SimpleForm
             initialValues={{ email: "", password: "" }}
             onSubmit={async (values) => {

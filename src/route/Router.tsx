@@ -7,6 +7,7 @@ import {
   Link,
   NavLink,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 import {
   SessionProvider,
@@ -22,7 +23,10 @@ import TeamPage from "../features/parties/TeamPage";
 import DocumentsPage from "../features/documents/DocumentsPage";
 import IntakeList from "../features/intake/IntakeList";
 import IntakeForm from "../features/intake/IntakeForm";
-import UserDetails from "../pages/Profile/UserDetails";
+import ProfilePage from "../features/identity/ProfilePage";
+import PasswordPage from "../features/identity/PasswordPage";
+import UsersPage from "../features/identity/UsersPage";
+import UserPage from "../features/identity/UserPage";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import {
@@ -40,6 +44,7 @@ import {
 } from "lucide-react";
 function Protected() {
   const state = useSession();
+  const location = useLocation();
   if (!session.getToken()) return <Navigate to="/login" replace />;
   if (state.loading) return <p role="status">Carregando sua conta…</p>;
   if (state.error)
@@ -50,6 +55,10 @@ function Protected() {
         <Button titulo="Sair" onClick={() => session.clear()} />
       </Card>
     );
+  if (state.account?.mustChangePassword)
+    return location.pathname === "/profile/password"
+      ? <main className="restricted-account"><PasswordPage mandatory /></main>
+      : <Navigate to="/profile/password" replace />;
   return (
     <div className="app-shell">
       <a href="#main-content" className="skip-link">
@@ -82,6 +91,7 @@ function Protected() {
             <UserRound size={19} />
             Minha conta
           </NavLink>
+          {state.account?.userRole === "ADMINISTRATOR" && <NavLink to="/users"><UsersRound size={19}/>Usuários</NavLink>}
           <NavLink to="/donors">
             <HandHeart size={19} />
             Doadores
@@ -154,6 +164,12 @@ function Protected() {
       </div>
     </div>
   );
+}
+/** UI guard complements server-side authorization and works without organization selection. */
+function AdministratorOnly() {
+  return useSession().account?.userRole === "ADMINISTRATOR"
+    ? <Outlet />
+    : <Card><h1>Acesso restrito</h1><p role="alert">Somente administradores podem gerenciar usuários.</p><Link to="/menu">Voltar ao início</Link></Card>;
 }
 function Scoped({ manager = false }: { manager?: boolean }) {
   const state = useSession();
@@ -257,7 +273,13 @@ export default function AppRouter() {
           <Route path="/login" element={<Login />} />
           <Route element={<Protected />}>
             <Route path="/menu" element={<Home />} />
-            <Route path="/profile" element={<UserDetails />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/password" element={<PasswordPage />} />
+            <Route element={<AdministratorOnly />}>
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/users/new" element={<UserPage key="new" />} />
+              <Route path="/users/:id" element={<UserPage />} />
+            </Route>
             <Route element={<Scoped />}>
               <Route path="/donors" element={<DonorsPage />} />
               <Route path="/team" element={<TeamPage />} />

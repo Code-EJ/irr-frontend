@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Identity workflows share the existing application surfaces and accessible controls. */
+.identity-card { max-width: 960px; margin-inline: auto; }
+.identity-form { margin-block: 24px; }
+.identity-form fieldset { display: grid; gap: 18px; min-width: 0; }
+.identity-form label { display: grid; gap: 7px; font-weight: 600; }
+.identity-form input, .identity-form select { width: 100%; padding: 12px 14px; border: 1px solid #bbcfc2; border-radius: 8px; background: white; color: #223c34; }
+.identity-form fieldset:disabled { opacity: .65; }
+.identity-security { border-top: 1px solid #e2e9e4; padding-top: 24px; margin-top: 28px; }
+.identity-security > p { margin-block: 12px; }
+.restricted-account { padding: clamp(16px, 5vw, 64px); }
+.restricted-account > .identity-card { max-width: 620px; }
+.membership-list { display: grid; gap: 10px; margin-block: 18px; }
+.membership-list li { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px; background: #f5f7f5; border-radius: 8px; }
+.identity-card [role="alert"] { color: #9b2d20; padding-block: 8px; }
+.identity-card [role="status"] { color: #226448; padding-block: 8px; }
+
 /* Application presentation. Author: Enzo Ribas (https://github.com/oEnzoRibas). */
 :root {
   font-family: "Segoe UI", system-ui, sans-serif;

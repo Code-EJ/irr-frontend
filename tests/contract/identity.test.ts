@@ -1,0 +1,67 @@
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+import {loadEnvFile} from "node:process";
+import {randomUUID} from "node:crypto";
+import {afterAll,beforeAll,expect,it,vi} from "vitest";
+import {isAxiosError} from "axios";
+import {apiClient} from "../../src/shared/api/client";
+import {session} from "../../src/shared/api/session";
+import {accounts,authenticate,currentAccount,updateProfile,changePassword,organizations,organizationAdministration as administration} from "../../src/features/identity/api";
+if(!process.env.IRR_BACKEND_ENV)throw new Error("Set IRR_BACKEND_ENV to a private local rehearsal environment.");
+loadEnvFile(process.env.IRR_BACKEND_ENV);
+if(!["localhost","127.0.0.1"].includes(new URL(apiClient.defaults.baseURL!).hostname))throw new Error("Identity fixtures are local-only.");
+const storage=new Map<string,string>();
+vi.stubGlobal("localStorage",{getItem:(key:string)=>storage.get(key)??null,setItem:(key:string,value:string)=>storage.set(key,value),removeItem:(key:string)=>storage.delete(key)});
+const suffix=randomUUID();
+const email=`identity-${suffix}@example.invalid`;
+const password=randomUUID();
+const replacement=randomUUID();
+const temporary=randomUUID();
+let adminToken="",userId="",organizationId="";
+let deleted=false;
+/** Strips request configuration before failures can enter test output. */
+async function safe<T>(operation:Promise<T>):Promise<T>{try{return await operation;}catch(error){throw new Error(isAxiosError(error)?`Identity request failed: ${error.response?.status??"network"}`:"Identity operation failed");}}
+async function status(operation:Promise<unknown>){try{await operation;return 200;}catch(error){return isAxiosError(error)?error.response?.status:0;}}
+beforeAll(async()=>{adminToken=await safe(authenticate(process.env.DEV_ADMIN_EMAIL!,process.env.DEV_ADMIN_PASSWORD!));session.setToken(adminToken);});
+afterAll(async()=>{session.setToken(adminToken);if(userId&&!deleted)await safe(accounts.deactivate(userId));if(organizationId)await safe(apiClient.delete(`/organizations/${organizationId}`));session.clear();});
+it("completes partner CRUD, self-service, credential reset and explicit membership lifecycle",async()=>{
+  const created=await safe(accounts.create({fullName:"Identity fixture",email,password,userRole:"REPRESENTATIVE"}));userId=created.id!;
+  expect(created.mustChangePassword).toBe(false);expect("passwordHash" in created).toBe(false);
+  expect((await safe(accounts.get(userId))).email).toBe(email);
+  expect((await safe(accounts.list(0))).total).toBeGreaterThan(0);
+  await safe(accounts.update(userId,{fullName:"Updated fixture",email,userRole:"CITY_HALL"}));
+  const org=await safe(apiClient.post("/organizations",{name:`Identity ${suffix}`,organizationType:"COOPERATIVE"}));organizationId=org.data.id;
+  expect((await safe(administration.list(0))).total).toBeGreaterThan(0);
+  expect(await status(administration.membership(organizationId,userId))).toBe(404);
+  await safe(administration.grant(organizationId,userId,"MEMBER"));
+  expect((await safe(administration.membership(organizationId,userId))).role).toBe("MEMBER");
+  const token=await safe(authenticate(email,password));session.setToken(token);
+  expect(await status(accounts.list(0))).toBe(403);
+  expect(await status(administration.list(0))).toBe(403);
+  expect((await safe(organizations())).some(value=>value.id===organizationId)).toBe(true);
+  await safe(updateProfile({fullName:"Self updated",email}));
+  expect((await safe(currentAccount())).fullName).toBe("Self updated");
+  expect(await status(updateProfile({fullName:"",email}))).toBe(400);
+  expect(await status(updateProfile({fullName:"Self",email:process.env.DEV_ADMIN_EMAIL!}))).toBe(409);
+  expect(await status(changePassword({currentPassword:"incorrect",newPassword:replacement}))).toBe(403);
+  await safe(changePassword({currentPassword:password,newPassword:replacement}));
+  expect(await status(currentAccount())).toBe(401);
+  expect(await status(authenticate(email,password))).toBe(401);
+  const changedToken=await safe(authenticate(email,replacement));session.setToken(changedToken);
+  expect((await safe(currentAccount())).mustChangePassword).toBe(false);
+  session.setToken(adminToken);await safe(administration.grant(organizationId,userId,"MANAGER"));
+  expect((await safe(administration.membership(organizationId,userId))).role).toBe("MANAGER");
+  await safe(accounts.reset(userId,temporary));session.setToken(changedToken);
+  expect(await status(currentAccount())).toBe(401);
+  session.setToken(await safe(authenticate(email,temporary)));
+  expect((await safe(currentAccount())).mustChangePassword).toBe(true);
+  expect(await status(organizations())).toBe(403);
+  expect(await status(updateProfile({fullName:"Blocked",email}))).toBe(403);
+  await safe(changePassword({currentPassword:temporary,newPassword:replacement}));
+  const finalToken=await safe(authenticate(email,replacement));
+  session.setToken(adminToken);await safe(administration.revoke(organizationId,userId));
+  expect((await safe(administration.membership(organizationId,userId))).active).toBe(false);
+  session.setToken(finalToken);expect((await safe(organizations())).some(value=>value.id===organizationId)).toBe(false);
+  session.setToken(adminToken);await safe(accounts.deactivate(userId));deleted=true;
+  expect(await status(accounts.get(userId))).toBe(404);
+  session.setToken(finalToken);expect(await status(currentAccount())).toBe(401);
+});

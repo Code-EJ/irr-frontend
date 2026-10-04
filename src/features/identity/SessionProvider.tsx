@@ -69,10 +69,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       error: "",
     });
     void (async () => {
-      const [account, items] = await Promise.all([
-        currentAccount(),
-        organizations(),
-      ]);
+      const account = await currentAccount();
+      const items = account.mustChangePassword ? [] : await organizations();
       if (!active) return;
       const selected =
         items.find((org) => org.id === session.getOrganization()) ?? null;
