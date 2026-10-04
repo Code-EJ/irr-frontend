@@ -19,7 +19,7 @@ export default function Button({
       type={type}
       className={
         "button " +
-        (variant === "secondary" ? "button-secondary " : "button-primary ") +
+        (variant === "secondary" ? "button-secondary " : variant === "danger" ? "button-danger " : "button-primary ") +
         className
       }
       {...rest}

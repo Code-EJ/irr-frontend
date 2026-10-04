@@ -12,6 +12,7 @@ import {errorMessage} from "../../shared/api/transport";
 import MembershipPanel from "./MembershipPanel";
 import {useSession} from "./SessionProvider";
 import {session} from "../../shared/api/session";
+import {KeyRound, UserRoundX} from "lucide-react";
 /** Loads administrative details from the API, including when reached by a direct URL. */
 export default function UserPage(){
   const {id}=useParams();
@@ -64,11 +65,11 @@ function AccountEditor({account,onUpdated}:{account:Account|null,onUpdated:(valu
     </form>}
     {account?.id&&<>
       {<div className="identity-security"><h2>Segurança e acesso</h2><div className="form-actions"><Button variant="secondary" titulo="Redefinir senha" disabled={busy} onClick={()=>open("reset")}/><Button variant="secondary" titulo="Desativar usuário" disabled={busy} onClick={()=>open("deactivate")}/></div></div>}
-      <MembershipPanel userId={account.id}/>
+      <MembershipPanel userId={account.id} userName={account.fullName}/>
     </>}
-    {action&&<Modal label={action==="reset"?"Redefinir senha":"Desativar usuário"} busy={busy} onClose={()=>open(null)}>
-      <h2>{action==="reset"?"Redefinir senha":"Desativar usuário"}</h2><p>{account?.fullName}</p>
-      <p>{action==="reset"?"Todas as sessões serão encerradas. A pessoa deverá trocar esta senha temporária antes de acessar a plataforma.":"O acesso será bloqueado imediatamente. O histórico será preservado. Esta tela não permite reativar a conta."}</p>
+    {action&&<Modal label={action==="reset"?"Redefinir senha":"Desativar usuário"} title={action==="reset"?"Redefinir senha":"Desativar usuário"} description={action==="reset"?"Defina uma senha temporária para recuperar o acesso à conta.":"Confirme o bloqueio de acesso desta conta."} icon={action==="reset"?<KeyRound size={23}/>:<UserRoundX size={23}/>} tone={action==="deactivate"?"danger":"default"} busy={busy} onClose={()=>open(null)}>
+      <div className="dialog-context"><small>Conta selecionada</small><strong>{account?.fullName}</strong></div>
+      <p className="dialog-notice dialog-notice-warning">{action==="reset"?"Todas as sessões serão encerradas. A pessoa deverá trocar esta senha temporária antes de acessar a plataforma.":"O acesso será bloqueado imediatamente. O histórico será preservado. Esta tela não permite reativar a conta."}</p>
       <form className="identity-form" onSubmit={async event=>{
         event.preventDefault();if(busy)return;const failure=action==="reset"?passwordError(password,confirmation):"";setError(failure);if(failure)return;setBusy(true);
         try{
@@ -77,7 +78,7 @@ function AccountEditor({account,onUpdated}:{account:Account|null,onUpdated:(valu
         }catch(err){setError(isAxiosError(err)&&err.response?.status===409?"Não é possível remover o último Administrador Geral ativo. Cadastre outro administrador primeiro.":errorMessage(err));}finally{setBusy(false);}
       }}><fieldset disabled={busy}>
         {action==="reset"&&<PasswordFields password={password} confirmation={confirmation} setPassword={setPassword} setConfirmation={setConfirmation}/>}
-        {error&&<p role="alert">{error}</p>}<div className="form-actions"><Button type="submit" titulo={busy?"Aguarde…":action==="reset"?"Confirmar redefinição":"Confirmar desativação"}/><Button variant="secondary" titulo="Cancelar" onClick={()=>open(null)}/></div>
+        {error&&<p role="alert">{error}</p>}<div className="dialog-footer"><Button variant="secondary" titulo="Cancelar" onClick={()=>open(null)}/><Button variant={action==="deactivate"?"danger":undefined} type="submit" titulo={busy?"Aguarde…":action==="reset"?"Confirmar redefinição":"Confirmar desativação"}/></div>
       </fieldset></form>
     </Modal>}
   </Card>;

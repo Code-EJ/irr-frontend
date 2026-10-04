@@ -732,21 +732,89 @@ td button {
 
 .workflow-dialog {
   padding: 0;
-  border: 0;
-  border-radius: 16px;
-  width: min(440px, calc(100vw - 32px));
-  max-height: calc(100dvh - 32px);
+  border: 1px solid #dce6df;
+  border-radius: 20px;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
   overflow-y: auto;
   background: white;
   color: #223c34;
+  box-shadow: 0 24px 80px #102b2033;
 }
 .workflow-dialog::backdrop {
-  background: #102b2066;
+  background: #102b2080;
   backdrop-filter: blur(4px);
 }
-.workflow-dialog > .surface {
+.workflow-dialog-content {
+  padding: 28px;
+  overflow-wrap: anywhere;
+}
+.workflow-dialog-content > .surface {
   border: 0;
+  padding: 0;
+  box-shadow: none;
   width: 100%;
+  max-width: none;
+}
+.dialog-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #dce6df;
+  border-radius: 10px;
+  background: white;
+  color: #52655b;
+}
+.dialog-close:hover:not(:disabled) { background: #eef4ef; }
+.dialog-close:disabled { opacity: .45; cursor: wait; }
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 28px 64px 24px 28px;
+  border-bottom: 1px solid #e3ebe5;
+  background: #f8fbf8;
+}
+.dialog-header h2 { font-size: 22px; font-weight: 700; line-height: 1.3; }
+.dialog-header p { margin-top: 8px; font-size: 13px; line-height: 1.7; color: #64766b; }
+.dialog-icon { display: grid; place-items: center; flex: 0 0 44px; height: 44px; border-radius: 12px; color: #176b49; background: #e5f2e9; }
+.workflow-dialog-danger .dialog-icon { color: #a33636; background: #fbe8e7; }
+.workflow-dialog-content > .surface > :is(h2,h3):first-child { padding-right: 38px; }
+.workflow-dialog .identity-form { margin-block: 0; }
+.workflow-dialog fieldset.identity-form { display: grid; gap: 18px; border: 0; padding: 0; min-width: 0; }
+.workflow-dialog .identity-form label { font-size: 13px; }
+.workflow-dialog .identity-form label > input,
+.workflow-dialog .identity-form label > select { min-height: 46px; margin: 0; }
+.workflow-dialog .muted-note { font-size: 12px; line-height: 1.7; color: #64766b; }
+.workflow-dialog .form-actions { margin-top: 6px; }
+.dialog-context { padding: 16px 18px; background: #f5f8f5; border: 1px solid #e2eae4; border-radius: 12px; margin-bottom: 24px; }
+.dialog-context small { display: block; font-size: 11px; color: #64766b; margin-bottom: 6px; }
+.dialog-context strong { display: block; font-size: 15px; line-height: 1.6; }
+.dialog-context p { font-size: 12px; line-height: 1.6; color: #64766b; margin-top: 6px; }
+.dialog-notice { padding: 14px 16px; border-radius: 10px; border: 1px solid #dfe9e2; background: #f5f8f5; font-size: 13px; line-height: 1.7; margin-bottom: 22px; }
+.dialog-notice-warning { border-color: #efdfbd; background: #fffbf2; color: #775825; }
+.workflow-dialog [role="alert"] { padding: 12px 14px; background: #fff3f2; border: 1px solid #f2d7d3; border-radius: 10px; line-height: 1.6; }
+.workflow-dialog [role="status"] { font-size: 13px; line-height: 1.6; margin-block: 14px; color: #176b49; }
+.dialog-footer { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; padding-top: 20px; margin-top: 24px; border-top: 1px solid #e3ebe5; }
+.button-danger { color: white; background: #aa3737; }
+.button-danger:hover { background: #8b2929; }
+.dialog-revoke { margin-top: 20px; }
+.dialog-revoke .form-actions { margin-top: 14px; }
+@media (max-width: 600px) {
+  .workflow-dialog { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); border-radius: 16px; }
+  .workflow-dialog-content { padding: 22px 18px; }
+  .dialog-header { padding: 22px 58px 20px 18px; gap: 12px; }
+  .dialog-header h2 { font-size: 20px; }
+  .dialog-icon { flex-basis: 38px; height: 38px; }
+  .dialog-close { top: 14px; right: 12px; }
+  .dialog-footer { flex-direction: column-reverse; }
+  .dialog-footer .button { width: 100%; white-space: normal; }
+  .workflow-dialog .membership-list li { align-items: flex-start; }
+  .workflow-dialog .membership-list small { overflow-wrap: anywhere; }
 }
 
 /* Scoped intake and reference workflows. */

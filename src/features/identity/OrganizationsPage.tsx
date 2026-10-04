@@ -11,6 +11,7 @@ import {accounts,organizationAdministration as administration,type Account,type 
 import {MembershipEditor} from "./MembershipPanel";
 import {passwordError} from "./validation";
 import {useSession} from "./SessionProvider";
+import {Building2, UsersRound} from "lucide-react";
 
 /** Bounded global administration, separate from the selected operational organization. */
 export default function OrganizationsPage(){
@@ -65,11 +66,10 @@ function OrganizationEditor({initial}:{initial:Organization|null}){
       <Button titulo="Gerenciar membros" onClick={()=>setManage(true)}/>
       <Button variant="secondary" titulo="Desativar organização" onClick={()=>setDeactivate(true)}/>
     </section>}
-    {manage&&<Modal label="Selecionar membro" busy={false} onClose={()=>setManage(false)}><UserSelection onSelect={user=>{setMember(user);setManage(false);}}/><Button titulo="Fechar" onClick={()=>setManage(false)}/></Modal>}
-    {member&&organization&&<MembershipEditor key={member.id} organization={organization} userId={member.id!} onClose={()=>{setMember(null);state.reload();}}/>}
-    {deactivate&&organization?.id&&<Modal label="Desativar organização" busy={busy} onClose={()=>setDeactivate(false)}><h2>Desativar {organization.name}?</h2><p>Todos os acessos à unidade serão bloqueados. Os registros e o histórico serão preservados.</p>{error&&<p role="alert">{error}</p>}
-      <Button titulo={busy?"Desativando…":"Confirmar desativação"} disabled={busy} onClick={()=>{setBusy(true);setError("");void administration.deactivate(organization.id!).then(()=>{state.reload();navigate("/organizations",{replace:true});}).catch(err=>setError(errorMessage(err))).finally(()=>setBusy(false));}}/>
-      <Button variant="secondary" titulo="Cancelar" disabled={busy} onClick={()=>setDeactivate(false)}/>
+    {manage&&<Modal label="Selecionar membro" title="Gerenciar membros" description="Selecione uma conta para consultar ou alterar o vínculo." icon={<UsersRound size={23}/>} busy={false} onClose={()=>setManage(false)}><UserSelection onSelect={user=>{setMember(user);setManage(false);}}/><div className="dialog-footer"><Button variant="secondary" titulo="Fechar" onClick={()=>setManage(false)}/></div></Modal>}
+    {member&&organization&&<MembershipEditor key={member.id} organization={organization} userId={member.id!} userName={member.fullName} onClose={()=>{setMember(null);state.reload();}}/>}
+    {deactivate&&organization?.id&&<Modal label="Desativar organização" title="Desativar organização" description="Confirme o bloqueio de acesso à unidade." icon={<Building2 size={23}/>} tone="danger" busy={busy} onClose={()=>setDeactivate(false)}><div className="dialog-context"><small>Organização selecionada</small><strong>{organization.name}</strong></div><p className="dialog-notice dialog-notice-warning">Todos os acessos à unidade serão bloqueados. Os registros e o histórico serão preservados.</p>{error&&<p role="alert">{error}</p>}
+      <div className="dialog-footer"><Button variant="secondary" titulo="Cancelar" disabled={busy} onClick={()=>setDeactivate(false)}/><Button variant="danger" titulo={busy?"Desativando…":"Confirmar desativação"} disabled={busy} onClick={()=>{setBusy(true);setError("");void administration.deactivate(organization.id!).then(()=>{state.reload();navigate("/organizations",{replace:true});}).catch(err=>setError(errorMessage(err))).finally(()=>setBusy(false));}}/></div>
     </Modal>}
   </Card>;
 }

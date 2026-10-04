@@ -7,8 +7,9 @@ import Pagination from "../../shared/ui/Pagination";
 import {usePage} from "../../shared/ui/usePage";
 import {errorMessage} from "../../shared/api/transport";
 import {organizationAdministration as administration,type Membership,type Organization} from "./api";
+import {UsersRound} from "lucide-react";
 /** Explicit metadata discovery never changes the administrator's own organization context. */
-export default function MembershipPanel({userId}:{userId:string}){
+export default function MembershipPanel({userId,userName}:{userId:string,userName?:string}){
   const [page,setPage]=useState(0);
   const [revision,setRevision]=useState(0);
   const {data,busy,error}=usePage(administration.list,page,revision);
@@ -19,10 +20,11 @@ export default function MembershipPanel({userId}:{userId:string}){
       <ul className="membership-list">{data.items.map(org=><li key={org.id}><span>{org.name}</span><Button variant="secondary" titulo="Gerenciar vínculo" aria-label={`Gerenciar vínculo com ${org.name}`} onClick={()=>setSelected(org)}/></li>)}</ul>
       <Pagination page={page} pages={data.pages} onChange={setPage}/>
     </>}
-    {selected?.id&&<MembershipEditor key={selected.id} organization={selected} userId={userId} onClose={()=>setSelected(null)}/>}
+    {selected?.id&&<MembershipEditor key={selected.id} organization={selected} userId={userId} userName={userName} onClose={()=>setSelected(null)}/>}
   </section>;
 }
-export function MembershipEditor({organization,userId,onClose}:{organization:Organization,userId:string,onClose:()=>void}){
+/** Edits actual membership with explicit revocation confirmation; global account authority is unchanged. */
+export function MembershipEditor({organization,userId,userName,onClose}:{organization:Organization,userId:string,userName?:string,onClose:()=>void}){
   const [membership,setMembership]=useState<Membership|null>(null);
   const [role,setRole]=useState<"MEMBER"|"MANAGER">("MEMBER");
   const [busy,setBusy]=useState(true);
@@ -48,15 +50,15 @@ export function MembershipEditor({organization,userId,onClose}:{organization:Org
       setConfirmRevoke(false);
     }catch(err){setError(errorMessage(err));}finally{setBusy(false);}
   }
-  return <Modal label="Gerenciar vínculo" busy={busy} onClose={onClose}>
-    <h2>{organization.name}</h2><p>{membership?.active?`Vínculo ativo: ${membership.role==="MANAGER"?"Administrador da Organização":"Membro"}`:"Sem vínculo ativo"}</p>
+  return <Modal label="Gerenciar vínculo" title="Gerenciar vínculo" description="Defina o acesso do usuário a esta organização." icon={<UsersRound size={23}/>} busy={busy} onClose={onClose}>
+    <div className="dialog-context"><small>Organização</small><strong>{organization.name}</strong>{userName&&<p>Usuário: {userName}</p>}<p>{membership?.active?`Vínculo ativo: ${membership.role==="MANAGER"?"Administrador da Organização":"Membro"}`:loaded?"Sem vínculo ativo":"Consultando vínculo…"}</p></div>
     {busy&&<p role="status">Aguarde…</p>}{error&&<p role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}
     {!loaded&&!busy&&<Button titulo="Tentar novamente" onClick={()=>setRevision(n=>n+1)}/>}
     <fieldset disabled={busy||!loaded} className="identity-form">
       <label>Permissão na organização<select value={role} onChange={e=>setRole(e.target.value as "MEMBER"|"MANAGER")}><option value="MEMBER">Membro</option><option value="MANAGER">Administrador da Organização</option></select></label>
       <p className="muted-note">Administradores da Organização podem alterar os dados operacionais da organização. Nenhum vínculo concede administração da plataforma.</p>
-      <Button titulo="Salvar vínculo" onClick={()=>void save(false)}/>
-      {membership?.active&&(confirmRevoke?<div role="alert"><p>Revogar o acesso a esta organização? O histórico será preservado.</p><Button titulo="Confirmar revogação" onClick={()=>void save(true)}/><Button variant="secondary" titulo="Cancelar revogação" onClick={()=>setConfirmRevoke(false)}/></div>:<Button variant="secondary" titulo="Revogar vínculo" onClick={()=>setConfirmRevoke(true)}/>)}
-    </fieldset><Button variant="secondary" titulo="Fechar" disabled={busy} onClick={onClose}/>
+      <div className="form-actions"><Button titulo={busy?"Salvando…":"Salvar vínculo"} disabled={confirmRevoke} onClick={()=>void save(false)}/>{membership?.active&&!confirmRevoke&&<Button variant="secondary" titulo="Revogar vínculo" onClick={()=>setConfirmRevoke(true)}/>}</div>
+      {membership?.active&&confirmRevoke&&<div role="alert" className="dialog-revoke"><strong>Revogar vínculo?</strong><p>O acesso a esta organização será removido imediatamente. O histórico será preservado.</p><div className="form-actions"><Button variant="secondary" titulo="Cancelar revogação" onClick={()=>setConfirmRevoke(false)}/><Button variant="danger" titulo="Confirmar revogação" onClick={()=>void save(true)}/></div></div>}
+    </fieldset><div className="dialog-footer"><Button variant="secondary" titulo="Fechar" disabled={busy} onClick={onClose}/></div>
   </Modal>;
 }
