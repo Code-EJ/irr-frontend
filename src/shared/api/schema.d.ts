@@ -64,7 +64,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Process request — Accounts
+         * Get by ID — Accounts
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["get"];
@@ -184,7 +184,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Process request — Sales
+         * Get by ID — Sales
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["get_2"];
@@ -204,6 +204,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/routes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get by ID — Routes
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["get_3"];
+        /**
+         * Update — Routes
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        put: operations["update_4"];
+        post?: never;
+        /**
+         * Deactivate — Routes
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        delete: operations["deactivate_1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/route-executions/{id}/areas/{areaId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Record declared coverage — Route executions
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        put: operations["coverage"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/organizations/{id}": {
         parameters: {
             query?: never;
@@ -215,18 +263,18 @@ export interface paths {
          * Get an accessible organization
          * @description Missing, inactive and foreign organizations all return 404.
          */
-        get: operations["get_3"];
+        get: operations["get_4"];
         /**
          * Update — Organizations
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        put: operations["update_4"];
+        put: operations["update_5"];
         post?: never;
         /**
          * Deactivate — Organizations
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        delete: operations["deactivate_1"];
+        delete: operations["deactivate_2"];
         options?: never;
         head?: never;
         patch?: never;
@@ -276,13 +324,13 @@ export interface paths {
          * Update — Material types
          * @description Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.
          */
-        put: operations["update_5"];
+        put: operations["update_6"];
         post?: never;
         /**
          * Deactivate — Material types
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        delete: operations["deactivate_2"];
+        delete: operations["deactivate_3"];
         options?: never;
         head?: never;
         patch?: never;
@@ -304,13 +352,13 @@ export interface paths {
          * Update — Material subtypes
          * @description Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.
          */
-        put: operations["update_6"];
+        put: operations["update_7"];
         post?: never;
         /**
          * Deactivate — Material subtypes
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        delete: operations["deactivate_3"];
+        delete: operations["deactivate_4"];
         options?: never;
         head?: never;
         patch?: never;
@@ -332,13 +380,13 @@ export interface paths {
          * Update — Material categories
          * @description Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.
          */
-        put: operations["update_7"];
+        put: operations["update_8"];
         post?: never;
         /**
          * Deactivate — Material categories
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        delete: operations["deactivate_4"];
+        delete: operations["deactivate_5"];
         options?: never;
         head?: never;
         patch?: never;
@@ -360,13 +408,13 @@ export interface paths {
          * Update — Donors
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        put: operations["update_8"];
+        put: operations["update_9"];
         post?: never;
         /**
          * Deactivate — Donors
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        delete: operations["deactivate_5"];
+        delete: operations["deactivate_6"];
         options?: never;
         head?: never;
         patch?: never;
@@ -388,13 +436,13 @@ export interface paths {
          * Update — Donations
          * @description Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.
          */
-        put: operations["update_9"];
+        put: operations["update_10"];
         post?: never;
         /**
          * Deactivate — Donations
          * @description Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.
          */
-        delete: operations["deactivate_6"];
+        delete: operations["deactivate_7"];
         options?: never;
         head?: never;
         patch?: never;
@@ -408,10 +456,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Process request — Attachments
+         * Get by ID — Attachments
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        get: operations["get_4"];
+        get: operations["get_5"];
         /**
          * Process request — Attachments
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
@@ -436,15 +484,15 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Process request — Collections
+         * Get by ID — Collections
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        get: operations["get_5"];
+        get: operations["get_6"];
         /**
          * Update — Collections
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        put: operations["update_10"];
+        put: operations["update_11"];
         post?: never;
         /**
          * Process request — Collections
@@ -467,12 +515,12 @@ export interface paths {
          * Get buyer
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        get: operations["get_6"];
+        get: operations["get_7"];
         /**
          * Update buyer
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        put: operations["update_11"];
+        put: operations["update_12"];
         post?: never;
         /**
          * Deactivate buyer
@@ -724,6 +772,114 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/routes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List — Routes
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["list_5"];
+        put?: never;
+        /**
+         * Create — Routes
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        post: operations["create_5"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/route-executions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List — Route executions
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["list_6"];
+        put?: never;
+        /**
+         * Create — Route executions
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        post: operations["create_6"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/route-executions/{id}/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start execution — Route executions
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        post: operations["start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/route-executions/{id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Complete execution — Route executions
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        post: operations["complete"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/route-executions/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel execution — Route executions
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        post: operations["cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/pressings": {
         parameters: {
             query?: never;
@@ -735,13 +891,13 @@ export interface paths {
          * List — Pressing
          * @description Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.
          */
-        get: operations["list_5"];
+        get: operations["list_7"];
         put?: never;
         /**
          * Create — Pressing
          * @description Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.
          */
-        post: operations["create_5"];
+        post: operations["create_7"];
         delete?: never;
         options?: never;
         head?: never;
@@ -779,13 +935,61 @@ export interface paths {
          * List accessible organizations
          * @description Global administrators see all active organizations. Other accounts require active membership.
          */
-        get: operations["list_6"];
+        get: operations["list_8"];
         put?: never;
         /**
          * Create an organization
          * @description ADMINISTRATOR only. Creates an audit event in the same transaction. Classification is descriptive and never grants permissions. Add members explicitly afterward.
          */
-        post: operations["create_6"];
+        post: operations["create_8"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/neighborhoods": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List neighborhoods — Territory
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["neighborhoods"];
+        put?: never;
+        /**
+         * Resolve or register neighborhood — Territory
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        post: operations["neighborhood"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/municipalities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List municipalities — Territory
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["municipalities"];
+        put?: never;
+        /**
+         * Resolve or register municipality — Territory
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        post: operations["municipality"];
         delete?: never;
         options?: never;
         head?: never;
@@ -803,13 +1007,13 @@ export interface paths {
          * List — Material types
          * @description Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.
          */
-        get: operations["list_7"];
+        get: operations["list_9"];
         put?: never;
         /**
          * Create — Material types
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        post: operations["create_7"];
+        post: operations["create_9"];
         delete?: never;
         options?: never;
         head?: never;
@@ -827,13 +1031,13 @@ export interface paths {
          * List — Material subtypes
          * @description Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.
          */
-        get: operations["list_8"];
+        get: operations["list_10"];
         put?: never;
         /**
          * Create — Material subtypes
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        post: operations["create_8"];
+        post: operations["create_10"];
         delete?: never;
         options?: never;
         head?: never;
@@ -851,13 +1055,13 @@ export interface paths {
          * List — Material categories
          * @description Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.
          */
-        get: operations["list_9"];
+        get: operations["list_11"];
         put?: never;
         /**
          * Create — Material categories
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        post: operations["create_9"];
+        post: operations["create_11"];
         delete?: never;
         options?: never;
         head?: never;
@@ -875,13 +1079,13 @@ export interface paths {
          * List — Donors
          * @description Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.
          */
-        get: operations["list_10"];
+        get: operations["list_12"];
         put?: never;
         /**
          * Create — Donors
          * @description Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.
          */
-        post: operations["create_10"];
+        post: operations["create_12"];
         delete?: never;
         options?: never;
         head?: never;
@@ -899,13 +1103,13 @@ export interface paths {
          * List — Donations
          * @description Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.
          */
-        get: operations["list_11"];
+        get: operations["list_13"];
         put?: never;
         /**
          * Create — Donations
          * @description Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.
          */
-        post: operations["create_11"];
+        post: operations["create_13"];
         delete?: never;
         options?: never;
         head?: never;
@@ -923,7 +1127,7 @@ export interface paths {
          * List — Attachments
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        get: operations["list_12"];
+        get: operations["list_14"];
         put?: never;
         /**
          * Upload an attachment
@@ -947,13 +1151,13 @@ export interface paths {
          * List — Collections
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        get: operations["list_13"];
+        get: operations["list_15"];
         put?: never;
         /**
          * Create — Collections
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        post: operations["create_12"];
+        post: operations["create_14"];
         delete?: never;
         options?: never;
         head?: never;
@@ -971,13 +1175,13 @@ export interface paths {
          * List buyers
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        get: operations["list_14"];
+        get: operations["list_16"];
         put?: never;
         /**
          * Create buyer
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
-        post: operations["create_13"];
+        post: operations["create_15"];
         delete?: never;
         options?: never;
         head?: never;
@@ -996,6 +1200,46 @@ export interface paths {
          * @description Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.
          */
         get: operations["getById_6"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/routes/{id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List history — Routes
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["events"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/route-executions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get by ID — Route executions
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["get_8"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1076,6 +1320,46 @@ export interface paths {
          * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
          */
         get: operations["membership"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/neighborhoods/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Resolve or register neighborhood — Territory
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["neighborhood_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/municipalities/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Resolve or register municipality — Territory
+         * @description Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.
+         */
+        get: operations["municipality_1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1350,6 +1634,152 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        RouteAreaRequest: {
+            /** Format: uuid */
+            neighborhoodId: string;
+            street?: string;
+        };
+        RouteRequest: {
+            name: string;
+            /** Format: uuid */
+            municipalityId: string;
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE";
+            /** Format: int64 */
+            version?: number;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            plannedDistanceKm?: string;
+            /** Format: int32 */
+            plannedDurationMinutes?: number;
+            areas: components["schemas"]["RouteAreaRequest"][];
+        };
+        RouteAreaResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            neighborhoodId?: string;
+            neighborhoodName?: string;
+            /** Format: int32 */
+            sequence?: number;
+            street?: string;
+        };
+        RouteResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            organizationId?: string;
+            /** Format: uuid */
+            municipalityId?: string;
+            municipalityName?: string;
+            municipalityIbgeCode?: string;
+            municipalityStateCode?: string;
+            name?: string;
+            /** @enum {string} */
+            status?: "DRAFT" | "ACTIVE";
+            isActive?: boolean;
+            /** Format: int64 */
+            version?: number;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            plannedDistanceKm?: string;
+            /** Format: int32 */
+            plannedDurationMinutes?: number;
+            areas?: components["schemas"]["RouteAreaResponse"][];
+            /** Format: uuid */
+            createdBy?: string;
+            /** Format: uuid */
+            updatedBy?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
+        RouteExecutionCoverageCommand: {
+            /** Format: int64 */
+            version: number;
+            covered: boolean;
+        };
+        RouteExecutionAreaResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            sourceAreaId?: string;
+            /** Format: uuid */
+            neighborhoodId?: string;
+            neighborhoodName?: string;
+            /** Format: int32 */
+            sequence?: number;
+            street?: string;
+            covered?: boolean;
+        };
+        RouteExecutionResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            organizationId?: string;
+            /** Format: uuid */
+            routeId?: string;
+            /** Format: int64 */
+            routeVersion?: number;
+            routeName?: string;
+            /** Format: uuid */
+            municipalityId?: string;
+            municipalityName?: string;
+            municipalityIbgeCode?: string;
+            municipalityStateCode?: string;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            plannedDistanceKm?: string;
+            /** Format: int32 */
+            plannedDurationMinutes?: number;
+            /** Format: date-time */
+            plannedStartAt?: string;
+            /** @enum {string} */
+            status?: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+            /** Format: int64 */
+            version?: number;
+            /** Format: uuid */
+            vehicleId?: string;
+            vehicleLicensePlate?: string;
+            /** Format: uuid */
+            driverId?: string;
+            driverName?: string;
+            /** Format: date-time */
+            startedAt?: string;
+            /** Format: date-time */
+            finishedAt?: string;
+            /** Format: date-time */
+            cancelledAt?: string;
+            cancellationReason?: string;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            distanceKm?: string;
+            areas?: components["schemas"]["RouteExecutionAreaResponse"][];
+            team?: components["schemas"]["RouteExecutionTeamResponse"][];
+            /** Format: uuid */
+            createdBy?: string;
+            /** Format: uuid */
+            updatedBy?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
+        RouteExecutionTeamResponse: {
+            /** Format: uuid */
+            teamMemberId?: string;
+            name?: string;
+            role?: string;
+        };
         CreateOrganization: {
             name: string;
             organizationType: string;
@@ -1570,6 +2000,8 @@ export interface components {
              * @example 123.4500
              */
             distanceKm?: string;
+            /** Format: uuid */
+            routeExecutionId?: string;
             scheduleValid?: boolean;
         };
         CollectionResponseDTO: {
@@ -1609,6 +2041,8 @@ export interface components {
              * @example 123.4500
              */
             distanceKm?: string;
+            /** Format: uuid */
+            routeExecutionId?: string;
         };
         BuyerRequest: {
             name: string;
@@ -1762,6 +2196,35 @@ export interface components {
             /** Format: int64 */
             version: number;
         };
+        RouteExecutionRequest: {
+            /** Format: uuid */
+            routeId: string;
+            /** Format: date-time */
+            plannedStartAt: string;
+            /** Format: uuid */
+            vehicleId: string;
+            /** Format: uuid */
+            driverId: string;
+            teamMemberIds?: string[];
+        };
+        RouteExecutionVersionCommand: {
+            /** Format: int64 */
+            version: number;
+        };
+        RouteExecutionCompletionCommand: {
+            /** Format: int64 */
+            version: number;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            distanceKm?: string;
+        };
+        RouteExecutionCancellationCommand: {
+            /** Format: int64 */
+            version: number;
+            reason: string;
+        };
         PressedBaleRequestDTO: {
             /** Format: uuid */
             sortedItemId: string;
@@ -1838,6 +2301,34 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
             status?: string;
+        };
+        NeighborhoodRequest: {
+            /** Format: uuid */
+            municipalityId: string;
+            name: string;
+        };
+        NeighborhoodResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            municipalityId?: string;
+            name?: string;
+            /** Format: date-time */
+            createdAt?: string;
+        };
+        MunicipalityRequest: {
+            ibgeCode: string;
+            name: string;
+            stateCode: string;
+        };
+        MunicipalityResponse: {
+            /** Format: uuid */
+            id?: string;
+            ibgeCode?: string;
+            name?: string;
+            stateCode?: string;
+            /** Format: date-time */
+            createdAt?: string;
         };
         MaterialTypeCreateRequestDTO: {
             /** Format: uuid */
@@ -1986,6 +2477,75 @@ export interface components {
             last?: boolean;
             empty?: boolean;
         };
+        PageRouteResponse: {
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            size?: number;
+            content?: components["schemas"]["RouteResponse"][];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            first?: boolean;
+            last?: boolean;
+            empty?: boolean;
+        };
+        PageRouteEventResponse: {
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            size?: number;
+            content?: components["schemas"]["RouteEventResponse"][];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            first?: boolean;
+            last?: boolean;
+            empty?: boolean;
+        };
+        RouteEventResponse: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            routeId?: string;
+            /** Format: uuid */
+            executionId?: string;
+            /** Format: uuid */
+            actorId?: string;
+            action?: string;
+            /** Format: int64 */
+            version?: number;
+            /** Format: date-time */
+            recordedAt?: string;
+        };
+        PageRouteExecutionResponse: {
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            size?: number;
+            content?: components["schemas"]["RouteExecutionResponse"][];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            first?: boolean;
+            last?: boolean;
+            empty?: boolean;
+        };
         Summary: {
             /** Format: date */
             from?: string;
@@ -2063,6 +2623,42 @@ export interface components {
             size?: number;
             /** Format: int64 */
             totalElements?: number;
+        };
+        PageNeighborhoodResponse: {
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            size?: number;
+            content?: components["schemas"]["NeighborhoodResponse"][];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            first?: boolean;
+            last?: boolean;
+            empty?: boolean;
+        };
+        PageMunicipalityResponse: {
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            size?: number;
+            content?: components["schemas"]["MunicipalityResponse"][];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            first?: boolean;
+            last?: boolean;
+            empty?: boolean;
         };
         PageMaterialTypeResponseDTO: {
             /** Format: int32 */
@@ -2807,6 +3403,115 @@ export interface operations {
     get_3: {
         parameters: {
             query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteResponse"];
+                };
+            };
+        };
+    };
+    update_4: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RouteRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteResponse"];
+                };
+            };
+        };
+    };
+    deactivate_1: {
+        parameters: {
+            query: {
+                version: number;
+            };
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    coverage: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+                areaId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RouteExecutionCoverageCommand"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteExecutionResponse"];
+                };
+            };
+        };
+    };
+    get_4: {
+        parameters: {
+            query?: never;
             header?: never;
             path: {
                 id: string;
@@ -2826,7 +3531,7 @@ export interface operations {
             };
         };
     };
-    update_4: {
+    update_5: {
         parameters: {
             query?: never;
             header?: never;
@@ -2852,7 +3557,7 @@ export interface operations {
             };
         };
     };
-    deactivate_1: {
+    deactivate_2: {
         parameters: {
             query?: never;
             header?: never;
@@ -2968,7 +3673,7 @@ export interface operations {
             };
         };
     };
-    update_5: {
+    update_6: {
         parameters: {
             query?: never;
             header: {
@@ -2997,7 +3702,7 @@ export interface operations {
             };
         };
     };
-    deactivate_2: {
+    deactivate_3: {
         parameters: {
             query?: never;
             header: {
@@ -3045,7 +3750,7 @@ export interface operations {
             };
         };
     };
-    update_6: {
+    update_7: {
         parameters: {
             query?: never;
             header: {
@@ -3074,7 +3779,7 @@ export interface operations {
             };
         };
     };
-    deactivate_3: {
+    deactivate_4: {
         parameters: {
             query?: never;
             header: {
@@ -3122,7 +3827,7 @@ export interface operations {
             };
         };
     };
-    update_7: {
+    update_8: {
         parameters: {
             query?: never;
             header: {
@@ -3151,7 +3856,7 @@ export interface operations {
             };
         };
     };
-    deactivate_4: {
+    deactivate_5: {
         parameters: {
             query?: never;
             header: {
@@ -3199,7 +3904,7 @@ export interface operations {
             };
         };
     };
-    update_8: {
+    update_9: {
         parameters: {
             query?: never;
             header: {
@@ -3228,7 +3933,7 @@ export interface operations {
             };
         };
     };
-    deactivate_5: {
+    deactivate_6: {
         parameters: {
             query?: never;
             header: {
@@ -3276,7 +3981,7 @@ export interface operations {
             };
         };
     };
-    update_9: {
+    update_10: {
         parameters: {
             query?: never;
             header: {
@@ -3305,7 +4010,7 @@ export interface operations {
             };
         };
     };
-    deactivate_6: {
+    deactivate_7: {
         parameters: {
             query?: never;
             header: {
@@ -3328,7 +4033,7 @@ export interface operations {
             };
         };
     };
-    get_4: {
+    get_5: {
         parameters: {
             query?: never;
             header: {
@@ -3405,7 +4110,7 @@ export interface operations {
             };
         };
     };
-    get_5: {
+    get_6: {
         parameters: {
             query?: never;
             header: {
@@ -3430,7 +4135,7 @@ export interface operations {
             };
         };
     };
-    update_10: {
+    update_11: {
         parameters: {
             query?: never;
             header: {
@@ -3482,7 +4187,7 @@ export interface operations {
             };
         };
     };
-    get_6: {
+    get_7: {
         parameters: {
             query?: never;
             header: {
@@ -3507,7 +4212,7 @@ export interface operations {
             };
         };
     };
-    update_11: {
+    update_12: {
         parameters: {
             query?: never;
             header: {
@@ -3978,6 +4683,200 @@ export interface operations {
     list_5: {
         parameters: {
             query: {
+                includeInactive?: boolean;
+                page: components["schemas"]["Pageable"];
+            };
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageRouteResponse"];
+                };
+            };
+        };
+    };
+    create_5: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RouteRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteResponse"];
+                };
+            };
+        };
+    };
+    list_6: {
+        parameters: {
+            query: {
+                routeId?: string;
+                status?: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+                page: components["schemas"]["Pageable"];
+            };
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageRouteExecutionResponse"];
+                };
+            };
+        };
+    };
+    create_6: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RouteExecutionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteExecutionResponse"];
+                };
+            };
+        };
+    };
+    start: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RouteExecutionVersionCommand"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteExecutionResponse"];
+                };
+            };
+        };
+    };
+    complete: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RouteExecutionCompletionCommand"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteExecutionResponse"];
+                };
+            };
+        };
+    };
+    cancel: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RouteExecutionCancellationCommand"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteExecutionResponse"];
+                };
+            };
+        };
+    };
+    list_7: {
+        parameters: {
+            query: {
                 pageable: components["schemas"]["Pageable"];
             };
             header: {
@@ -4000,7 +4899,7 @@ export interface operations {
             };
         };
     };
-    create_5: {
+    create_7: {
         parameters: {
             query?: never;
             header: {
@@ -4056,7 +4955,7 @@ export interface operations {
             };
         };
     };
-    list_6: {
+    list_8: {
         parameters: {
             query?: {
                 page?: number;
@@ -4079,7 +4978,7 @@ export interface operations {
             };
         };
     };
-    create_6: {
+    create_8: {
         parameters: {
             query?: never;
             header?: never;
@@ -4103,7 +5002,112 @@ export interface operations {
             };
         };
     };
-    list_7: {
+    neighborhoods: {
+        parameters: {
+            query: {
+                municipalityId: string;
+                page: components["schemas"]["Pageable"];
+            };
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageNeighborhoodResponse"];
+                };
+            };
+        };
+    };
+    neighborhood: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NeighborhoodRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["NeighborhoodResponse"];
+                };
+            };
+        };
+    };
+    municipalities: {
+        parameters: {
+            query: {
+                page: components["schemas"]["Pageable"];
+            };
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageMunicipalityResponse"];
+                };
+            };
+        };
+    };
+    municipality: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MunicipalityRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MunicipalityResponse"];
+                };
+            };
+        };
+    };
+    list_9: {
         parameters: {
             query: {
                 categoryId?: string;
@@ -4130,7 +5134,7 @@ export interface operations {
             };
         };
     };
-    create_7: {
+    create_9: {
         parameters: {
             query?: never;
             header: {
@@ -4157,7 +5161,7 @@ export interface operations {
             };
         };
     };
-    list_8: {
+    list_10: {
         parameters: {
             query: {
                 typeId?: string;
@@ -4184,7 +5188,7 @@ export interface operations {
             };
         };
     };
-    create_8: {
+    create_10: {
         parameters: {
             query?: never;
             header: {
@@ -4211,7 +5215,7 @@ export interface operations {
             };
         };
     };
-    list_9: {
+    list_11: {
         parameters: {
             query: {
                 name?: string;
@@ -4237,7 +5241,7 @@ export interface operations {
             };
         };
     };
-    create_9: {
+    create_11: {
         parameters: {
             query?: never;
             header: {
@@ -4264,7 +5268,7 @@ export interface operations {
             };
         };
     };
-    list_10: {
+    list_12: {
         parameters: {
             query: {
                 pageable: components["schemas"]["Pageable"];
@@ -4289,7 +5293,7 @@ export interface operations {
             };
         };
     };
-    create_10: {
+    create_12: {
         parameters: {
             query?: never;
             header: {
@@ -4316,7 +5320,7 @@ export interface operations {
             };
         };
     };
-    list_11: {
+    list_13: {
         parameters: {
             query: {
                 pageable: components["schemas"]["Pageable"];
@@ -4341,7 +5345,7 @@ export interface operations {
             };
         };
     };
-    create_11: {
+    create_13: {
         parameters: {
             query?: never;
             header: {
@@ -4368,7 +5372,7 @@ export interface operations {
             };
         };
     };
-    list_12: {
+    list_14: {
         parameters: {
             query: {
                 page: components["schemas"]["Pageable"];
@@ -4423,7 +5427,7 @@ export interface operations {
             };
         };
     };
-    list_13: {
+    list_15: {
         parameters: {
             query: {
                 page: components["schemas"]["Pageable"];
@@ -4448,7 +5452,7 @@ export interface operations {
             };
         };
     };
-    create_12: {
+    create_14: {
         parameters: {
             query?: never;
             header: {
@@ -4475,7 +5479,7 @@ export interface operations {
             };
         };
     };
-    list_14: {
+    list_16: {
         parameters: {
             query: {
                 page: components["schemas"]["Pageable"];
@@ -4500,7 +5504,7 @@ export interface operations {
             };
         };
     };
-    create_13: {
+    create_15: {
         parameters: {
             query?: never;
             header: {
@@ -4548,6 +5552,58 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["SortingResponseDTO"];
+                };
+            };
+        };
+    };
+    events: {
+        parameters: {
+            query: {
+                page: components["schemas"]["Pageable"];
+            };
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageRouteEventResponse"];
+                };
+            };
+        };
+    };
+    get_8: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RouteExecutionResponse"];
                 };
             };
         };
@@ -4647,6 +5703,56 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Membership"];
+                };
+            };
+        };
+    };
+    neighborhood_1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["NeighborhoodResponse"];
+                };
+            };
+        };
+    };
+    municipality_1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MunicipalityResponse"];
                 };
             };
         };

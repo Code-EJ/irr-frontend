@@ -246,7 +246,7 @@
         "tags": [
           "Accounts"
         ],
-        "summary": "Process request — Accounts",
+        "summary": "Get by ID — Accounts",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "get",
         "parameters": [
@@ -585,7 +585,7 @@
         "tags": [
           "Sales"
         ],
-        "summary": "Process request — Sales",
+        "summary": "Get by ID — Sales",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
         "operationId": "get_2",
         "parameters": [
@@ -717,6 +717,205 @@
         }
       }
     },
+    "/api/v1/routes/{id}": {
+      "get": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Get by ID — Routes",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "get_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Update — Routes",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "update_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Deactivate — Routes",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "deactivate_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/route-executions/{id}/areas/{areaId}": {
+      "put": {
+        "tags": [
+          "Route executions"
+        ],
+        "summary": "Record declared coverage — Route executions",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "coverage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "areaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteExecutionCoverageCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteExecutionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/organizations/{id}": {
       "get": {
         "tags": [
@@ -724,7 +923,7 @@
         ],
         "summary": "Get an accessible organization",
         "description": "Missing, inactive and foreign organizations all return 404.",
-        "operationId": "get_3",
+        "operationId": "get_4",
         "parameters": [
           {
             "name": "id",
@@ -755,7 +954,7 @@
         ],
         "summary": "Update — Organizations",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "update_4",
+        "operationId": "update_5",
         "parameters": [
           {
             "name": "id",
@@ -796,7 +995,7 @@
         ],
         "summary": "Deactivate — Organizations",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "deactivate_1",
+        "operationId": "deactivate_2",
         "parameters": [
           {
             "name": "id",
@@ -988,7 +1187,7 @@
         ],
         "summary": "Update — Material types",
         "description": "Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.",
-        "operationId": "update_5",
+        "operationId": "update_6",
         "parameters": [
           {
             "name": "id",
@@ -1039,7 +1238,7 @@
         ],
         "summary": "Deactivate — Material types",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "deactivate_2",
+        "operationId": "deactivate_3",
         "parameters": [
           {
             "name": "id",
@@ -1116,7 +1315,7 @@
         ],
         "summary": "Update — Material subtypes",
         "description": "Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.",
-        "operationId": "update_6",
+        "operationId": "update_7",
         "parameters": [
           {
             "name": "id",
@@ -1167,7 +1366,7 @@
         ],
         "summary": "Deactivate — Material subtypes",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "deactivate_3",
+        "operationId": "deactivate_4",
         "parameters": [
           {
             "name": "id",
@@ -1244,7 +1443,7 @@
         ],
         "summary": "Update — Material categories",
         "description": "Administrator-only update in the authenticated creator scope. Send the last returned version. Stale versions return 409; refresh the record before retrying. Successful responses include the flushed server-managed version.",
-        "operationId": "update_7",
+        "operationId": "update_8",
         "parameters": [
           {
             "name": "id",
@@ -1295,7 +1494,7 @@
         ],
         "summary": "Deactivate — Material categories",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "deactivate_4",
+        "operationId": "deactivate_5",
         "parameters": [
           {
             "name": "id",
@@ -1372,7 +1571,7 @@
         ],
         "summary": "Update — Donors",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "update_8",
+        "operationId": "update_9",
         "parameters": [
           {
             "name": "id",
@@ -1423,7 +1622,7 @@
         ],
         "summary": "Deactivate — Donors",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "deactivate_5",
+        "operationId": "deactivate_6",
         "parameters": [
           {
             "name": "id",
@@ -1500,7 +1699,7 @@
         ],
         "summary": "Update — Donations",
         "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
-        "operationId": "update_9",
+        "operationId": "update_10",
         "parameters": [
           {
             "name": "id",
@@ -1551,7 +1750,7 @@
         ],
         "summary": "Deactivate — Donations",
         "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
-        "operationId": "deactivate_6",
+        "operationId": "deactivate_7",
         "parameters": [
           {
             "name": "id",
@@ -1585,9 +1784,9 @@
         "tags": [
           "Attachments"
         ],
-        "summary": "Process request — Attachments",
+        "summary": "Get by ID — Attachments",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "get_4",
+        "operationId": "get_5",
         "parameters": [
           {
             "name": "id",
@@ -1713,9 +1912,9 @@
         "tags": [
           "Collections"
         ],
-        "summary": "Process request — Collections",
+        "summary": "Get by ID — Collections",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "get_5",
+        "operationId": "get_6",
         "parameters": [
           {
             "name": "id",
@@ -1756,7 +1955,7 @@
         ],
         "summary": "Update — Collections",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "update_10",
+        "operationId": "update_11",
         "parameters": [
           {
             "name": "id",
@@ -1843,7 +2042,7 @@
         ],
         "summary": "Get buyer",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "get_6",
+        "operationId": "get_7",
         "parameters": [
           {
             "name": "id",
@@ -1884,7 +2083,7 @@
         ],
         "summary": "Update buyer",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "update_11",
+        "operationId": "update_12",
         "parameters": [
           {
             "name": "id",
@@ -2669,6 +2868,365 @@
         }
       }
     },
+    "/api/v1/routes": {
+      "get": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "List — Routes",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "list_5",
+        "parameters": [
+          {
+            "name": "includeInactive",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageRouteResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "Create — Routes",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "create_5",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/route-executions": {
+      "get": {
+        "tags": [
+          "Route executions"
+        ],
+        "summary": "List — Route executions",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "list_6",
+        "parameters": [
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PLANNED",
+                "IN_PROGRESS",
+                "COMPLETED",
+                "CANCELLED"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageRouteExecutionResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Route executions"
+        ],
+        "summary": "Create — Route executions",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "create_6",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteExecutionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteExecutionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/route-executions/{id}/start": {
+      "post": {
+        "tags": [
+          "Route executions"
+        ],
+        "summary": "Start execution — Route executions",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "start",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteExecutionVersionCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteExecutionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/route-executions/{id}/complete": {
+      "post": {
+        "tags": [
+          "Route executions"
+        ],
+        "summary": "Complete execution — Route executions",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "complete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteExecutionCompletionCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteExecutionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/route-executions/{id}/cancel": {
+      "post": {
+        "tags": [
+          "Route executions"
+        ],
+        "summary": "Cancel execution — Route executions",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteExecutionCancellationCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteExecutionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/pressings": {
       "get": {
         "tags": [
@@ -2676,7 +3234,7 @@
         ],
         "summary": "List — Pressing",
         "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
-        "operationId": "list_5",
+        "operationId": "list_7",
         "parameters": [
           {
             "name": "pageable",
@@ -2716,7 +3274,7 @@
         ],
         "summary": "Create — Pressing",
         "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
-        "operationId": "create_5",
+        "operationId": "create_7",
         "parameters": [
           {
             "name": "X-Organization-Id",
@@ -2825,7 +3383,7 @@
         ],
         "summary": "List accessible organizations",
         "description": "Global administrators see all active organizations. Other accounts require active membership.",
-        "operationId": "list_6",
+        "operationId": "list_8",
         "parameters": [
           {
             "name": "page",
@@ -2867,7 +3425,7 @@
         ],
         "summary": "Create an organization",
         "description": "ADMINISTRATOR only. Creates an audit event in the same transaction. Classification is descriptive and never grants permissions. Add members explicitly afterward.",
-        "operationId": "create_6",
+        "operationId": "create_8",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2892,6 +3450,183 @@
         }
       }
     },
+    "/api/v1/neighborhoods": {
+      "get": {
+        "tags": [
+          "Territory"
+        ],
+        "summary": "List neighborhoods — Territory",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "neighborhoods",
+        "parameters": [
+          {
+            "name": "municipalityId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageNeighborhoodResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Territory"
+        ],
+        "summary": "Resolve or register neighborhood — Territory",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "neighborhood",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NeighborhoodRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeighborhoodResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/municipalities": {
+      "get": {
+        "tags": [
+          "Territory"
+        ],
+        "summary": "List municipalities — Territory",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "municipalities",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageMunicipalityResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Territory"
+        ],
+        "summary": "Resolve or register municipality — Territory",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "municipality",
+        "parameters": [
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MunicipalityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MunicipalityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/materials/types": {
       "get": {
         "tags": [
@@ -2899,7 +3634,7 @@
         ],
         "summary": "List — Material types",
         "description": "Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.",
-        "operationId": "list_7",
+        "operationId": "list_9",
         "parameters": [
           {
             "name": "categoryId",
@@ -2956,7 +3691,7 @@
         ],
         "summary": "Create — Material types",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "create_7",
+        "operationId": "create_9",
         "parameters": [
           {
             "name": "X-Organization-Id",
@@ -3000,7 +3735,7 @@
         ],
         "summary": "List — Material subtypes",
         "description": "Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.",
-        "operationId": "list_8",
+        "operationId": "list_10",
         "parameters": [
           {
             "name": "typeId",
@@ -3057,7 +3792,7 @@
         ],
         "summary": "Create — Material subtypes",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "create_8",
+        "operationId": "create_10",
         "parameters": [
           {
             "name": "X-Organization-Id",
@@ -3101,7 +3836,7 @@
         ],
         "summary": "List — Material categories",
         "description": "Lists only the authenticated creator's active materials. The optional name filter is a trimmed, case-insensitive literal substring; percent and underscore are not wildcards. Filtering precedes pagination and total counts.",
-        "operationId": "list_9",
+        "operationId": "list_11",
         "parameters": [
           {
             "name": "name",
@@ -3149,7 +3884,7 @@
         ],
         "summary": "Create — Material categories",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "create_9",
+        "operationId": "create_11",
         "parameters": [
           {
             "name": "X-Organization-Id",
@@ -3193,7 +3928,7 @@
         ],
         "summary": "List — Donors",
         "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
-        "operationId": "list_10",
+        "operationId": "list_12",
         "parameters": [
           {
             "name": "pageable",
@@ -3233,7 +3968,7 @@
         ],
         "summary": "Create — Donors",
         "description": "Declared method authorization: @organizationScope.manager(). Organization ownership is checked by the application service.",
-        "operationId": "create_10",
+        "operationId": "create_12",
         "parameters": [
           {
             "name": "X-Organization-Id",
@@ -3277,7 +4012,7 @@
         ],
         "summary": "List — Donations",
         "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
-        "operationId": "list_11",
+        "operationId": "list_13",
         "parameters": [
           {
             "name": "pageable",
@@ -3317,7 +4052,7 @@
         ],
         "summary": "Create — Donations",
         "description": "Declared method authorization: isAuthenticated(). Organization ownership is checked by the application service.",
-        "operationId": "create_11",
+        "operationId": "create_13",
         "parameters": [
           {
             "name": "X-Organization-Id",
@@ -3361,7 +4096,7 @@
         ],
         "summary": "List — Attachments",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "list_12",
+        "operationId": "list_14",
         "parameters": [
           {
             "name": "page",
@@ -3453,7 +4188,7 @@
         ],
         "summary": "List — Collections",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "list_13",
+        "operationId": "list_15",
         "parameters": [
           {
             "name": "page",
@@ -3493,7 +4228,7 @@
         ],
         "summary": "Create — Collections",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "create_12",
+        "operationId": "create_14",
         "parameters": [
           {
             "name": "X-Organization-Id",
@@ -3537,7 +4272,7 @@
         ],
         "summary": "List buyers",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "list_14",
+        "operationId": "list_16",
         "parameters": [
           {
             "name": "page",
@@ -3577,7 +4312,7 @@
         ],
         "summary": "Create buyer",
         "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
-        "operationId": "create_13",
+        "operationId": "create_15",
         "parameters": [
           {
             "name": "X-Organization-Id",
@@ -3650,6 +4385,100 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/SortingResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/routes/{id}/events": {
+      "get": {
+        "tags": [
+          "Routes"
+        ],
+        "summary": "List history — Routes",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "events",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageRouteEventResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/route-executions/{id}": {
+      "get": {
+        "tags": [
+          "Route executions"
+        ],
+        "summary": "Get by ID — Route executions",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "get_8",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteExecutionResponse"
                 }
               }
             }
@@ -3830,6 +4659,92 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Membership"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/neighborhoods/{id}": {
+      "get": {
+        "tags": [
+          "Territory"
+        ],
+        "summary": "Resolve or register neighborhood — Territory",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "neighborhood_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/NeighborhoodResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/municipalities/{id}": {
+      "get": {
+        "tags": [
+          "Territory"
+        ],
+        "summary": "Resolve or register municipality — Territory",
+        "description": "Authenticated access is checked by the application service. Business records require global authority or current organization membership; platform administration uses the administrator role.",
+        "operationId": "municipality_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MunicipalityResponse"
                 }
               }
             }
@@ -4488,6 +5403,361 @@
           }
         }
       },
+      "RouteAreaRequest": {
+        "type": "object",
+        "properties": {
+          "neighborhoodId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "street": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "neighborhoodId"
+        ]
+      },
+      "RouteRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "municipalityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "ACTIVE"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "plannedDistanceKm": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "plannedDurationMinutes": {
+            "type": "integer",
+            "format": "int32",
+            "exclusiveMinimum": 0
+          },
+          "areas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteAreaRequest"
+            },
+            "maxItems": 200,
+            "minItems": 0
+          }
+        },
+        "required": [
+          "areas",
+          "municipalityId",
+          "name",
+          "status"
+        ]
+      },
+      "RouteAreaResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "neighborhoodId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "neighborhoodName": {
+            "type": "string"
+          },
+          "sequence": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "street": {
+            "type": "string"
+          }
+        }
+      },
+      "RouteResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "organizationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "municipalityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "municipalityName": {
+            "type": "string"
+          },
+          "municipalityIbgeCode": {
+            "type": "string"
+          },
+          "municipalityStateCode": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "ACTIVE"
+            ]
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "plannedDistanceKm": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "plannedDurationMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "areas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteAreaResponse"
+            }
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "updatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RouteExecutionCoverageCommand": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "covered": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "covered",
+          "version"
+        ]
+      },
+      "RouteExecutionAreaResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sourceAreaId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "neighborhoodId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "neighborhoodName": {
+            "type": "string"
+          },
+          "sequence": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "street": {
+            "type": "string"
+          },
+          "covered": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RouteExecutionResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "organizationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "routeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "routeVersion": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "routeName": {
+            "type": "string"
+          },
+          "municipalityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "municipalityName": {
+            "type": "string"
+          },
+          "municipalityIbgeCode": {
+            "type": "string"
+          },
+          "municipalityStateCode": {
+            "type": "string"
+          },
+          "plannedDistanceKm": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "plannedDurationMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "plannedStartAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PLANNED",
+              "IN_PROGRESS",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "vehicleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vehicleLicensePlate": {
+            "type": "string"
+          },
+          "driverId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "driverName": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cancelledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cancellationReason": {
+            "type": "string"
+          },
+          "distanceKm": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "areas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteExecutionAreaResponse"
+            }
+          },
+          "team": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteExecutionTeamResponse"
+            }
+          },
+          "createdBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "updatedBy": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RouteExecutionTeamResponse": {
+        "type": "object",
+        "properties": {
+          "teamMemberId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
       "CreateOrganization": {
         "type": "object",
         "properties": {
@@ -5050,6 +6320,10 @@
             "example": "123.4500",
             "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
           },
+          "routeExecutionId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "scheduleValid": {
             "type": "boolean"
           }
@@ -5140,6 +6414,10 @@
             "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
             "example": "123.4500",
             "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "routeExecutionId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -5552,6 +6830,94 @@
           "version"
         ]
       },
+      "RouteExecutionRequest": {
+        "type": "object",
+        "properties": {
+          "routeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "plannedStartAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "vehicleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "driverId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamMemberIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "maxItems": 100,
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "driverId",
+          "plannedStartAt",
+          "routeId",
+          "vehicleId"
+        ]
+      },
+      "RouteExecutionVersionCommand": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "RouteExecutionCompletionCommand": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "distanceKm": {
+            "type": "string",
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "RouteExecutionCancellationCommand": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "reason",
+          "version"
+        ]
+      },
       "PressedBaleRequestDTO": {
         "type": "object",
         "properties": {
@@ -5713,6 +7079,91 @@
           },
           "status": {
             "type": "string"
+          }
+        }
+      },
+      "NeighborhoodRequest": {
+        "type": "object",
+        "properties": {
+          "municipalityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          }
+        },
+        "required": [
+          "municipalityId",
+          "name"
+        ]
+      },
+      "NeighborhoodResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "municipalityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MunicipalityRequest": {
+        "type": "object",
+        "properties": {
+          "ibgeCode": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "[0-9]{7}"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "stateCode": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+          }
+        },
+        "required": [
+          "ibgeCode",
+          "name",
+          "stateCode"
+        ]
+      },
+      "MunicipalityResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ibgeCode": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "stateCode": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -6119,6 +7570,176 @@
           }
         }
       },
+      "PageRouteResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageRouteEventResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteEventResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RouteEventResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "routeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "executionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "actorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "action": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageRouteExecutionResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteExecutionResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
       "Summary": {
         "type": "object",
         "properties": {
@@ -6252,6 +7873,98 @@
           "totalElements": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "PageNeighborhoodResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NeighborhoodResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageMunicipalityResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MunicipalityResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
           }
         }
       },
