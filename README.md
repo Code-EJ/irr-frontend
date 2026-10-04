@@ -146,6 +146,8 @@ Login → Esqueci minha senha requests a neutral recovery message. The link open
 
 For the isolated identity rehearsal, the backend listens on 9292, frontend on 5273, and local Mailpit on 8025. These are deliberate local overrides; normal README examples use backend 9191/frontend 5173. Keep VITE_API_BASE_URL and backend PASSWORD_RESET_BASE_URL matched to the actual frontend/backend pair. See the backend docs/email-recovery.md for Docker startup and sender configuration.
 
+Local access correction (2026-10-04): the standard frontend at 5173 was rebuilt against the running identity backend at 9292. Its ignored `.env` now sets `VITE_API_BASE_URL=http://localhost:9292/api/v1`; the separate rehearsal frontend at 5273 remains available. The old backend listener at 9191 is stopped. If changing the local API address, update this public value and run `docker compose up -d --build frontend`: restarting an existing static image does not update its compiled API URL. Administrator login, CORS for 5173, the served API origin and container health were verified. Recovery links still use the configured rehearsal frontend at 5273. No database or credential reset was performed.
+
 ```powershell
 $env:VITE_API_BASE_URL = 'http://localhost:9292/api/v1'
 $env:IRR_BACKEND_ENV = (Resolve-Path '../irr-backend-identity/.local/identity/contract.env').Path
