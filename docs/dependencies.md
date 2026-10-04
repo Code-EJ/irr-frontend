@@ -16,3 +16,13 @@ The full and production-only npm audits reported zero known vulnerabilities on 2
 - Added Node 24 type definitions for checked build scripts and real-backend tests. No new visual library was introduced; the interface uses the existing lucide-react icons and CSS/Tailwind.
 - The frontend container pins Node 24 Alpine and unprivileged Nginx 1.28 Alpine by digest in Dockerfile. Review digest updates deliberately; npm audits do not assess operating-system image packages.
 - The current clean install reports deprecation notices for the retained ESLint 9 and transitive glob 10 tooling. These notices are distinct from the zero-advisory npm audit result. Follow up within dependency maintenance rather than forcing an unrelated framework/tooling migration during this slice.
+
+## Identity delivery — 2026-10-03
+
+Maintainer: Enzo Ribas (https://github.com/oEnzoRibas). Removed unused Zustand with the unreachable legacy state/service dependency closure. Added development-only @testing-library/react, @testing-library/user-event and jsdom to verify credential forms, SessionProvider restrictions and profile refresh. No new runtime abstraction or UI library.
+
+npm audit reported five high findings in the Tailwind 3 toolchain (braces, chokidar, micromatch, fast-glob, tailwindcss), rooted in GHSA-vfj7-8cjw-p6xm. The reported fix requires Tailwind 4, outside this incremental identity scope. Build-time exposure remains a review gate; do not call the full audit clean or use npm audit fix --force to silently change architecture. Production-only audit is recorded separately in the verification evidence.
+
+## Global identity and recovery — 2026-10-04
+
+Maintainer: Enzo Ribas (https://github.com/oEnzoRibas). No new runtime or test library was added for the expanded slice; organization/recovery screens reuse React, generated DTOs, Axios and native dialogs. The jsdom test environment receives a minimal dialog-method polyfill; actual browser verification uses the real native implementation. Retained build-tool advisories remain distinct from the production-only audit; see current verification evidence.

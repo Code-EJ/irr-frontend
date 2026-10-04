@@ -74,12 +74,14 @@ If port 5173 is occupied, stop the other frontend process instead of changing or
 Swagger is the official API documentation. Markdown guides explain integration and operations, not a competing HTTP specification. DTOs are generated into src/shared/api/schema.d.ts. To intentionally review a backend contract change:
 
 ~~~powershell
+$env:BACKEND_COMMIT = (git -C ../irr-backend-identity rev-parse HEAD)
+$env:OPENAPI_URL = "http://localhost:9292/v3/api-docs"
 npm run api:capture
 npm run api:generate
 git diff -- docs/api src/shared/api/schema.d.ts
 ~~~
 
-The current capture script records the frozen 0dc0d1f baseline. Before accepting a different backend, update that reference deliberately and validate the matched backend/frontend pair. Do not blindly capture an unrelated running server to make a test pass. CI regenerates types from the pinned snapshot and fails on a tracked diff.
+The current capture script requires BACKEND_COMMIT as a full verified Git SHA and OPENAPI_URL for the intended running backend. The pinned metadata identifies the locally verified identity contract. The original 0dc0d1f baseline is historical; v1 freezes only at the first release/homologation manifest. Before accepting a different backend, review the contract diff and validate the matched pair. Do not blindly capture an unrelated running server to make a test pass. CI regenerates types from the pinned snapshot and fails on a tracked diff.
 
 ## Verify
 
@@ -121,7 +123,7 @@ Browser verification and dated results are in [the integration execution record]
 | src/route/Router.tsx | Active guarded navigation and pending-workflow gating |
 | src/pages/VehiclePages | Integrated fleet pages |
 | src/components | Existing shared presentation and typed controls |
-| src/pages, src/models, src/services, src/bases | Remaining legacy workflow code, kept for incremental replacement; legacy BaseService fails closed |
+| src/pages | Retained active login/fleet presentation; obsolete services/models/bases and unreachable workflow closures were removed after replacement verification |
 | tests/contract | Opt-in real-backend acceptance |
 | docs/adrs | Historical decisions and ADR-0015 integration decision |
 | docs/api | Pinned executable contract and baseline digest |
@@ -131,3 +133,27 @@ Browser verification and dated results are in [the integration execution record]
 Follow [ADR-0001](docs/adrs/0001-master-plan.md), [ADR-0003](docs/adrs/0003-architecture-and-dependencies.md) and [ADR-0015](docs/adrs/0015-frontend-contract-integration.md). ADR-0014 in the backend supersedes old aliases and transitional references in earlier ADRs. [Dependency notes](docs/dependencies.md) describe the retained stack and precise tooling changes. Inventory arithmetic, authorization and domain transitions remain backend responsibilities; later UI slices preserve decimal strings, versions and idempotency semantics.
 
 Use feature/refactor branches and coherent semantic commits. Keep engineering identifiers, documentation and comments in English. All active product UI, accessibility labels and user-facing errors use Brazilian Portuguese (pt-BR), as requested by the owner. ABNT2 refers to the operating-system keyboard layout; the application accepts accented Unicode input without changing the user's keyboard. Use TSDoc/JSDoc in TypeScript and JavaDoc in the backend. Attribute Enzo Ribas (@oEnzoRibas) for these changes without replacing historical contributor credits. Remove legacy code only after the corresponding replacement is verified. No Kubernetes or backend architecture rewrite is part of this frontend phase.
+
+## Identity & Access completion
+
+[ADR-0016](docs/adrs/0016-global-identity-and-recovery-integration.md) extends the existing integration; backend ADR-0017/0018 own global authority and recovery policy. Administrador Geral can manage users/organizations and operate in any selected active organization without membership. Administrador da Organização reuses MANAGER and stays local. User creation includes ADMINISTRATOR; the server protects the last active global administrator with 409.
+
+Use Organizations to create/edit/deactivate units and manage MEMBER/MANAGER/revocation. New organization onboarding creates the unit, then creates or selects the responsible user, then grants MANAGER. A failed grant retains the created identifiers for retry. If you leave the page, resume through organization member management. Credentials never belong to Organization or browser storage.
+
+Login → Esqueci minha senha requests a neutral recovery message. The link opens /reset-password with a fragment token, immediately removed from history and held only in memory. Refresh requires reopening the email link. Successful reset clears local session state and returns to login; the backend revokes previous sessions. Invalid, expired or used links require another request. Disabled mail returns an explicit unavailable state.
+
+### Local verification environment
+
+For the isolated identity rehearsal, the backend listens on 9292, frontend on 5273, and local Mailpit on 8025. These are deliberate local overrides; normal README examples use backend 9191/frontend 5173. Keep VITE_API_BASE_URL and backend PASSWORD_RESET_BASE_URL matched to the actual frontend/backend pair. See the backend docs/email-recovery.md for Docker startup and sender configuration.
+
+```powershell
+$env:VITE_API_BASE_URL = 'http://localhost:9292/api/v1'
+$env:IRR_BACKEND_ENV = (Resolve-Path '../irr-backend-identity/.local/identity/contract.env').Path
+$env:IRR_MAILPIT_URL = 'http://localhost:8025'
+npm run dev:credentials
+npm run test:contract
+```
+
+The credentials helper creates ignored .env-dev from the private backend file without printing values. Read that private file locally for development sign-in. It preserves an existing .env-dev; after changing your password, update your private reference deliberately. Vite does not load .env-dev, and no DEV_ADMIN_PASSWORD or mail key may be renamed to VITE_* or included in the bundle. Public examples contain placeholders only.
+
+The contract suite includes real email capture, credential replacement/replay, global authority, organization CRUD and local manager restrictions in addition to earlier identity/fleet/intake workflows. Fixture history is retained in deactivated test organizations, without a database reset. External Brevo sender/domain approval and Railway mail Variables remain operator actions before homologation. Routes and reporting follow that deployment gate in ADR-0001.

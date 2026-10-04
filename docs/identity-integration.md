@@ -2,6 +2,8 @@
 
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
+> The audit below records the earlier profile slice. Current authority and recovery supersede its partner-only/membership-only assumptions through backend ADR-0017/0018 and frontend ADR-0016. The API remains exclusively /api/v1.
+
 ## Audit before implementation
 
 Frontend main `01a9543` has a single scoped client/session/provider, a read-only current-account screen and verified fleet/material/intake workflows. Backend main `4c50f17` supports current-account reads, administrator partner CRUD and explicit membership grant/revoke. It lacks self-service profile/password changes, administrative reset and administrative organization/membership discovery. Neither repository needs an architectural rewrite.
@@ -23,3 +25,11 @@ Audit imports before removal: Profile/UserEdit, UsersPages/ManageUsers, UsersPag
 Backend first: populated V1-to-V2 PostgreSQL upgrade, tests, build and health checks. Update the pinned contract deliberately to the verified backend commit, then regenerate types and implement the frontend. Existing `/api/v1` consumers must remain usable with normal accounts. Do not initiate resets until the new frontend is deployed because the older bundle cannot complete mandatory password change. No Railway setting changes or merges are performed by this task.
 
 Run clean install, lint, strict typecheck, unit/component tests, real-backend contract tests, build, api:check and both container gates. Verify profile, password, administrator guards, partner lifecycle, membership revocation, 400/401/403/404/409 and forced change through real browser flows. Check a production HTTPS API build argument and ensure no private credentials or accidental localhost backend origin are included. Record executed results separately from deployment instructions; local verification is not Railway deployment evidence.
+
+## Current expanded delivery
+
+Global account authority and actual local membership are separate in SessionProvider. Global organization discovery uses /organizations; the removed unreleased /organizations/admin consumer is gone. The existing account editor now creates/edits all four roles and handles administrator succession/deactivation conflicts. Organization pages add CRUD and responsible onboarding with explicit partial progress. A shared membership editor retains MEMBER/MANAGER/revocation semantics.
+
+Public recovery uses generated request/confirmation DTOs and the single client, deliberately excluding bearer credentials. It clears fragment history, validates password confirmation and handles neutral request success/expired/used/invalid/unavailable states. Controlled API/component tests verify credential-changing flows; browser verification inspects forms without entering new credentials where handoff rules apply.
+
+Legacy closure removal was committed in b156abb: 78 unreachable files, including BaseService, old Auth/User services, entities/config clients and their dead consumers. Supported fleet/material/intake integrations remain. Processing/sales pages stay gated for separately approved later work; there is no retained compatibility service for them. Current executable evidence and remaining homologation gates are recorded in identity-verification.md.

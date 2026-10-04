@@ -1,6 +1,6 @@
 # ADR-0016: Global identity, organization administration and recovery integration
 
-- Status: Accepted; implementation and verification in progress.
+- Status: Accepted; implemented and locally verified. External homologation pending.
 - Date: 2026-10-04.
 - Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
@@ -35,3 +35,7 @@ The UI exposes global authority clearly while ordinary users retain actual membe
 Mail delivery requires operator-approved sender/domain/API key for external homologation. Disabled mail is an explicit 503, not a completed recovery gate. Proxy address aggregation can affect shared throttles and needs deployment verification. Recovery tokens are intentionally not retained across page refresh after the fragment is removed. Tailwind's previously recorded development dependency advisories remain a reviewed build-tool risk; no forced major migration is introduced.
 
 The release baseline freezes v1 only after real homologation and a compatible manifest; local verification does not claim Railway deployment. See the backend mail operations/runbooks and shared requirements traceability for external dependencies and product decisions.
+
+## Verification closure — 2026-10-04
+
+The locally executed checks and remaining release gates are recorded in [the identity verification record](../identity-verification.md). Backend executable baseline: 18f4891825821dae931ab7f3d44a2d0cd48c311f. No production reset, remote secret change or external delivery was performed.
