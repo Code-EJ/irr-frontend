@@ -36,7 +36,7 @@ it("completes partner CRUD, self-service, credential reset and explicit membersh
   expect((await safe(administration.membership(organizationId,userId))).role).toBe("MEMBER");
   const token=await safe(authenticate(email,password));session.setToken(token);
   expect(await status(accounts.list(0))).toBe(403);
-  expect(await status(administration.list(0))).toBe(403);
+  expect((await safe(administration.list(0))).total).toBe(1);
   expect((await safe(organizations())).some(value=>value.id===organizationId)).toBe(true);
   await safe(updateProfile({fullName:"Self updated",email}));
   expect((await safe(currentAccount())).fullName).toBe("Self updated");

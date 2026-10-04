@@ -3,6 +3,7 @@ import { apiClient } from "../../shared/api/client";
 import type { components } from "../../shared/api/schema";
 export type Account = components["schemas"]["UserResponse"];
 export type Organization = components["schemas"]["Organization"];
+export type OrganizationInput = components["schemas"]["CreateOrganization"];
 export type Membership = components["schemas"]["Membership"];
 export type ProfileInput = components["schemas"]["UpdateProfileRequest"];
 export type PartnerInput = components["schemas"]["UpdatePartnerRequest"];
@@ -15,7 +16,7 @@ export async function updateProfile(input: ProfileInput) {
 export async function changePassword(input: components["schemas"]["ChangePasswordRequest"]) {
   await apiClient.put("/users/me/password", input);
 }
-/** Platform administration never sends organization scope or grants implicit membership. */
+/** Global administration uses account authority without an organization header. */
 export const accounts = {
   async list(page: number) {
     const {data} = await apiClient.get<components["schemas"]["PageUserResponse"]>("/users", {params:{page,size:10,sort:"fullName,asc"}});
@@ -32,8 +33,12 @@ export const accounts = {
   },
 };
 export const organizationAdministration = {
+  async get(id: string) { return (await apiClient.get<Organization>(`/organizations/${id}`)).data; },
+  async create(input: OrganizationInput) { return (await apiClient.post<Organization>("/organizations",input)).data; },
+  async update(id: string, input: OrganizationInput) { return (await apiClient.put<Organization>(`/organizations/${id}`,input)).data; },
+  async deactivate(id: string) { await apiClient.delete(`/organizations/${id}`); },
   async list(page: number) {
-    const {data} = await apiClient.get<components["schemas"]["OrganizationPage"]>("/organizations/admin",{params:{page,size:10}});
+    const {data} = await apiClient.get<components["schemas"]["OrganizationPage"]>("/organizations",{params:{page,size:10}});
     if (!data.content || data.totalElements === undefined) throw new Error("Invalid organization page.");
     return {items:data.content, pages:Math.ceil(data.totalElements/10), total:data.totalElements};
   },
@@ -89,4 +94,15 @@ export async function membership(id: string) {
   )
     throw new Error("The organization membership is no longer available.");
   return data;
+}
+
+/** Public request deliberately returns no account metadata or recovery secret. */
+export async function requestRecovery(email: string) {
+  const input: components["schemas"]["RecoveryRequest"] = {email};
+  await apiClient.post("/session/password-recovery/request",input);
+}
+/** A successful one-use link revokes old sessions; the caller clears local credentials. */
+export async function confirmRecovery(token: string, newPassword: string) {
+  const input: components["schemas"]["RecoveryConfirmation"] = {token,newPassword};
+  await apiClient.post("/session/password-recovery/confirm",input);
 }

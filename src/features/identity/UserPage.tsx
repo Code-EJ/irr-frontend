@@ -10,6 +10,8 @@ import {roleLabels} from "./ProfilePage";
 import {passwordError} from "./validation";
 import {errorMessage} from "../../shared/api/transport";
 import MembershipPanel from "./MembershipPanel";
+import {useSession} from "./SessionProvider";
+import {session} from "../../shared/api/session";
 /** Loads administrative details from the API, including when reached by a direct URL. */
 export default function UserPage(){
   const {id}=useParams();
@@ -28,6 +30,7 @@ export default function UserPage(){
 }
 function AccountEditor({account,onUpdated}:{account:Account|null,onUpdated:(value:Account)=>void}){
   const navigate=useNavigate();
+  const state=useSession();
   const [input,setInput]=useState<PartnerInput>({fullName:account?.fullName??"",email:account?.email??"",userRole:account?.userRole??"REPRESENTATIVE"});
   const [password,setPassword]=useState("");
   const [confirmation,setConfirmation]=useState("");
@@ -35,32 +38,32 @@ function AccountEditor({account,onUpdated}:{account:Account|null,onUpdated:(valu
   const [error,setError]=useState("");
   const [notice,setNotice]=useState("");
   const [action,setAction]=useState<"reset"|"deactivate"|null>(null);
-  const admin=account?.userRole==="ADMINISTRATOR";
+
   function open(action:"reset"|"deactivate"|null){setPassword("");setConfirmation("");setError("");setAction(action);}
   return <Card className="identity-card">
     <Link to="/users">← Usuários</Link><p className="eyebrow">ADMINISTRAÇÃO</p><h1>{account?"Detalhes da conta":"Criar usuário"}</h1>
     {account?.mustChangePassword&&<p className="status-pill">Troca de senha pendente</p>}
     {notice&&<p role="status">{notice}</p>}
-    {admin?<><p>Administrador: {account.fullName} · {account.email}</p><p className="muted-note">Administradores alteram seus próprios dados e senha em Minha conta.</p></>:<form className="identity-form" onSubmit={async event=>{
+    {<form className="identity-form" onSubmit={async event=>{
       event.preventDefault();if(busy)return;const failure=!account?passwordError(password,confirmation):"";setError(failure);if(failure)return;setBusy(true);setNotice("");
       try{
         const data={...input,fullName:input.fullName.trim(),email:input.email.trim()};
-        if(account?.id){onUpdated(await accounts.update(account.id,data));setNotice("Conta atualizada.");}
-        else{if(data.userRole === "ADMINISTRATOR") throw new Error("Administrator provisioning is not supported."); const created=await accounts.create({...data,userRole:data.userRole,password});setPassword("");setConfirmation("");navigate(`/users/${created.id}`,{replace:true});}
-      }catch(err){setError(isAxiosError(err)&&err.response?.status===409?"Este e-mail já está em uso ou a conta não permite esta alteração.":errorMessage(err));}
+        if(account?.id){onUpdated(await accounts.update(account.id,data));setNotice("Conta atualizada.");if(account.id===state.account?.id) state.reload();}
+        else{const created=await accounts.create({...data,userRole:data.userRole,password});setPassword("");setConfirmation("");navigate(`/users/${created.id}`,{replace:true});}
+      }catch(err){setError(isAxiosError(err)&&err.response?.status===409?"Este e-mail já está em uso ou a alteração removeria o último Administrador Geral ativo.":errorMessage(err));}
       finally{setBusy(false);}
     }}>
       <fieldset disabled={busy}>
         <label>Nome completo<input required maxLength={255} value={input.fullName} onChange={e=>setInput({...input,fullName:e.target.value})}/></label>
         <label>E-mail<input required type="email" maxLength={255} autoComplete="off" value={input.email} onChange={e=>setInput({...input,email:e.target.value})}/></label>
-        <label>Perfil na plataforma<select value={input.userRole} onChange={e=>setInput({...input,userRole:e.target.value as PartnerInput["userRole"]})}>{(["REPRESENTATIVE","ORGANIZATION","CITY_HALL"] as const).map(role=><option key={role} value={role}>{roleLabels[role]}</option>)}</select></label>
+        <label>Perfil na plataforma<select value={input.userRole} onChange={e=>setInput({...input,userRole:e.target.value as PartnerInput["userRole"]})}>{(["ADMINISTRATOR","REPRESENTATIVE","ORGANIZATION","CITY_HALL"] as const).map(role=><option key={role} value={role}>{roleLabels[role]}</option>)}</select></label>
         {!account&&<><p>Defina uma senha inicial e compartilhe-a por um canal seguro.</p><PasswordFields password={password} confirmation={confirmation} setPassword={setPassword} setConfirmation={setConfirmation}/></>}
         {!action&&error&&<p role="alert">{error}</p>}
         <Button type="submit" titulo={busy?"Salvando…":account?"Salvar usuário":"Criar usuário"}/>
       </fieldset>
     </form>}
     {account?.id&&<>
-      {!admin&&<div className="identity-security"><h2>Segurança e acesso</h2><div className="form-actions"><Button variant="secondary" titulo="Redefinir senha" disabled={busy} onClick={()=>open("reset")}/><Button variant="secondary" titulo="Desativar usuário" disabled={busy} onClick={()=>open("deactivate")}/></div></div>}
+      {<div className="identity-security"><h2>Segurança e acesso</h2><div className="form-actions"><Button variant="secondary" titulo="Redefinir senha" disabled={busy} onClick={()=>open("reset")}/><Button variant="secondary" titulo="Desativar usuário" disabled={busy} onClick={()=>open("deactivate")}/></div></div>}
       <MembershipPanel userId={account.id}/>
     </>}
     {action&&<Modal label={action==="reset"?"Redefinir senha":"Desativar usuário"} busy={busy} onClose={()=>open(null)}>
@@ -69,9 +72,9 @@ function AccountEditor({account,onUpdated}:{account:Account|null,onUpdated:(valu
       <form className="identity-form" onSubmit={async event=>{
         event.preventDefault();if(busy)return;const failure=action==="reset"?passwordError(password,confirmation):"";setError(failure);if(failure)return;setBusy(true);
         try{
-          if(action==="reset"){await accounts.reset(account!.id!,password);onUpdated({...account!,mustChangePassword:true});open(null);setNotice("Senha redefinida. Compartilhe a senha temporária por um canal seguro.");}
-          else{await accounts.deactivate(account!.id!);navigate("/users",{replace:true});}
-        }catch(err){setError(errorMessage(err));}finally{setBusy(false);}
+          if(action==="reset"){await accounts.reset(account!.id!,password);if(account!.id===state.account?.id){session.clear();navigate("/login",{replace:true});return;}onUpdated({...account!,mustChangePassword:true});open(null);setNotice("Senha redefinida. Compartilhe a senha temporária por um canal seguro.");}
+          else{await accounts.deactivate(account!.id!);if(account!.id===state.account?.id) session.clear();navigate("/users",{replace:true});}
+        }catch(err){setError(isAxiosError(err)&&err.response?.status===409?"Não é possível remover o último Administrador Geral ativo. Cadastre outro administrador primeiro.":errorMessage(err));}finally{setBusy(false);}
       }}><fieldset disabled={busy}>
         {action==="reset"&&<PasswordFields password={password} confirmation={confirmation} setPassword={setPassword} setConfirmation={setConfirmation}/>}
         {error&&<p role="alert">{error}</p>}<div className="form-actions"><Button type="submit" titulo={busy?"Aguarde…":action==="reset"?"Confirmar redefinição":"Confirmar desativação"}/><Button variant="secondary" titulo="Cancelar" onClick={()=>open(null)}/></div>

@@ -9,7 +9,7 @@ import { useSession } from "../identity/SessionProvider";
 import { errorMessage } from "../../shared/api/transport";
 import { team, teamRoles, type TeamMember, type TeamRequest } from "./api";
 export default function TeamPage() {
-  const manager = useSession().membership?.role === "MANAGER";
+  const manager = useSession().canManage;
   const [page, setPage] = useState(0);
   const [revision, setRevision] = useState(0);
   const { data, busy, error } = usePage(team.list, page, revision);

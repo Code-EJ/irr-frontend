@@ -7,7 +7,7 @@ import Button from "../../components/Button";
 import {useSession} from "./SessionProvider";
 import {updateProfile} from "./api";
 import {errorMessage} from "../../shared/api/transport";
-export const roleLabels = {ADMINISTRATOR:"Administrador",REPRESENTATIVE:"Representante",ORGANIZATION:"Organização",CITY_HALL:"Prefeitura"};
+export const roleLabels = {ADMINISTRATOR:"Administrador Geral",REPRESENTATIVE:"Representante",ORGANIZATION:"Organização",CITY_HALL:"Prefeitura"};
 /** Self-service profile never exposes role or organization write controls. */
 export default function ProfilePage() {
   const {account,reload} = useSession();

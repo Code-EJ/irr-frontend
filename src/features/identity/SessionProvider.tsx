@@ -21,13 +21,14 @@ type State = {
   organizations: Organization[];
   organization: Organization | null;
   membership: Membership | null;
+  canManage: boolean;
   loading: boolean;
   error: string;
   select: (id: string) => void;
   reload: () => void;
 };
 const Context = createContext<State | null>(null);
-/** Loads permissions from the backend; platform role never substitutes for membership. */
+/** Loads server authority; global access never fabricates an organization membership. */
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [revision, setRevision] = useState(0);
   const [state, setState] = useState<Omit<State, "select" | "reload">>({
@@ -35,6 +36,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     organizations: [],
     organization: null,
     membership: null,
+    canManage: false,
     loading: true,
     error: "",
   });
@@ -55,6 +57,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         organizations: [],
         organization: null,
         membership: null,
+        canManage: false,
         loading: false,
         error: "",
       });
@@ -65,6 +68,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       organizations: [],
       organization: null,
       membership: null,
+      canManage: false,
       loading: true,
       error: "",
     });
@@ -74,13 +78,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       if (!active) return;
       const selected =
         items.find((org) => org.id === session.getOrganization()) ?? null;
-      const access = selected?.id ? await membership(selected.id) : null;
+      const global = account.userRole === "ADMINISTRATOR";
+      const access = selected?.id && !global ? await membership(selected.id) : null;
       if (active)
         setState({
           account,
           organizations: items,
           organization: selected,
           membership: access,
+          canManage: Boolean(selected) && (global || access?.role === "MANAGER"),
           loading: false,
           error: "",
         });
@@ -91,6 +97,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           organizations: [],
           organization: null,
           membership: null,
+          canManage: false,
           loading: false,
           error: errorMessage(error),
         });

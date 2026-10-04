@@ -13,7 +13,7 @@ export default function MembershipPanel({userId}:{userId:string}){
   const [revision,setRevision]=useState(0);
   const {data,busy,error}=usePage(administration.list,page,revision);
   const [selected,setSelected]=useState<Organization|null>(null);
-  return <section className="identity-security"><h2>Vínculos com organizações</h2><p>O perfil na plataforma não concede acesso automático às organizações.</p>
+  return <section className="identity-security"><h2>Vínculos com organizações</h2><p>Administradores Gerais têm acesso global. Os vínculos abaixo definem as permissões locais dos demais usuários.</p>
     {error?<p role="alert">{error}<Button titulo="Recarregar organizações" onClick={()=>setRevision(n=>n+1)}/></p>:busy?<p role="status">Carregando organizações…</p>:<>
       {!data.items.length&&<p>Nenhuma organização ativa disponível.</p>}
       <ul className="membership-list">{data.items.map(org=><li key={org.id}><span>{org.name}</span><Button variant="secondary" titulo="Gerenciar vínculo" aria-label={`Gerenciar vínculo com ${org.name}`} onClick={()=>setSelected(org)}/></li>)}</ul>
@@ -22,7 +22,7 @@ export default function MembershipPanel({userId}:{userId:string}){
     {selected?.id&&<MembershipEditor key={selected.id} organization={selected} userId={userId} onClose={()=>setSelected(null)}/>}
   </section>;
 }
-function MembershipEditor({organization,userId,onClose}:{organization:Organization,userId:string,onClose:()=>void}){
+export function MembershipEditor({organization,userId,onClose}:{organization:Organization,userId:string,onClose:()=>void}){
   const [membership,setMembership]=useState<Membership|null>(null);
   const [role,setRole]=useState<"MEMBER"|"MANAGER">("MEMBER");
   const [busy,setBusy]=useState(true);
@@ -49,12 +49,12 @@ function MembershipEditor({organization,userId,onClose}:{organization:Organizati
     }catch(err){setError(errorMessage(err));}finally{setBusy(false);}
   }
   return <Modal label="Gerenciar vínculo" busy={busy} onClose={onClose}>
-    <h2>{organization.name}</h2><p>{membership?.active?`Vínculo ativo: ${membership.role==="MANAGER"?"Gestor":"Membro"}`:"Sem vínculo ativo"}</p>
+    <h2>{organization.name}</h2><p>{membership?.active?`Vínculo ativo: ${membership.role==="MANAGER"?"Administrador da Organização":"Membro"}`:"Sem vínculo ativo"}</p>
     {busy&&<p role="status">Aguarde…</p>}{error&&<p role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}
     {!loaded&&!busy&&<Button titulo="Tentar novamente" onClick={()=>setRevision(n=>n+1)}/>}
     <fieldset disabled={busy||!loaded} className="identity-form">
-      <label>Permissão na organização<select value={role} onChange={e=>setRole(e.target.value as "MEMBER"|"MANAGER")}><option value="MEMBER">Membro</option><option value="MANAGER">Gestor</option></select></label>
-      <p className="muted-note">Gestores podem alterar os dados operacionais da organização. Nenhum vínculo concede administração da plataforma.</p>
+      <label>Permissão na organização<select value={role} onChange={e=>setRole(e.target.value as "MEMBER"|"MANAGER")}><option value="MEMBER">Membro</option><option value="MANAGER">Administrador da Organização</option></select></label>
+      <p className="muted-note">Administradores da Organização podem alterar os dados operacionais da organização. Nenhum vínculo concede administração da plataforma.</p>
       <Button titulo="Salvar vínculo" onClick={()=>void save(false)}/>
       {membership?.active&&(confirmRevoke?<div role="alert"><p>Revogar o acesso a esta organização? O histórico será preservado.</p><Button titulo="Confirmar revogação" onClick={()=>void save(true)}/><Button variant="secondary" titulo="Cancelar revogação" onClick={()=>setConfirmRevoke(false)}/></div>:<Button variant="secondary" titulo="Revogar vínculo" onClick={()=>setConfirmRevoke(true)}/>)}
     </fieldset><Button variant="secondary" titulo="Fechar" disabled={busy} onClick={onClose}/>

@@ -27,6 +27,8 @@ import ProfilePage from "../features/identity/ProfilePage";
 import PasswordPage from "../features/identity/PasswordPage";
 import UsersPage from "../features/identity/UsersPage";
 import UserPage from "../features/identity/UserPage";
+import RecoveryPage,{ResetPasswordPage} from "../features/identity/RecoveryPage";
+import OrganizationsPage,{OrganizationPage} from "../features/identity/OrganizationsPage";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import {
@@ -91,7 +93,7 @@ function Protected() {
             <UserRound size={19} />
             Minha conta
           </NavLink>
-          {state.account?.userRole === "ADMINISTRATOR" && <NavLink to="/users"><UsersRound size={19}/>Usuários</NavLink>}
+          {state.account?.userRole === "ADMINISTRATOR" && <><NavLink to="/users"><UsersRound size={19}/>Usuários</NavLink><NavLink to="/organizations"><UsersRound size={19}/>Organizações</NavLink></>}
           <NavLink to="/donors">
             <HandHeart size={19} />
             Doadores
@@ -142,9 +144,9 @@ function Protected() {
             <span>
               {state.account?.fullName}
               <small>
-                {state.membership
+                {state.account?.userRole === "ADMINISTRATOR" ? "Administrador Geral" : state.membership
                   ? state.membership.role === "MANAGER"
-                    ? "Gestor da organização"
+                    ? "Administrador da Organização"
                     : "Membro da organização"
                   : "Selecione uma organização"}
               </small>
@@ -184,11 +186,11 @@ function Scoped({ manager = false }: { manager?: boolean }) {
         </p>
       </Card>
     );
-  if (manager && state.membership?.role !== "MANAGER")
+  if (manager && !state.canManage)
     return (
       <Card>
         <p role="alert">
-          Somente gestores da organização podem alterar veículos.
+          Somente administradores da organização ou Administradores Gerais podem alterar veículos.
         </p>
         <Link to="/vehicle-list">Voltar para veículos</Link>
       </Card>
@@ -271,11 +273,16 @@ export default function AppRouter() {
       <SessionProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<RecoveryPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route element={<Protected />}>
             <Route path="/menu" element={<Home />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/password" element={<PasswordPage />} />
             <Route element={<AdministratorOnly />}>
+              <Route path="/organizations" element={<OrganizationsPage />} />
+              <Route path="/organizations/new" element={<OrganizationPage key="new" />} />
+              <Route path="/organizations/:id" element={<OrganizationPage />} />
               <Route path="/users" element={<UsersPage />} />
               <Route path="/users/new" element={<UserPage key="new" />} />
               <Route path="/users/:id" element={<UserPage />} />

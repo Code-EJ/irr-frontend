@@ -1,7 +1,7 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
 import { useState } from "react";
 import { isAxiosError } from "axios";
-import { Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import InputText from "../components/InputText";
@@ -103,6 +103,7 @@ export default function Login() {
               </>
             )}
           </SimpleForm>
+          <p className="login-help"><Link to="/forgot-password">Esqueci minha senha</Link></p>
           <p className="login-help">
             Precisa de acesso? Entre em contato com o administrador da sua
             organização.

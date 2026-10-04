@@ -23,7 +23,7 @@ type Props = {
 
 /** Renders one level of the material hierarchy, never a generic business CRUD workflow. */
 function CatalogPanel({ level, parent, selected, onSelect }: Props) {
-  const manager = useSession().membership?.role === "MANAGER";
+  const manager = useSession().canManage;
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("");
