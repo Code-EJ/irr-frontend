@@ -7,7 +7,7 @@ import Button from "../../components/Button";
 import Modal from "../../components/Modal";
 import { errorMessage } from "../../shared/api/transport";
 import { useSession } from "../identity/SessionProvider";
-import { decimal } from "../intake/quantities";
+import { decimal, displayDecimal } from "../intake/quantities";
 import { executions, executionStatuses, type Execution } from "./api";
 const timestamp = (value: string | undefined) =>
   value ? new Date(value).toLocaleString("pt-BR") : "Não registrado";
@@ -124,7 +124,7 @@ export default function ExecutionPage() {
                   <dd>
                     {record.plannedDistanceKm == null
                       ? "Não informada"
-                      : record.plannedDistanceKm + " km"}
+                      : displayDecimal(record.plannedDistanceKm) + " km"}
                   </dd>
                   <dt>Duração planejada</dt>
                   <dd>
@@ -145,7 +145,7 @@ export default function ExecutionPage() {
                   <dd>
                     {record.distanceKm == null
                       ? "Não informada"
-                      : record.distanceKm + " km"}
+                      : displayDecimal(record.distanceKm) + " km"}
                   </dd>
                   {record.status === "CANCELLED" && (
                     <>
@@ -190,6 +190,11 @@ export default function ExecutionPage() {
                     <label>
                       <input
                         type="checkbox"
+                        aria-label={
+                          "Área atendida: " +
+                          area.neighborhoodName +
+                          (area.street ? " — " + area.street : "")
+                        }
                         checked={area.covered ?? false}
                         disabled={busy || record.status !== "IN_PROGRESS"}
                         onChange={(e) =>

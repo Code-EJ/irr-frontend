@@ -183,7 +183,10 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
             teamMemberIds: execution.team.map((member) => member.teamMemberId!),
             departureAt: localDateTime(execution.startedAt),
             arrivalAt: localDateTime(execution.finishedAt),
-            distanceKm: execution.distanceKm ?? "",
+            distanceKm:
+              execution.distanceKm == null
+                ? ""
+                : displayDecimal(execution.distanceKm),
           }));
         })
         .catch((err) => {

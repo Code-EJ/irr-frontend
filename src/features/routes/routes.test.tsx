@@ -410,7 +410,9 @@ it("requires explicit cancellation and versioned coverage during operation", asy
     </MemoryRouter>,
   );
   await screen.findByText("Cobertura desta execução");
-  await userEvent.click(screen.getByRole("checkbox"));
+  await userEvent.click(
+    screen.getByRole("checkbox", { name: "Área atendida: Centro — Rua A" }),
+  );
   await waitFor(() => expect(coverage).toEqual({ version: 2, covered: true }));
   await screen.findByText("Execução: versão 3");
   await userEvent.click(
@@ -448,6 +450,7 @@ it("denies local member scheduling and exposes terminal history without operatio
     </MemoryRouter>,
   );
   await screen.findByText("Concluída");
+  expect(screen.getAllByText("8,125 km").length).toBeGreaterThan(0);
   expect(
     screen.queryByRole("button", { name: "Concluir execução" }),
   ).toBeNull();

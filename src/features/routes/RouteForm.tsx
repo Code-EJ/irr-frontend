@@ -9,7 +9,7 @@ import Pagination from "../../shared/ui/Pagination";
 import { usePage } from "../../shared/ui/usePage";
 import { errorMessage } from "../../shared/api/transport";
 import { useSession } from "../identity/SessionProvider";
-import { decimal } from "../intake/quantities";
+import { decimal, displayDecimal } from "../intake/quantities";
 import {
   routes,
   geography,
@@ -109,7 +109,11 @@ export default function RouteForm() {
           setName(item.name);
           setMunicipality(item.municipalityId);
           setStatus(item.status);
-          setDistance(item.plannedDistanceKm ?? "");
+          setDistance(
+            item.plannedDistanceKm == null
+              ? ""
+              : displayDecimal(item.plannedDistanceKm),
+          );
           setDuration(item.plannedDurationMinutes?.toString() ?? "");
           setAreas(
             item.areas.map((area) => ({
