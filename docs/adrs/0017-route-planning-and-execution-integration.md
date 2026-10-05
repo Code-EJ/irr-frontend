@@ -1,6 +1,6 @@
 # ADR-0017: Route planning and execution integration
 
-- Status: Accepted for incremental implementation; verification pending.
+- Status: Accepted; implemented and locally verified; remote homologation remains pending.
 - Date: 2026-10-04.
 - Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
@@ -19,3 +19,7 @@ Global administrators can register shared territorial references; MANAGER plans/
 Run lint/typecheck/unit/component/real-backend contract/build/OpenAPI checks, both Docker images and browser workflows. Preserve Identity/ledger/intake regressions. Verify route history survives plan edits and Collection points to the executed snapshot. Verify actual organization isolation/global/member permissions and active municipality/neighborhood selection. A successful compile or this ADR alone does not close Routes.
 
 External mail approval, unknown product formulas, vehicle booking/coverage completeness policy, GPS/maps, route terminal corrections and dashboards remain separate. Analytics is planned, with native PostgreSQL/query/API/IRR frontend and shared export definitions; no charts, BI SDK, geometry provider or empty telemetry interface is implemented now. Current tests/actual executed API reference are recorded as implementation advances.
+
+## Delivery evidence — 2026-10-05
+
+The operational phase is IMPLEMENTED / READY FOR HOMOLOGATION. See [the Routes verification record](../routes-verification.md) for the tested image/contract pair, PostgreSQL upgrade, browser workflow, limitations and release gates. Analytics remains planning only.
