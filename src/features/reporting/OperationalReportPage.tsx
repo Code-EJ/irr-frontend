@@ -5,6 +5,7 @@ import Card from "../../components/Card";
 import Button from "../../components/Button";
 import ResourcePicker from "../../shared/ui/ResourcePicker";
 import { errorMessage } from "../../shared/api/transport";
+import { displayDuration } from "./duration";
 import { displayDecimal } from "../intake/quantities";
 import { municipalityChoices, municipalityChoice } from "../routes/api";
 import { operationalReport, reportRouteChoices, reportRouteChoice, reportVehicleChoices, reportVehicleChoice,
@@ -35,7 +36,7 @@ export default function OperationalReportPage() {
   const field = (name: "municipalityId" | "routeId" | "vehicleId", value: string) => setDraft({...draft,[name]:value || undefined});
   return <Card>
     <div className="page-heading"><div><p className="eyebrow">ACOMPANHAMENTO</p>
-      <h1><BarChart3 aria-hidden="true" size={28}/> Relatório operacional</h1>
+      <h1 className="report-title"><BarChart3 aria-hidden="true" size={28}/> Relatório operacional</h1>
       <p className="page-description">Acompanhe os resultados da organização, com os dados informados pela equipe.</p></div></div>
     <form className="report-filters" onSubmit={event => {event.preventDefault();setApplied({...draft});}}>
       <label>Data inicial<input type="date" required value={draft.from} max={draft.to} onChange={event => setDraft({...draft,from:event.target.value})}/></label>
@@ -55,11 +56,12 @@ export default function OperationalReportPage() {
       <dl className="report-metrics">
         <div><dt><CheckCircle2 aria-hidden="true"/>Execuções concluídas</dt><dd>{data.completedExecutions}</dd><p>Contadas uma vez por execução.</p></div>
         <div><dt><Gauge aria-hidden="true"/>Distância informada</dt><dd>{data.reportedDistanceKm == null ? "Sem informação" : displayDecimal(data.reportedDistanceKm)+" km"}</dd><p>{data.measuredExecutions} com medição · {data.missingDistanceExecutions} sem informação</p></div>
-        <div><dt><Timer aria-hidden="true"/>Duração real</dt><dd>{displayDecimal(data.durationSeconds)} s</dd><p>Tempo entre início e conclusão.</p></div>
+        <div><dt><Timer aria-hidden="true"/>Duração real</dt><dd title={displayDecimal(data.durationSeconds) + " segundos exatos"}>{displayDuration(data.durationSeconds)}</dd><p>Tempo entre início e conclusão. A partir de uma hora, exibido em minutos completos.</p><details className="report-duration-detail"><summary>Ver segundos exatos</summary><p>{displayDecimal(data.durationSeconds)} s</p></details></div>
         <div><dt><Scale aria-hidden="true"/>Peso coletado</dt><dd>{displayDecimal(data.collectedWeightKg)} kg</dd><p>{data.collectionCount} coletas ativas</p></div>
       </dl>
       <div className="report-notice"><h3>Como interpretar</h3><p>Os totais são recalculados após alterações. Distâncias ausentes não são estimadas; zero significa uma medição informada.</p>
         <p>{data.municipalityId || data.routeId ? "Coletas sem vínculo com uma execução são excluídas quando há filtro de município ou rota." : `${data.unlinkedCollections} coletas sem vínculo com uma execução estão incluídas no peso; elas não possuem município ou rota comprovados.`}</p>
+        <p>Duração em meses e anos usa equivalências aproximadas de 30 e 365 dias. Consulte o valor original em “Ver segundos exatos”.</p>
         <p>O peso considera a data da coleta, mesmo quando a execução vinculada foi concluída em outro período.</p></div>
       <p className="report-method">Atualizado em {new Date(data.generatedAt).toLocaleString("pt-BR",{timeZone:data.timezone})} · Horário de Brasília</p>
     </section>}
