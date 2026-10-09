@@ -23,6 +23,9 @@ import DocumentsPage from "../features/documents/DocumentsPage";
 import IntakeList from "../features/intake/IntakeList";
 import IntakeForm from "../features/intake/IntakeForm";
 import OperationalReportPage from "../features/reporting/OperationalReportPage";
+import ProcessingPage from "../features/processing/ProcessingPage";
+import ProcessingForm from "../features/processing/ProcessingForm";
+import InventoryPage from "../features/processing/InventoryPage";
 import RoutesPage from "../features/routes/RoutesPage";
 import RouteForm from "../features/routes/RouteForm";
 import ExecutionsPage from "../features/routes/ExecutionsPage";
@@ -222,8 +225,7 @@ function Home() {
       <div className="coming-next">
         <span className="status-pill">Em breve</span>
         <p>
-          Processamento, estoque e vendas estarão disponíveis nas próximas
-          etapas.
+          Vendas e comercialização estarão disponíveis nas próximas etapas.
         </p>
       </div>
     </div>
@@ -253,6 +255,11 @@ export default function AppRouter() {
               <Route path="/users/:id" element={<UserPage />} />
             </Route>
             <Route element={<Scoped />}>
+              <Route path="/sortings" element={<ProcessingPage key="sortings" kind="sortings" />} />
+              <Route path="/sortings/new" element={<ProcessingForm key="new-sorting" kind="sortings" />} />
+              <Route path="/pressings" element={<ProcessingPage key="pressings" kind="pressings" />} />
+              <Route path="/pressings/new" element={<ProcessingForm key="new-pressing" kind="pressings" />} />
+              <Route path="/inventory" element={<InventoryPage />} />
               <Route path="/reports/operations" element={<OperationalReportPage />} />
               <Route path="/routes" element={<RoutesPage />} />
               <Route

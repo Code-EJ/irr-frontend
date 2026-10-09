@@ -22,6 +22,9 @@ export default function Sidebar({ name, role, administrator, onSignOut }: {
         <div className="navigation-items">
           <NavLink to="/routes"><MapPinned size={18} aria-hidden="true" />Rotas</NavLink>
           <NavLink to="/intake"><PackagePlus size={18} aria-hidden="true" />Entradas</NavLink>
+          <NavLink to="/sortings"><Layers3 size={18} aria-hidden="true" />Triagem</NavLink>
+          <NavLink to="/pressings"><Recycle size={18} aria-hidden="true" />Prensagem</NavLink>
+          <NavLink to="/inventory"><PackagePlus size={18} aria-hidden="true" />Estoque</NavLink>
           <NavLink to="/documents"><Files size={18} aria-hidden="true" />Documentos</NavLink>
         </div>
       </section>
