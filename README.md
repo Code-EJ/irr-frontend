@@ -168,6 +168,10 @@ The current Routes integration includes municipal plans, ordered neighborhood/st
 
 Final local acceptance and remaining release gates: [Routes verification record](docs/routes-verification.md).
 
+## Native operational reporting
+
+Open **Relatório operacional** after selecting an organization. The four approved metrics use the current Swagger contract, exact decimal quantities, Brazilian calendar dates and optional municipality/route/vehicle filters. See [user workflow and development](docs/reporting-integration.md) and [verification evidence](docs/reporting-verification.md). For the local identity worktree stack, set the public VITE_API_BASE_URL in the ignored local environment to http://localhost:9292/api/v1 and rebuild the frontend container. Development credentials remain in the ignored private environment file.
+
 ## Code quality gates
 
 Run `npm run lint` for ESLint with zero warnings allowed, `npm run lint:fix` for deliberate local autofixes, and `npm run typecheck` for TypeScript. CI checks lint and types before testing/building. Generated API types and private local artifacts are excluded from lint. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas).
