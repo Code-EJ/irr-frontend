@@ -167,3 +167,7 @@ The contract suite includes real email capture, credential replacement/replay, g
 The current Routes integration includes municipal plans, ordered neighborhood/street coverage, dated fleet/team assignments, start/coverage/completion/cancellation and optional completed-execution collection linkage. Select an organization before opening `/routes`. Global administrators curate territory; organization administration manages plans/scheduling; members record permitted field operations. Platform content is Brazilian Portuguese. See [the Routes development and verification guide](docs/routes-integration.md) for step-by-step Docker/source operation, credentials, tests, exact contract behavior and rollout. No new secret/service is needed. Backend V4 must run before the matching frontend; preserve database volumes. Analytics and GPS remain future phases.
 
 Final local acceptance and remaining release gates: [Routes verification record](docs/routes-verification.md).
+
+## Code quality gates
+
+Run `npm run lint` for ESLint with zero warnings allowed, `npm run lint:fix` for deliberate local autofixes, and `npm run typecheck` for TypeScript. CI checks lint and types before testing/building. Generated API types and private local artifacts are excluded from lint. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas).

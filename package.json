@@ -7,7 +7,7 @@
     "dev": "vite",
     "start": "vite",
     "build": "npm run typecheck && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.tests.json",
     "test": "vitest run",
@@ -17,7 +17,8 @@
     "api:check": "node scripts/check-openapi.mjs",
     "dev:credentials": "node scripts/development-credentials.mjs",
     "verify:production": "node scripts/verify-production-bundle.mjs",
-    "verify:homologation": "node scripts/verify-homologation.mjs"
+    "verify:homologation": "node scripts/verify-homologation.mjs",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "axios": "^1.7.9",
