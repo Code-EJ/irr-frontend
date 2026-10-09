@@ -172,6 +172,10 @@ Final local acceptance and remaining release gates: [Routes verification record]
 
 Open **Relatório operacional** after selecting an organization. The four approved metrics use the current Swagger contract, exact decimal quantities, Brazilian calendar dates and optional municipality/route/vehicle filters. See [user workflow and development](docs/reporting-integration.md) and [verification evidence](docs/reporting-verification.md). For the local identity worktree stack, set the public VITE_API_BASE_URL in the ignored local environment to http://localhost:9292/api/v1 and rebuild the frontend container. Development credentials remain in the ignored private environment file.
 
+## Navigation and duration
+
+The sidebar groups Operation, Registers, Results and global Administration, with profile/sign-out in the account footer. Operational duration now progresses from seconds to minutes, hours, days, approximate months and years. Expand **Ver segundos exatos** for the original quantity. [Presentation rules and local verification](docs/reporting-verification.md) document the tested boundaries without changing the backend contract.
+
 ## Code quality gates
 
 Run `npm run lint` for ESLint with zero warnings allowed, `npm run lint:fix` for deliberate local autofixes, and `npm run typecheck` for TypeScript. CI checks lint and types before testing/building. Generated API types and private local artifacts are excluded from lint. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas).

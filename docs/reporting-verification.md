@@ -27,9 +27,17 @@ For real-backend checks, use the private IRR_BACKEND_ENV reference, VITE_API_BAS
 
 Backend verification used a public-source build snapshot because the original Windows generated target migration file was locked; original source/migrations/permissions were preserved. Spotless also passed in the original worktree. The public HTTPS-only production bundle gate is not applicable to a localhost build and remains a release gate, together with external email/homologation and the documented build-chain advisories.
 
-## Contract findings and follow-up
+## Navigation and duration acceptance — 2026-10-09
+
+Frontend source b9f480d on feat/frontend-navigation-and-duration adds grouped task navigation, pinned account/profile/sign-out, and progressive elapsed-time display through years. See [presentation rules](reporting-integration.md). The HTTP contract and backend remain unchanged at 20a03c7. This is the owner's presentation refinement of the accepted slice, not a new metric or architecture decision.
+
+Lint, TypeScript, production build and Docker rebuild passed. The full frontend suite passed 105 tests across 12 files, including 20 duration boundary/precision cases and two account/navigation authorization-visibility cases. Six read-only pair checks and api:check passed against the running containers. The existing report tests now expect human-readable elapsed minutes while preserving exact decimal seconds.
+
+Browser verification passed with real organization data: grouped desktop navigation, organization selection, 103.469461 source seconds shown as 1 min 43.469461 seconds with Portuguese decimal punctuation, and exact-seconds disclosure opened with Enter. The 390-pixel responsive check had equal document/client widths (375 pixels excluding the scrollbar), with no horizontal overflow; lower menu links remained reachable by scrolling. The normal viewport was restored. Private visual evidence is retained under .local/navigation-duration-desktop.png and .local/navigation-duration-mobile.png. No accounts, credentials or business facts were changed.
 
 Browser acceptance also passed against the running containers: existing administrator sign-in; required organization selection; empty report with unknown distance; switch to retained Routes fixture history; route/vehicle filter application; exact 8.125 km, 63.485280 seconds and 1.2345 kg from one execution and one receipt. Organization switching cleared the prior report. The full-page layout was visually reviewed; private local evidence is saved as frontend .local/operational-report.png. These read-only browser checks created no new business fixtures.
+
+## Contract findings and follow-up
 
 Nullable applied filter IDs were explicitly documented in backend Swagger. Existing fleet listing already retains inactive vehicles, so historical selectors required no new backend functionality. No deprecated endpoint or legacy adapter was added; no obsolete frontend closure needed removal for this additive slice. Existing commercial summaries/CSV keep their own rules.
 

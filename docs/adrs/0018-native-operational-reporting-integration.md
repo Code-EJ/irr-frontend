@@ -24,6 +24,8 @@ Backend first: scoped query/API plus PostgreSQL tests for day boundaries, exact 
 
 ## Consequences and remaining risks
 
+The owner's 2026-10-09 presentation follow-up groups existing navigation and displays elapsed duration progressively through years, with exact seconds retained and 30/365-day approximations documented. It changes neither operations-1 nor /api/v1. [Presentation and verification](../reporting-verification.md) records the implementation; a new architecture decision is unnecessary for this UI refinement.
+
 [Verification evidence](../reporting-verification.md) records the actual backend 20a03c7 Swagger baseline, 83 frontend tests, 21 real API checks and container/pair verification. Broader Analytics remains pending.
 
 Benefits: auditable facts, exact sums, no double counting and incremental delivery. Costs: live totals change after edits; ad-hoc receipts lack municipal provenance; manual km completeness must remain visible. External email/homologation and existing build-chain advisories remain separate release gates. Unapproved metric families in the register retain PRODUCT DEFINITION REQUIRED. Record actual acceptance evidence before marking implementation complete.
