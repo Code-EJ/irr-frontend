@@ -17,6 +17,7 @@ import {
 } from "../../src/features/intake/api";
 import { driverChoices } from "../../src/features/intake/choices";
 import { catalog } from "../../src/features/materials/api";
+import { sales, buyers, } from "../../src/features/sales/api";
 import { processing, inventory } from "../../src/features/processing/api";
 import { fleet } from "../../src/features/fleet/api";
 const envFile = process.env.IRR_BACKEND_ENV;
@@ -46,6 +47,7 @@ const intake: {
 const uploads: string[] = [];
 const sortings: string[] = [];
 const pressings: string[] = [];
+const saleIds: string[] = [];
 let admin = "",
   member = "",
   adminId = "",
@@ -393,6 +395,50 @@ it("posts and replays pressing, blocks upstream reversal and restores exact inve
   expect(restored.weightKg).toBe(before.weightKg);
   expect(restored.volumeM3).toBe(before.volumeM3);
 });
+it("completes invoice-gated versioned sales with replay and exact stock restoration", async () => {
+  scope();
+  const buyer = await safe(buyers.create({ name: "Sales contract buyer", document: "12345678000199" }));
+  await safe(buyers.update(buyer.id!, { name: "Updated sales buyer", document: "12345678000199" }));
+  expect((await safe(buyers.get(buyer.id!))).name).toBe("Updated sales buyer");
+  scope(member);
+  expect(await status(buyers.create({ name: "Forbidden member buyer" }))).toBe(403);
+  expect(await status(buyers.update(buyer.id!, { name: "Forbidden edit" }))).toBe(403);
+  const sortedLot = (await safe(inventory.lots(0))).items.find(value => value.sortedItemId)!;
+  const pressing = await safe(processing.create("pressings", { pressedBales: [{ sortedItemId: sortedLot.sortedItemId!, materialSubtypeId: subtypeId, weightKg: "0.2000", initialVolumeM3: "0.0200", finalVolumeM3: "0.0100", destinationType: "STOCK" }] }, randomUUID()));
+  pressings.push(pressing.id!);
+  const lot = (await safe(inventory.lots(0))).items.find(value => value.pressedBaleId)!;
+  const before = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const payload = { saleDate: "2026-10-09T12:00:00Z", buyerId: buyer.id!, items: [{ stockLotId: lot.id!, materialSubtypeId: subtypeId, weightKg: "0.0500", volumeM3: "0.0050", unitPrice: "1.2345" }] };
+  let sale = await safe(sales.create(payload)); saleIds.push(sale.id);
+  expect(sale.status).toBe("DRAFT"); expect(sale.totalValue).toBe("0.06");
+  expect((await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!.weightKg).toBe(before.weightKg);
+  expect(await status(sales.transition(sale.id, "post", sale.version, randomUUID()))).toBe(400);
+  const oldVersion = sale.version;
+  sale = await safe(sales.update(sale.id, { ...payload, nfeAttachmentId: proofId, version: sale.version }));
+  expect(await status(sales.update(sale.id, { ...payload, version: oldVersion }))).toBe(409);
+  const postVersion = sale.version, postKey = randomUUID();
+  sale = await safe(sales.transition(sale.id, "post", postVersion, postKey));
+  expect(sale.status).toBe("POSTED");
+  expect((await safe(sales.transition(sale.id, "post", postVersion, postKey))).version).toBe(sale.version);
+  expect(await status(sales.update(sale.id, { ...payload, version: sale.version }))).toBe(409);
+  expect(await status(sales.deactivate(sale.id, sale.version))).toBe(409);
+  expect(await status(processing.reverse("pressings", pressing.id!, randomUUID()))).toBe(409);
+  const after = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(after.weightKg).toBe("0.3500"); expect(after.volumeM3).toBe("0.0250");
+  scope(admin, orgs[1]); expect(await status(sales.get(sale.id))).toBe(404); expect(await status(buyers.get(buyer.id!))).toBe(404);
+  scope(); expect(await status(buyers.deactivate(buyer.id!))).toBe(409);
+  scope(member);
+  const reverseVersion = sale.version, reverseKey = randomUUID();
+  sale = await safe(sales.transition(sale.id, "reverse", reverseVersion, reverseKey));
+  expect(sale.status).toBe("REVERSED");
+  expect((await safe(sales.transition(sale.id, "reverse", reverseVersion, reverseKey))).version).toBe(sale.version);
+  const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(restored.weightKg).toBe(before.weightKg); expect(restored.volumeM3).toBe(before.volumeM3);
+  const excess = await safe(sales.create({ ...payload, nfeAttachmentId: proofId, items: [{ ...payload.items[0], weightKg: "99.0000" }] })); saleIds.push(excess.id);
+  expect(await status(sales.transition(excess.id, "post", excess.version, randomUUID()))).toBe(409);
+  expect(await status(sales.deactivate(excess.id, excess.version + 1))).toBe(409);
+  await safe(sales.deactivate(excess.id, excess.version)); expect(await status(sales.get(excess.id))).toBe(404);
+});
 it("deactivates unprocessed collections and independent donors", async () => {
   scope(member);
   await safe(collections.deactivate(intake[1].id));
@@ -420,6 +466,15 @@ afterAll(async () => {
       failures.push(label);
     }
   };
+  for (const id of saleIds) {
+    const code = await status(sales.get(id));
+    if (code === 404) continue;
+    await clean("restore sale", async () => {
+      const sale = await sales.get(id);
+      if (sale.status === "POSTED") await sales.transition(id, "reverse", sale.version, randomUUID());
+      else if (sale.status === "DRAFT") await sales.deactivate(id, sale.version);
+    });
+  }
   for (const id of pressings)
     await clean("reverse pressing", () => processing.reverse("pressings", id, randomUUID()));
   for (const id of sortings)

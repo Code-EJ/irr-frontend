@@ -25,6 +25,7 @@ export default function Sidebar({ name, role, administrator, onSignOut }: {
           <NavLink to="/sortings"><Layers3 size={18} aria-hidden="true" />Triagem</NavLink>
           <NavLink to="/pressings"><Recycle size={18} aria-hidden="true" />Prensagem</NavLink>
           <NavLink to="/inventory"><PackagePlus size={18} aria-hidden="true" />Estoque</NavLink>
+          <NavLink to="/sales"><HandHeart size={18} aria-hidden="true" />Vendas</NavLink>
           <NavLink to="/documents"><Files size={18} aria-hidden="true" />Documentos</NavLink>
         </div>
       </section>
@@ -35,6 +36,7 @@ export default function Sidebar({ name, role, administrator, onSignOut }: {
           <NavLink to="/team"><UsersRound size={18} aria-hidden="true" />Equipe</NavLink>
           <NavLink to="/materials"><Layers3 size={18} aria-hidden="true" />Materiais</NavLink>
           <NavLink to="/donors"><HandHeart size={18} aria-hidden="true" />Doadores</NavLink>
+          <NavLink to="/buyers"><UsersRound size={18} aria-hidden="true" />Compradores</NavLink>
         </div>
       </section>
       <section className="navigation-group" aria-labelledby="navigation-results">

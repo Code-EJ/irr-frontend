@@ -26,6 +26,9 @@ import OperationalReportPage from "../features/reporting/OperationalReportPage";
 import ProcessingPage from "../features/processing/ProcessingPage";
 import ProcessingForm from "../features/processing/ProcessingForm";
 import InventoryPage from "../features/processing/InventoryPage";
+import BuyersPage from "../features/sales/BuyersPage";
+import SalesPage from "../features/sales/SalesPage";
+import SalePage from "../features/sales/SalePage";
 import RoutesPage from "../features/routes/RoutesPage";
 import RouteForm from "../features/routes/RouteForm";
 import ExecutionsPage from "../features/routes/ExecutionsPage";
@@ -222,12 +225,7 @@ function Home() {
           <strong>Acessar entradas →</strong>
         </Link>
       </div>
-      <div className="coming-next">
-        <span className="status-pill">Em breve</span>
-        <p>
-          Vendas e comercialização estarão disponíveis nas próximas etapas.
-        </p>
-      </div>
+      <Link className="primary-link" to="/sales">Acessar vendas e comercialização →</Link>
     </div>
   );
 }
@@ -255,6 +253,10 @@ export default function AppRouter() {
               <Route path="/users/:id" element={<UserPage />} />
             </Route>
             <Route element={<Scoped />}>
+              <Route path="/buyers" element={<BuyersPage />} />
+              <Route path="/sales" element={<SalesPage />} />
+              <Route path="/sales/new" element={<SalePage key="new-sale" />} />
+              <Route path="/sales/:id" element={<SalePage />} />
               <Route path="/sortings" element={<ProcessingPage key="sortings" kind="sortings" />} />
               <Route path="/sortings/new" element={<ProcessingForm key="new-sorting" kind="sortings" />} />
               <Route path="/pressings" element={<ProcessingPage key="pressings" kind="pressings" />} />

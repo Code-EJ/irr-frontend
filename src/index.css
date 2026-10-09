@@ -10,6 +10,10 @@
 .resource-form input, .resource-form select { width: 100%; min-width: 0; min-height: 44px; padding: .75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-weight: 400; }
 .resource-form fieldset > p, .resource-form fieldset > .pagination { grid-column: 1 / -1; }
 .resource-form fieldset:disabled { opacity: .8; }
+.sale-line {grid-column:1 / -1;border-top:1px solid var(--border);padding-top:1rem;min-width:0;}
+.sale-line p {overflow-wrap:anywhere;margin-block:.75rem;}
+.sale-lifecycle {display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem;border-top:1px solid var(--border);padding-top:1.5rem;}
+.sale-lifecycle h2,.sale-lifecycle p {width:100%;}
 .table-scroll td { overflow-wrap: anywhere; }
 @media (max-width: 700px) { .resource-form fieldset { grid-template-columns: minmax(0,1fr); padding: 1rem; } }
 
