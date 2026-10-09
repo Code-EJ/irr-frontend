@@ -282,3 +282,7 @@ Identity remains functionally complete. Routes is IMPLEMENTED / READY FOR HOMOLO
 ## Approved operational reporting slice — 2026-10-09
 
 The owner approved completed execution count, reported km/completeness, actual duration and active collected kg, using America/Sao_Paulo and independent execution-completion/collection-realization periods. The reporting execution ADR records the exact semantics. Implementation is IN_PROGRESS; remaining indicators stay PRODUCT DEFINITION REQUIRED. Routes remains implemented, external homologation pending.
+
+## Owner-selected processing integration — 2026-10-09
+
+The first operational reporting slice is implemented and locally verified; see its delivery evidence. After accessibility, the owner selected sorting, pressing and inventory using the existing contracts. ADR-0019 resumes this existing sequence. Frontend scoped sorting/pressing posting, list/details/reversal and read-only balances/lots/movements are implemented. The local contract suite verifies member pressing, exact stock conservation/restoration, idempotent replay and organization isolation. Sales remains the next functional integration; additional analytics formulas remain PRODUCT DEFINITION REQUIRED. See [processing evidence and limitations](../processing-verification.md). This checkpoint does not assert operator homologation or production readiness.

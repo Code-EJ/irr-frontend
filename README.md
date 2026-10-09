@@ -176,6 +176,10 @@ Open **Relatório operacional** after selecting an organization. The four approv
 
 The sidebar groups Operation, Registers, Results and global Administration, with profile/sign-out in the account footer. Operational duration now progresses from seconds to minutes, hours, days, approximate months and years. Expand **Ver segundos exatos** for the original quantity. [Presentation rules and local verification](docs/reporting-verification.md) document the tested boundaries without changing the backend contract.
 
-## Code quality gates
+## Processing and accessibility
+
+Sorting, pressing and read-only organization stock are available through **Triagem**, **Prensagem** and **Estoque**. The global **Acessibilidade** control provides persisted device/light/dark theme, font enlargement and high contrast. See [the workflow, limitations and verification commands](docs/processing-verification.md), maintained by [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas). Product text remains Brazilian Portuguese; technical documentation remains English.
+
+## Code quality commands
 
 Run `npm run lint` for ESLint with zero warnings allowed, `npm run lint:fix` for deliberate local autofixes, and `npm run typecheck` for TypeScript. CI checks lint and types before testing/building. Generated API types and private local artifacts are excluded from lint. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas).

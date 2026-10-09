@@ -1,6 +1,6 @@
 # ADR-0019: Processing and read-only inventory integration
 
-- Status: Accepted; implementation in progress.
+- Status: Accepted; initial frontend slice implemented, local API verified; operator acceptance pending.
 - Date: 2026-10-09.
 - Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
@@ -19,5 +19,7 @@ Sorting consumes explicitly selected collection/donation input and produces net 
 Inspect Swagger, processing DTOs and inventory semantics; implement sorting create/list/detail/reversal; pressing create/list/detail/reversal; read-only inventory balances/lots/movements. Preserve selected organization scope, exact kg/m3, pagination, safe loading/error/retry states and Portuguese content. Reference choices stay bounded. Existing v1-only permissions and transaction policy remain backend decisions. Verify lint/types/build/component tests, real posting/idempotent replay/pressing/reversal/stock conservation against local backend, and actual browser forms. Compilation alone does not establish completion. Document remaining limitations and remove only replaced legacy dependency closures.
 
 ## Consequences and remaining dependencies
+
+The initial forms post one source line at server time, preserving the subtype of the selected source. They do not offer historical date selection or multi-line batch entry yet. Keys survive retries inside the mounted form/confirmation, not navigation/reload. These limits and verification results are recorded in [the delivery evidence](../processing-verification.md). Native browser form inspection complements real backend posting tests; it does not substitute for operator workflow acceptance.
 
 The existing ledger stays the sole stock authority; no migration, cache, new library or backend capability is assumed. Historical records cannot be overwritten. Stock conflicts may require reversing downstream allocation first. Sales remains a subsequent integration with its established draft/post/reverse decisions. Additional analytics formulas, deployment/email configuration and realistic-volume performance review remain their existing separate gates. Accessibility preferences are local presentation settings and change no organization/account policy.
