@@ -5,7 +5,6 @@ import {
   Route,
   Navigate,
   Link,
-  NavLink,
   Outlet,
   useLocation,
 } from "react-router-dom";
@@ -41,20 +40,14 @@ import OrganizationsPage, {
 } from "../features/identity/OrganizationsPage";
 import Button from "../components/Button";
 import Card from "../components/Card";
+import Sidebar from "../components/Sidebar";
 import {
   Recycle,
-  LayoutDashboard,
   Truck,
   Layers3,
-  UserRound,
   ArrowUpRight,
-  LogOut,
-  HandHeart,
-  UsersRound,
-  Files,
   PackagePlus,
   MapPinned,
-  BarChart3,
 } from "lucide-react";
 function Protected() {
   const state = useSession();
@@ -82,76 +75,16 @@ function Protected() {
       <a href="#main-content" className="skip-link">
         Pular para o conteúdo
       </a>
-      <aside className="sidebar">
-        <Link className="brand" to="/menu">
-          <span className="brand-icon">
-            <Recycle size={26} />
-          </span>
-          <span>
-            IRR<small>Gestão de resíduos</small>
-          </span>
-        </Link>
-        <p className="nav-caption">ÁREA DE TRABALHO</p>
-        <nav aria-label="Navegação principal">
-          <NavLink to="/menu">
-            <LayoutDashboard size={19} />
-            Visão geral
-          </NavLink>
-          <NavLink to="/vehicle-list">
-            <Truck size={19} />
-            Veículos
-          </NavLink>
-          <NavLink to="/materials">
-            <Layers3 size={19} />
-            Materiais
-          </NavLink>
-          <NavLink to="/profile">
-            <UserRound size={19} />
-            Minha conta
-          </NavLink>
-          {state.account?.userRole === "ADMINISTRATOR" && (
-            <>
-              <NavLink to="/users">
-                <UsersRound size={19} />
-                Usuários
-              </NavLink>
-              <NavLink to="/organizations">
-                <UsersRound size={19} />
-                Organizações
-              </NavLink>
-            </>
-          )}
-          <NavLink to="/donors">
-            <HandHeart size={19} />
-            Doadores
-          </NavLink>
-          <NavLink to="/team">
-            <UsersRound size={19} />
-            Equipe
-          </NavLink>
-          <NavLink to="/documents">
-            <Files size={19} />
-            Documentos
-          </NavLink>
-          <NavLink to="/intake">
-            <PackagePlus size={19} />
-            Entradas
-          </NavLink>
-          <NavLink to="/routes">
-            <MapPinned size={19} />
-            Rotas
-          </NavLink>
-          <NavLink to="/reports/operations"><BarChart3 size={19}/>Relatório operacional</NavLink>
-        </nav>
-        <div className="sidebar-note">
-          <Recycle size={25} />
-          <p>
-            Cada etapa conta.
-            <br />
-            <strong>Um novo ciclo começa aqui.</strong>
-          </p>
-        </div>
-      </aside>
+      <Sidebar
+        name={state.account?.fullName ?? "Minha conta"}
+        role={state.account?.userRole === "ADMINISTRATOR"
+          ? "Administrador Geral"
+          : state.membership?.role === "MANAGER"
+            ? "Administrador da Organização"
+            : state.membership ? "Membro da organização" : "Selecione uma organização"}
+        administrator={state.account?.userRole === "ADMINISTRATOR"}
+        onSignOut={() => session.clear()}
+      />
       <div className="workspace">
         <header className="workspace-header">
           <label className="organization-picker">
@@ -169,27 +102,6 @@ function Protected() {
               ))}
             </select>
           </label>
-          <div className="account-summary">
-            <span className="avatar" aria-hidden="true">
-              {state.account?.fullName?.slice(0, 1)}
-            </span>
-            <span>
-              {state.account?.fullName}
-              <small>
-                {state.account?.userRole === "ADMINISTRATOR"
-                  ? "Administrador Geral"
-                  : state.membership
-                    ? state.membership.role === "MANAGER"
-                      ? "Administrador da Organização"
-                      : "Membro da organização"
-                    : "Selecione uma organização"}
-              </small>
-            </span>
-          </div>
-          <button className="signout" onClick={() => session.clear()}>
-            <LogOut size={17} />
-            Sair
-          </button>
         </header>
         <main id="main-content" className="workspace-content">
           <Outlet key={state.organization?.id ?? "no-organization"} />
