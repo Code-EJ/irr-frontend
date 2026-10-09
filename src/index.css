@@ -283,7 +283,7 @@ label {
   gap: 24px;
   min-height: 97px;
   padding: 18px 40px;
-  background: #ffffffd9;
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
 .organization-picker {
