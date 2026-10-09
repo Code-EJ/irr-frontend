@@ -293,3 +293,7 @@ The first operational reporting slice is implemented and locally verified; see i
 ## Sales execution checkpoint — 2026-10-09
 
 ADR-0015 step five continues through ADR-0019 into [ADR-0020](0020-sales-lifecycle-integration.md). Buyers and sales are integrated against backend `20a03c7`, preserving ADR-0014's exclusive `/api/v1` contract. The [sales verification record](../sales-verification.md) distinguishes component, real API and browser evidence. Existing release gates and product-definition dependencies remain; this is execution of the established sequence, not a replacement roadmap.
+
+## Integrated acceptance checkpoint — 2026-10-09
+
+[The integrated acceptance record](../integrated-acceptance.md) consolidates existing release gates without replacing the roadmap. An incremental ADR-0019 refinement adds declared processing dates through current Swagger fields and consistent shared dialogs. The frontend remains on its existing stack and backend `20a03c7` remains unchanged. Multi-line processing, operator/browser acceptance and external release configuration remain explicit pending work.

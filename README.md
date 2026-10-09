@@ -187,3 +187,7 @@ Run `npm run lint` for ESLint with zero warnings allowed, `npm run lint:fix` for
 ## Buyers and sales
 
 Open **Compradores** to maintain organization-owned commercial references and **Vendas** to create or edit drafts, register against an invoice and reverse registered sales. Save local edits before registering; drafts do not reserve inventory. Posted and reversed records retain history and are read-only. See [the sales development and verification guide](docs/sales-verification.md) and [ADR-0020](docs/adrs/0020-sales-lifecycle-integration.md). Development credentials remain in the ignored `.env-dev` described above; no secret is bundled or committed.
+
+## Integrated acceptance
+
+[The acceptance record](docs/integrated-acceptance.md) distinguishes automated local evidence from remaining browser/operator and deployment gates. Processing forms accept an optional operation date in the device's local time; blank dates preserve server time. These controls do not edit historical records or change stock policy.

@@ -59,3 +59,9 @@ No legacy processing screens existed in the current source tree to delete. The o
 ## Subsequent sales checkpoint — 2026-10-09
 
 The historical processing evidence above remains unchanged. The subsequent sales milestone is now implemented and locally verified under ADR-0020; see [sales workflow and verification](sales-verification.md). Batch/historical-date UX, operator acceptance, external email/deployment and unapproved indicator definitions remain open.
+
+## Declared operation dates and dialog refinement — 2026-10-09
+
+Triagem and Prensagem now accept optional **Data e hora da operação**. Leave it blank for server time; otherwise use the local time of this device. The frontend sends the corresponding instant through the existing Swagger field. Audit time remains separate. Unchanged retry payloads preserve the same explicit instant and Idempotency-Key. Historical posted records remain immutable. Multi-line batches are still pending.
+
+Frontend `a528f90` passed lint, typecheck and build, 117 component/unit tests across 15 files and 23 contract tests across five files. The real backend verifies explicit sorting/pressing dates with a -03:00 offset, idempotent replay and stock conservation. Reversal component tests keep the labelled confirmation and retry key after a stock conflict. Processing detail/reversal dialogs now reuse the shared heading/description/footer instead of nested cards. Browser-native visual acceptance is still pending; component evidence is not presented as browser verification.
