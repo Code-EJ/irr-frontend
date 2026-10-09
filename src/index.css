@@ -64,9 +64,9 @@ input, select, textarea { color: var(--text); }
 [data-theme="dark"] [class*="text-gray-"] { color: var(--muted-text); }
 [data-contrast="high"] [class*="text-gray-"] { color: var(--text); }
 .appearance-launcher {position:fixed;right:1rem;bottom:1rem;z-index:40;display:flex;align-items:center;gap:.5rem;background:var(--surface);color:var(--text);border:2px solid var(--border);border-radius:2rem;padding:.65rem 1rem;font-size:.875rem;box-shadow:0 2px 12px #0002;}
-.appearance-settings {display:grid;gap:1.25rem;}
-.appearance-settings label {display:grid;gap:.5rem;font-weight:600;}
-.appearance-settings select {padding:.75rem;border:1px solid var(--border);border-radius:.5rem;background:var(--surface);}
+.appearance-settings {display:grid;grid-template-columns:minmax(0,1fr);gap:1.25rem;min-width:0;}
+.appearance-settings label {display:grid;grid-template-columns:minmax(0,1fr);gap:.5rem;font-weight:600;min-width:0;}
+.appearance-settings select {width:100%;min-width:0;padding:.75rem;border:1px solid var(--border);border-radius:.5rem;background:var(--surface);}
 .appearance-settings .appearance-toggle {display:flex;align-items:center;gap:.75rem;}
 .appearance-toggle input {width:1.2rem;height:1.2rem;accent-color:var(--accent-text);}
 .appearance-settings p {color:var(--muted-text);line-height:1.6;}
