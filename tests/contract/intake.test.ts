@@ -338,6 +338,7 @@ it("refuses updates and deactivation after sorting has consumed a donation", asy
       "/sortings",
       {
         sortingType: "PRIMARY",
+        sortingDate: "2026-10-01T10:30:00-03:00",
         sortedItems: [
           {
             inputItemId: item.id,
@@ -356,6 +357,7 @@ it("refuses updates and deactivation after sorting has consumed a donation", asy
     ),
   );
   sortings.push(sorted.data.id);
+  expect(new Date(sorted.data.sortingDate).toISOString()).toBe("2026-10-01T13:30:00.000Z");
   intake[0].processed = true;
   expect(
     await status(
@@ -373,10 +375,11 @@ it("posts and replays pressing, blocks upstream reversal and restores exact inve
   const line = "sortedItems" in sorting ? sorting.sortedItems![0] : undefined;
   expect(line).toBeDefined();
   const before = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
-  const payload = { pressedBales: [{ sortedItemId: line!.id!, materialSubtypeId: subtypeId, weightKg: "0.2000", initialVolumeM3: "0.0200", finalVolumeM3: "0.0100", destinationType: "STOCK" as const }] };
+  const payload = { pressingDate: "2026-10-02T10:30:00-03:00", pressedBales: [{ sortedItemId: line!.id!, materialSubtypeId: subtypeId, weightKg: "0.2000", initialVolumeM3: "0.0200", finalVolumeM3: "0.0100", destinationType: "STOCK" as const }] };
   const key = randomUUID();
   const posted = await safe(processing.create("pressings", payload, key));
   pressings.push(posted.id!);
+  expect(new Date("pressingDate" in posted ? posted.pressingDate! : "").toISOString()).toBe("2026-10-02T13:30:00.000Z");
   expect((await safe(processing.create("pressings", payload, key))).id).toBe(posted.id);
   const after = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
   expect(after.weightKg).toBe(before.weightKg);
