@@ -10,7 +10,10 @@ The owner's Routes phase decision explicitly supersedes the prior requirement to
 | PARALLEL OPERATIONS | Email provider configuration / first deployment | OPERATIONAL CONFIGURATION PENDING: external sender/domain/key and public deployment; EXTERNAL CONFIGURATION REQUIRED; no automatic merge, secrets update or database reset |
 | COMPLETED DEVELOPMENT | Routes | IMPLEMENTED / READY FOR HOMOLOGATION: explicit territory, organization-owned reusable planning, dated execution, preserved collection history and verified frontend integration |
 | COMPLETED DEVELOPMENT | First native operational report | IMPLEMENTED / LOCALLY VERIFIED: backend ADR-0021 / frontend ADR-0018; exact execution and collection facts, Brazilian periods and organization filters; see reporting verification |
-| NEXT | Additional analytics, reports, indicators and dashboards | PRODUCT DEFINITION REQUIRED for unapproved metrics; continue the existing sequence after operations-1 acceptance |
+| COMPLETED DEVELOPMENT | Initial processing and inventory | LOCALLY VERIFIED under ADR-0019; sorting/pressing transitions and organization ledger reads; batch and historical-date UX remain incremental improvements |
+| COMPLETED DEVELOPMENT | Buyers and sales lifecycle | LOCALLY VERIFIED under ADR-0020; versioned drafts, invoice-gated posting and compensating reversal; operator acceptance pending |
+| NEXT ACCEPTANCE | Existing integrated workflows and release gates | Operator review, external email/deployment and release-pair approval; local evidence does not certify homologation |
+| PRODUCT DEFINITION | Additional analytics, reports, indicators and dashboards | PRODUCT DEFINITION REQUIRED for unapproved metrics; no invented formulas |
 | INCREMENTAL EVOLUTION | GPS / route telemetry / mapping | PLANNED_POST_DEPLOY: extension at execution/geometry boundaries; no provider, hardware or advanced map now |
 | FUTURE | Optional BI and advanced analytics | DEFERRED until demonstrated need and separate product authorization |
 
@@ -286,3 +289,7 @@ The owner approved completed execution count, reported km/completeness, actual d
 ## Owner-selected processing integration — 2026-10-09
 
 The first operational reporting slice is implemented and locally verified; see its delivery evidence. After accessibility, the owner selected sorting, pressing and inventory using the existing contracts. ADR-0019 resumes this existing sequence. Frontend scoped sorting/pressing posting, list/details/reversal and read-only balances/lots/movements are implemented. The local contract suite verifies member pressing, exact stock conservation/restoration, idempotent replay and organization isolation. Sales remains the next functional integration; additional analytics formulas remain PRODUCT DEFINITION REQUIRED. See [processing evidence and limitations](../processing-verification.md). This checkpoint does not assert operator homologation or production readiness.
+
+## Sales execution checkpoint — 2026-10-09
+
+ADR-0015 step five continues through ADR-0019 into [ADR-0020](0020-sales-lifecycle-integration.md). Buyers and sales are integrated against backend `20a03c7`, preserving ADR-0014's exclusive `/api/v1` contract. The [sales verification record](../sales-verification.md) distinguishes component, real API and browser evidence. Existing release gates and product-definition dependencies remain; this is execution of the established sequence, not a replacement roadmap.

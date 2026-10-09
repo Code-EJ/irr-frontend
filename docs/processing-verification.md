@@ -55,3 +55,7 @@ Shared dialogs preserve keyboard focus, Escape and scrollable content; native fi
 - Dark theme, maximum font size, high contrast and persistence were inspected. Responsive 390×844 checks exposed and led to corrections for preference grid sizing and long dialog headings. Ignored local screenshots are visual evidence, not repository assets.
 
 No legacy processing screens existed in the current source tree to delete. The obsolete Home placeholder for processing/stock was replaced with the remaining sales milestone. Existing technology and shared UI/transport were preserved; no new library or backend endpoint was added. Sales integration, batch/historical-date UX, operator acceptance, external email/deployment and unapproved indicator definitions remain open.
+
+## Subsequent sales checkpoint — 2026-10-09
+
+The historical processing evidence above remains unchanged. The subsequent sales milestone is now implemented and locally verified under ADR-0020; see [sales workflow and verification](sales-verification.md). Batch/historical-date UX, operator acceptance, external email/deployment and unapproved indicator definitions remain open.

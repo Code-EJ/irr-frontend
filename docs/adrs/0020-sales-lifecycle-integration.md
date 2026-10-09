@@ -1,6 +1,6 @@
 # ADR-0020: Existing sales lifecycle integration
 
-- Status: Accepted; implementation in progress.
+- Status: Accepted; implemented and locally verified. Operator acceptance remains pending.
 - Date: 2026-10-09.
 - Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 - Frontend baseline: `c7bb5f5`, following ADR-0019's initial processing/inventory delivery.
@@ -31,3 +31,7 @@ Lint, strict types, component tests and build must pass. Verify the real local i
 ## Consequences, risks and dependencies
 
 The ledger stays authoritative; competing allocations may reject posting with conflict even after a draft is saved. Stock is not reserved by draft creation. Fiscal authenticity is an operator responsibility; attaching a test PDF proves API linkage, not legal invoice validity. Historical dates use the existing date-time contract and current display conventions, without adding unapproved reporting formulas. Real-volume performance, public deployment, external email and full operator acceptance remain existing release gates. Additional analytics definitions remain PRODUCT DEFINITION REQUIRED. Source/material labels and batch UX can improve incrementally without replacing the architecture.
+
+## Execution checkpoint — 2026-10-09
+
+Implementation `6b98cb8` delivers scoped buyers and the complete existing sale draft/update/deactivate/post/reverse UI. Read-only release checks include buyer and sale SPA routes. [The sales verification guide](../sales-verification.md) records exact commands, evidence and limitations. No backend endpoint, dependency or architecture change was required. This checkpoint does not certify production or full operator acceptance.

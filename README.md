@@ -183,3 +183,7 @@ Sorting, pressing and read-only organization stock are available through **Triag
 ## Code quality commands
 
 Run `npm run lint` for ESLint with zero warnings allowed, `npm run lint:fix` for deliberate local autofixes, and `npm run typecheck` for TypeScript. CI checks lint and types before testing/building. Generated API types and private local artifacts are excluded from lint. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas).
+
+## Buyers and sales
+
+Open **Compradores** to maintain organization-owned commercial references and **Vendas** to create or edit drafts, register against an invoice and reverse registered sales. Save local edits before registering; drafts do not reserve inventory. Posted and reversed records retain history and are read-only. See [the sales development and verification guide](docs/sales-verification.md) and [ADR-0020](docs/adrs/0020-sales-lifecycle-integration.md). Development credentials remain in the ignored `.env-dev` described above; no secret is bundled or committed.
