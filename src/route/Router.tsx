@@ -23,6 +23,7 @@ import TeamPage from "../features/parties/TeamPage";
 import DocumentsPage from "../features/documents/DocumentsPage";
 import IntakeList from "../features/intake/IntakeList";
 import IntakeForm from "../features/intake/IntakeForm";
+import OperationalReportPage from "../features/reporting/OperationalReportPage";
 import RoutesPage from "../features/routes/RoutesPage";
 import RouteForm from "../features/routes/RouteForm";
 import ExecutionsPage from "../features/routes/ExecutionsPage";
@@ -53,6 +54,7 @@ import {
   Files,
   PackagePlus,
   MapPinned,
+  BarChart3,
 } from "lucide-react";
 function Protected() {
   const state = useSession();
@@ -139,6 +141,7 @@ function Protected() {
             <MapPinned size={19} />
             Rotas
           </NavLink>
+          <NavLink to="/reports/operations"><BarChart3 size={19}/>Relatório operacional</NavLink>
         </nav>
         <div className="sidebar-note">
           <Recycle size={25} />
@@ -338,6 +341,7 @@ export default function AppRouter() {
               <Route path="/users/:id" element={<UserPage />} />
             </Route>
             <Route element={<Scoped />}>
+              <Route path="/reports/operations" element={<OperationalReportPage />} />
               <Route path="/routes" element={<RoutesPage />} />
               <Route
                 path="/routes/new"

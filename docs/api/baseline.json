@@ -1,5 +1,5 @@
 {
-  "backendCommit": "6bb0a830a9778b16994a83f87e25b3eaad462c4b",
-  "sha256": "d452cc54c7b6d95b8651e1575ee76de45285830916df977185218cd686852427",
+  "backendCommit": "20a03c7cc8cb31e338056917877c733bdda99b6e",
+  "sha256": "6ae74f4de9d772df54c46f1522251d6a91fbe9ae46767311353bc0cd4295d516",
   "source": "http://localhost:9292/v3/api-docs"
 }

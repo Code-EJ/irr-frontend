@@ -13,6 +13,8 @@ import {
   type Route,
   type Execution,
 } from "../../src/features/routes/api";
+import { operationalReport } from "../../src/features/reporting/api";
+import { defaultReportPeriod } from "../../src/features/reporting/OperationalReportPage";
 import { fleet } from "../../src/features/fleet/api";
 import { team } from "../../src/features/parties/api";
 import { catalog } from "../../src/features/materials/api";
@@ -241,4 +243,29 @@ it("records actual completed execution collection facts and keeps history after 
   expect((await safe(executions.get(execution.id))).routeName).toBe(
     "Contract plan " + suffix,
   );
+}, 30000);
+
+/** Executes the approved report against actual completed work and linked receipt provenance. */
+it("reports exact operational totals through the actual scoped v1 contract", async () => {
+  scope();
+  const dates = defaultReportPeriod();
+  const report = await safe(operationalReport({...dates, routeId: plan.id, vehicleId: vehicle, municipalityId: municipality}));
+  expect(report.organizationId).toBe(organization);
+  expect(report.definitionVersion).toBe("operations-1");
+  expect(report.timezone).toBe("America/Sao_Paulo");
+  expect(report.completedExecutions).toBe(1);
+  expect(report.measuredExecutions).toBe(1);
+  expect(report.missingDistanceExecutions).toBe(0);
+  expect(report.reportedDistanceKm).toBe("0.001");
+  expect(report.collectionCount).toBe(1);
+  expect(report.collectedWeightKg).toBe("1.2345");
+  expect(report.unlinkedCollections).toBe(0);
+  expect(typeof report.durationSeconds).toBe("string");
+  scope(otherOrganization);
+  expect(await status(operationalReport({...dates,routeId:plan.id}))).toBe(404);
+  const empty = await safe(operationalReport(dates));
+  expect(empty.completedExecutions).toBe(0);
+  expect(empty.reportedDistanceKm).toBeNull();
+  scope();
+  expect(await status(operationalReport({from:"2025-01-01",to:"2026-10-09"}))).toBe(400);
 }, 30000);

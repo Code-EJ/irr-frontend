@@ -1025,3 +1025,19 @@ td button {
 .route-history span { font-size: .85rem; color: #65756b; }
 .route-history a { color: #176947; }
 @media (max-width: 720px) { .route-facts { grid-template-columns: 1fr; } .route-area-editor { flex-wrap: wrap; } .route-area-tools { margin-left: 3rem; } .route-coverage li { flex-wrap: wrap; } .route-actions > .route-link { flex: 1; } }
+
+/* Operational reporting. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas). */
+.report-filters {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem;margin:1.5rem 0;padding:1.5rem;background:#f7faf8;border:1px solid #e1e9e4;border-radius:1rem;}
+.report-filters label {display:grid;gap:.5rem;font-weight:600;color:#33463c;}
+.report-filters input {padding:.75rem;border:1px solid #cbd8d0;border-radius:.65rem;background:white;min-width:0;}
+.report-filter-actions {display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;}
+.report-method {color:#63766b;font-size:.875rem;line-height:1.65;margin:1rem 0;}
+.report-summary {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;margin:2rem 0 1rem;}
+.report-summary h2 {font-size:1.25rem;font-weight:700;}.report-summary p {color:#63766b;}
+.report-metrics {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;}
+.report-metrics>div {padding:1.5rem;border:1px solid #e1e9e4;border-radius:1rem;background:linear-gradient(135deg,#f3faf5,white);}
+.report-metrics dt {display:flex;align-items:center;gap:.5rem;color:#405c4b;font-weight:600;}
+.report-metrics dt svg {width:20px;}.report-metrics dd {font-size:1.75rem;font-weight:700;color:#185734;margin:.8rem 0;overflow-wrap:anywhere;}
+.report-metrics p {color:#63766b;font-size:.875rem;}.report-notice {margin:1.25rem 0;padding:1.25rem;border:1px solid #d9e6dd;border-radius:.75rem;background:#f7faf8;line-height:1.65;}
+.report-notice h3 {font-weight:700;margin-bottom:.5rem;}.report-notice p+p {margin-top:.5rem;}
+@media(max-width:640px){.report-filters,.report-metrics {grid-template-columns:1fr;}.report-filters {padding:1rem;}}

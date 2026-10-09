@@ -1288,6 +1288,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/reports/operations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read organization operational totals
+         * @description Live definition operations-1; America/Sao_Paulo dates inclusive, at most 366 days. Completed executions use completion time; active collections use realization time. Requires selected effective organization scope.
+         */
+        get: operations["operations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/pressings/{id}": {
         parameters: {
             query?: never;
@@ -2596,6 +2616,62 @@ export interface components {
              * @example 123.4500
              */
             currentStockVolumeM3?: string;
+        };
+        OperationalReport: {
+            /** Format: uuid */
+            organizationId?: string;
+            /** Format: date */
+            from?: string;
+            /** Format: date */
+            to?: string;
+            timezone?: string;
+            /** Format: date-time */
+            startInclusive?: string;
+            /** Format: date-time */
+            endExclusive?: string;
+            definitionVersion?: string;
+            /** Format: date-time */
+            generatedAt?: string;
+            /**
+             * Format: uuid
+             * @description Applied municipality filter; null when unrestricted
+             */
+            municipalityId?: string | null;
+            /**
+             * Format: uuid
+             * @description Applied route filter; null when unrestricted
+             */
+            routeId?: string | null;
+            /**
+             * Format: uuid
+             * @description Applied vehicle filter; null when unrestricted
+             */
+            vehicleId?: string | null;
+            /** Format: int64 */
+            completedExecutions?: number;
+            /** Format: int64 */
+            measuredExecutions?: number;
+            /** Format: int64 */
+            missingDistanceExecutions?: number;
+            /**
+             * @description Sum of reported km; null when no execution has a measurement
+             * @example 123.4500
+             */
+            reportedDistanceKm?: string | null;
+            /**
+             * @description Exact sum of finished_at minus started_at, in seconds
+             * @example 123.4500
+             */
+            durationSeconds?: string;
+            /** Format: int64 */
+            collectionCount?: number;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            collectedWeightKg?: string;
+            /** Format: int64 */
+            unlinkedCollections?: number;
         };
         PagePressingResponseDTO: {
             /** Format: int32 */
@@ -5656,6 +5732,35 @@ export interface operations {
                 };
                 content: {
                     "text/csv": string;
+                };
+            };
+        };
+    };
+    operations: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+                municipalityId?: string;
+                routeId?: string;
+                vehicleId?: string;
+            };
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["OperationalReport"];
                 };
             };
         };
