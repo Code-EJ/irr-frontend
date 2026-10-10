@@ -52,7 +52,7 @@ if(cors.headers.get("access-control-allow-origin")!==frontend.origin||!cors.head
 results.push("Exact public frontend CORS preflight");
 await request(frontend.origin+"/health");
 let html="";
-for(const route of ["/login","/reset-password","/organizations","/users","/routes","/routes/new","/route-executions","/route-executions/new","/intake/collections/new","/reports/operations","/sortings","/sortings/new","/pressings","/pressings/new","/inventory","/buyers","/sales","/sales/new"]){
+for(const route of ["/login","/reset-password","/organizations","/users","/routes","/routes/new","/route-executions","/route-executions/new","/intake/collections/new","/reports/operations","/reports/analytics","/sortings","/sortings/new","/pressings","/pressings/new","/inventory","/buyers","/sales","/sales/new"]){
   const response=await request(frontend.origin+route);const page=await response.text();
   if(!response.headers.get("content-type")?.includes("text/html")||!page.includes('id="root"'))throw new Error(`SPA route unavailable: ${route}.`);
   if(route==="/login")html=page;

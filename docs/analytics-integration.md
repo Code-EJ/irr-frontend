@@ -20,6 +20,20 @@ Run `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run a
 
 ## Evidence and remaining limits
 
+The corrected full frontend run passed all 127 tests in 16 files. Lint and all TypeScript gates passed again. The six new Analytics component tests passed; the 26 real-backend tests also passed. The initial ambiguous loading-selector failure is resolved.
+
 Backend full source-only Maven verification: 51 unit/95 real PostgreSQL/Redis integration tests passed, no failures/errors/skips. Backend image build and startup passed. Frontend lint/types/build and pinned 116-operation check passed. All 26 real API contract tests passed, including byte-for-byte delivery of the valid synthetic PDF. Initial component run had one ambiguous loading-selector assertion; corrected and rerun before acceptance. Final browser/screenshots and component results are recorded below.
+
+### Actual browser evidence
+
+The rebuilt frontend at 9e25e91 and backend at 996e36f were inspected in the authenticated in-app browser at localhost:5173 on 2026-10-10. Existing synthetic organizations were read without changing business records. The empty Homologação IRR 669850 organization showed unavailable comparisons/productivity/coverage, zero valid revenue and one excluded reversed sale. Verificação de Rotas 4da124 showed two completed executions, 50% section-count coverage, 89.2345 kg and 3104.724784 kg/h from 103.469461 actual seconds. These brief synthetic executions are test facts, not representative operational performance.
+
+Applying the Centro route filter reduced the population to one execution, preserved planned/actual 8.125 km, showed 100% section-count coverage, 70.003629 kg/h and 0.151938 kg/km. Revenue changed to unavailable with the explicit missing-provenance explanation. Expanded calculation details exposed exact numerator/denominator and exclusion counts. Reversal recalculation was verified through real API tests and SQL integration tests, rather than inferred from the browser's zero-sales fixtures.
+
+![Empty Analytics results](assets/screenshots/analytics-empty.png)
+
+![Populated Analytics results and calculation details](assets/screenshots/analytics-filled.png)
+
+![Route-filtered Analytics and unavailable revenue](assets/screenshots/analytics-filtered.png)
 
 This scope implements the newly approved four families. Additional recovery/reject metrics, published stock/financial closures, global comparisons, targets, alerts, exports and GPS retain their separate definitions/dependencies. Local verification does not establish operator acceptance or deployment readiness.

@@ -1,19 +1,21 @@
 # IRR frontend
 
+The approved native MVP Analytics screen is available at Results → Analytics (/reports/analytics), using backend-generated /api/v1 types and server-calculated formulas. See [definitions, local commands and actual screenshots](docs/analytics-integration.md), [ADR-0021](docs/adrs/0021-approved-mvp-analytics-integration.md) and [remaining local Master Plan gates](docs/MASTER_PLAN_PROGRESS.md). The current locally verified implementation pair is frontend 9e25e91 / backend 996e36f; earlier baselines below are dated milestones.
+
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
-React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend commit **0dc0d1f** and exclusively **/api/v1**. Supported slices are sign-in/current account, organization selection, vehicles, the material category/type/subtype hierarchy, donors, operational staff, documents, collections and donations. Processing, inventory, sales and reports remain gated while their existing Master Plan slices are implemented. A passing build does not mean the whole application is finished.
+React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend source **996e36f** and exclusively **/api/v1**. Supported slices include identity/profile/recovery/administration, organization selection, fleet, material hierarchy, parties, documents, intake, routes/executions, sorting, pressing, inventory, buyers/sales, operations reporting and approved MVP Analytics. Earlier 0dc0d1f integration evidence remains historical. A passing build does not mean the whole application is finished; see the remaining local and external acceptance gates.
 
 ## Run locally, step by step
 
-1. Start the backend from its repository using its README and existing private environment configuration:
+1. Start the backend from its repository using its README and existing private environment configuration. The current identity worktree uses its retained private Compose configuration:
 
    ~~~powershell
-   Set-Location '../back-irr-v2'
-   docker compose up -d --build --wait
+   Set-Location '../irr-backend-identity'
+   docker compose -p irr-identity-verification -f .local/identity/compose.json up -d --build --wait
    ~~~
 
-   Check readiness at http://localhost:9191/actuator/health/readiness. PostgreSQL and Redis are backend-only Docker services. Do not publish them or put their credentials in the browser. Do not delete named volumes to resolve an integration error.
+   Check current-worktree readiness at http://localhost:9292/actuator/health/readiness and Swagger at http://localhost:9292/swagger-ui/index.html. Use VITE_API_BASE_URL=http://localhost:9292/api/v1 in the ignored frontend environment file. A new checkout without the retained private stack follows the backend README's standard Compose setup (default port 9191) and must use its matching API origin instead. PostgreSQL and Redis are backend-only Docker services. Do not publish them or put their credentials in the browser. Do not delete named volumes to resolve an integration error.
 
 2. Use Node.js 24 and npm. From this frontend repository:
 

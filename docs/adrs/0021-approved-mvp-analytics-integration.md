@@ -1,6 +1,6 @@
 # ADR-0021: Approved native MVP analytics integration
 
-- Status: Accepted; implementation and verification in progress.
+- Status: Accepted; implemented and locally verified. Operator acceptance and release readiness remain separate gates.
 - Date: 2026-10-10.
 - Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
