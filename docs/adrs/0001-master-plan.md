@@ -313,3 +313,7 @@ The owner selected continued local validation for this execution. Public deploym
 ## Larger-batch local acceptance checkpoint — 2026-10-09
 
 The existing ADR-0019 acceptance sequence now has executable evidence for fifty-line sorting/pressing, complete paginated inventory reads, full rollback on a last-line conflict and exact reversal. The [integrated acceptance record](../integrated-acceptance.md) and [processing guide](../processing-verification.md) retain the measured local scope and remaining operator/browser/workload gates. All 25 real API tests pass; no backend issue or new architecture was introduced.
+
+## Browser and operator checkpoint — 2026-10-09
+
+The [operator homologation record](../operator-homologation.md) executes the existing local acceptance gate with the owner as the named participant. Actual browser processing/sales transitions, stock restoration and accessibility controls were inspected; a historical-sale readability defect was corrected. The operator's acceptance remains separate from automated verification and participation. Existing public-release and broader operator gates remain explicit.

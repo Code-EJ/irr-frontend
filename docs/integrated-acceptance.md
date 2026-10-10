@@ -68,3 +68,7 @@ The owner selected local-only validation for now. Six read-only pair checks and 
 ## Larger local batch checkpoint — 2026-10-09
 
 Twenty-five real-backend tests now pass, including a fifty-line sorting/pressing sample, six-page lot completeness/uniqueness, replay, rollback when the final line fails, and exact restoration. The [processing guide](processing-verification.md) records individual observed timings and their limits. This resolves the bounded local larger-batch check; production workload/concurrency and browser/operator acceptance remain separate gates. No frontend runtime or backend contract change was necessary.
+
+## Browser/operator rehearsal — 2026-10-09
+
+The owner volunteered as operator. The actual browser now verified the scoped processing/sales chain, invoice/unsaved-edit gates, downstream reversal conflict, sale reversal, pressing/sorting reversals and final zero balances in a synthetic organization. Accessibility theme/200% font/contrast, Escape and focus restoration were inspected. A read-only-sale readability issue was corrected in frontend `9cb6345`. See [the operator record](operator-homologation.md) for quantities, evidence and review scope. Earlier browser-blocker statements remain historical evidence; the active valid tab was available for this rehearsal. Owner acceptance is still pending and no complete-platform or production acceptance is inferred.
