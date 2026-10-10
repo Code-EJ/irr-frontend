@@ -2,7 +2,7 @@
 
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas). Date: 2026-10-09.
 
-Status: Browser transactional workflow verified; owner/operator acceptance pending. The owner explicitly volunteered to evaluate the flows. Participation is recorded separately from acceptance; no approval is inferred.
+Status: Browser transactional workflow verified; owner accepted the local processing/sales workflow on 2026-10-09. Document-viewer acceptance remains pending. The owner explicitly volunteered to evaluate the flows. Participation is recorded separately from acceptance; no approval is inferred.
 
 Frontend served source: `9cb6345` after the readability correction. Backend executable: `20a03c7`. Frontend: http://localhost:5173; Swagger/API: backend 9292. The existing ADR-0015/0019/0020 and exclusively `/api/v1` contract govern this local rehearsal. Public deployment remains outside the owner's current selected scope.
 
@@ -45,3 +45,7 @@ The synthetic organization remains active for operator inspection; all posted st
 ## Operator feedback — 2026-10-09
 
 The owner reported that the downloaded invoice did not open. Inspection confirmed that the rehearsal fixture contains only 76 bytes: a PDF header/catalog/trailer without a valid page tree or complete PDF structure. This fixture is unsuitable for viewer acceptance. The browser download check proves delivery of the fixture, not successful PDF rendering. This is a fixture defect; no application download defect has been established. Operator acceptance remains pending. Repeat the attachment upload/download/viewer workflow with a valid synthetic PDF before accepting document usability.
+
+## Scoped owner acceptance — 2026-10-09
+
+The owner explicitly stated: "I approve this workflow." This accepts the local processing, sales, stock restoration and reviewed accessibility walkthrough. It does not establish valid-PDF viewing, broader platform operator acceptance, external mail delivery, published deployment or production readiness. The invalid synthetic PDF limitation above remains an open verification item.

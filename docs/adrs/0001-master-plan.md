@@ -317,3 +317,7 @@ The existing ADR-0019 acceptance sequence now has executable evidence for fifty-
 ## Browser and operator checkpoint — 2026-10-09
 
 The [operator homologation record](../operator-homologation.md) executes the existing local acceptance gate with the owner as the named participant. Actual browser processing/sales transitions, stock restoration and accessibility controls were inspected; a historical-sale readability defect was corrected. The operator's acceptance remains separate from automated verification and participation. Existing public-release and broader operator gates remain explicit.
+
+## Scoped operator acceptance checkpoint — 2026-10-09
+
+The owner accepted the locally rehearsed processing/sales workflow. See [the acceptance record](../operator-homologation.md) for scope and the remaining valid-PDF verification. Continue the existing release gates: broader operator checks, current-schema recovery rehearsal, external email and public HTTPS matched-image deployment. Additional metric definitions and GPS retain their existing future status; this acceptance does not authorize or certify a production deployment.

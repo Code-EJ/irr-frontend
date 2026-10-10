@@ -72,3 +72,7 @@ Twenty-five real-backend tests now pass, including a fifty-line sorting/pressing
 ## Browser/operator rehearsal — 2026-10-09
 
 The owner volunteered as operator. The actual browser now verified the scoped processing/sales chain, invoice/unsaved-edit gates, downstream reversal conflict, sale reversal, pressing/sorting reversals and final zero balances in a synthetic organization. Accessibility theme/200% font/contrast, Escape and focus restoration were inspected. A read-only-sale readability issue was corrected in frontend `9cb6345`. See [the operator record](operator-homologation.md) for quantities, evidence and review scope. Earlier browser-blocker statements remain historical evidence; the active valid tab was available for this rehearsal. Owner acceptance is still pending and no complete-platform or production acceptance is inferred.
+
+## Scoped operator acceptance — 2026-10-09
+
+The owner accepted the local processing/sales browser workflow recorded in [operator homologation](operator-homologation.md). This resolves that scoped operator gate; valid-PDF viewing remains unverified because the fixture was invalid. Broader identity/fleet/intake/Routes/report operator gates, external email, deployment, persistent-storage recovery and matched-release approval remain separate.
