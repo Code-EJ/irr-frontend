@@ -321,3 +321,7 @@ The [operator homologation record](../operator-homologation.md) executes the exi
 ## Scoped operator acceptance checkpoint — 2026-10-09
 
 The owner accepted the locally rehearsed processing/sales workflow. See [the acceptance record](../operator-homologation.md) for scope and the remaining valid-PDF verification. Continue the existing release gates: broader operator checks, current-schema recovery rehearsal, external email and public HTTPS matched-image deployment. Additional metric definitions and GPS retain their existing future status; this acceptance does not authorize or certify a production deployment.
+
+## Local completion execution — 2026-10-09
+
+The owner now prioritizes completion and validation of all applicable local requirements before any Railway configuration/deployment. [The central execution register](../MASTER_PLAN_PROGRESS.md) records the source-based audit, dependency-ordered tasks and actual evidence. This changes release sequencing only; existing domain decisions and pending product definitions remain explicit.
