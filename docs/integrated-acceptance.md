@@ -58,3 +58,9 @@ Additional analytics require approved formulas; GPS remains planned after deploy
 ## Subsequent batch checkpoint — 2026-10-09
 
 Frontend `9cd733e` delivers the queued multi-line processing UX described in ADR-0019 and the processing guide. Latest evidence: 118 frontend tests and 24 real API tests, including atomic rollback and stock restoration. Earlier test counts remain dated evidence. Backend `20a03c7` remains the executable baseline. The multi-line UX limitation is resolved; browser/operator, representative-volume, accessibility and external release gates remain.
+
+## Uncertain-delivery acceptance correction — 2026-10-09
+
+Frontend `949e13d` resolves a duplicate-operation risk found during acceptance review: unresolved processing commands can no longer be edited into new submissions while their original outcome is unknown. Exact command/key retention and successful-receipt validation are verified by the processing regression suite. Latest full frontend evidence is 121 passing tests, with eight targeted processing tests after the final retry-path refinement, and 24 passing real API tests. Browser/operator and external deployment/email gates remain outstanding.
+
+The owner selected local-only validation for now. Six read-only pair checks and the pinned 115-operation contract check passed against rebuilt frontend source `949e13d`; all five local service containers were healthy. Publication/external email remain future operator gates and are not claimed as executed. Local browser/operator acceptance remains separately pending.

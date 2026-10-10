@@ -301,3 +301,11 @@ ADR-0015 step five continues through ADR-0019 into [ADR-0020](0020-sales-lifecyc
 ## Processing batch checkpoint — 2026-10-09
 
 Frontend `9cd733e` completes the previously documented multi-line processing form limitation through the existing Swagger arrays, following ADR-0019. The [processing guide](../processing-verification.md) records queue workflow, atomic backend verification and retry limits. No new roadmap or architecture is introduced. Remaining acceptance and release dependencies follow the [integrated acceptance record](../integrated-acceptance.md).
+
+## Processing acceptance correction — 2026-10-09
+
+Frontend `949e13d` tightens ADR-0019 uncertain-delivery behavior after acceptance review exposed the risk of editing an unresolved command into a new operation. The [processing verification record](../processing-verification.md) documents retained commands, blocked editing and exact replay checks. Existing native-browser/operator and external release gates remain explicit.
+
+## Owner-selected local validation scope — 2026-10-09
+
+The owner selected continued local validation for this execution. Public deployment and external email validation remain future operator gates, rather than dependencies for current local acceptance work. The existing architecture, contract and roadmap remain authoritative. Against served frontend `949e13d`, six read-only local pair checks and the pinned 115-operation Swagger check passed; frontend/backend/PostgreSQL/Redis/Mailpit containers were healthy.
