@@ -4,6 +4,8 @@ The approved native MVP Analytics screen is available at Results → Analytics (
 
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
+The [document verification record](docs/document-verification.md) contains the real upload/download screenshot, downloaded-PDF render and remaining viewer limitation. The corresponding backend selected-stack recovery rehearsal passed for V1-V4 with 39 tables and 20 verified attachments.
+
 React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend source **996e36f** and exclusively **/api/v1**. Supported slices include identity/profile/recovery/administration, organization selection, fleet, material hierarchy, parties, documents, intake, routes/executions, sorting, pressing, inventory, buyers/sales, operations reporting and approved MVP Analytics. Earlier 0dc0d1f integration evidence remains historical. A passing build does not mean the whole application is finished; see the remaining local and external acceptance gates.
 
 ## Run locally, step by step
