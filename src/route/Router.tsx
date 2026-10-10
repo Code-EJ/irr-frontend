@@ -23,6 +23,7 @@ import DocumentsPage from "../features/documents/DocumentsPage";
 import IntakeList from "../features/intake/IntakeList";
 import IntakeForm from "../features/intake/IntakeForm";
 import OperationalReportPage from "../features/reporting/OperationalReportPage";
+import AnalyticsPage from "../features/reporting/AnalyticsPage";
 import ProcessingPage from "../features/processing/ProcessingPage";
 import ProcessingForm from "../features/processing/ProcessingForm";
 import InventoryPage from "../features/processing/InventoryPage";
@@ -263,6 +264,7 @@ export default function AppRouter() {
               <Route path="/pressings/new" element={<ProcessingForm key="new-pressing" kind="pressings" />} />
               <Route path="/inventory" element={<InventoryPage />} />
               <Route path="/reports/operations" element={<OperationalReportPage />} />
+              <Route path="/reports/analytics" element={<AnalyticsPage />} />
               <Route path="/routes" element={<RoutesPage />} />
               <Route
                 path="/routes/new"

@@ -1308,6 +1308,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/reports/analytics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read organization MVP analytics
+         * @description Live analytics-1; inclusive America/Sao_Paulo dates, at most 366 days. Completed execution cohorts, unique declared sections, weighted linked-receipt productivity and current POSTED sale-date revenue. Revenue unavailable under municipality/route/vehicle filters. Backend ratios rounded HALF_UP to six decimals.
+         */
+        get: operations["get_9"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/pressings/{id}": {
         parameters: {
             query?: never;
@@ -2672,6 +2692,135 @@ export interface components {
             collectedWeightKg?: string;
             /** Format: int64 */
             unlinkedCollections?: number;
+        };
+        AnalyticsComparison: {
+            unit?: string;
+            /** Format: int64 */
+            consideredExecutions?: number;
+            /** Format: int64 */
+            excludedExecutions?: number;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            planned?: string | null;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            actual?: string | null;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            signedDeviation?: string | null;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            absoluteDeviation?: string | null;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            percentageDeviation?: string | null;
+        };
+        AnalyticsCoverage: {
+            /** Format: int64 */
+            consideredExecutions?: number;
+            /** Format: int64 */
+            excludedExecutions?: number;
+            /** Format: int64 */
+            declaredSections?: number;
+            /** Format: int64 */
+            coveredSections?: number;
+            /** Format: int64 */
+            duplicateRows?: number;
+            /** Format: int64 */
+            conflictingSections?: number;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            percentage?: string | null;
+        };
+        AnalyticsProductivity: {
+            unit?: string;
+            /** Format: int64 */
+            consideredExecutions?: number;
+            /** Format: int64 */
+            collectionCount?: number;
+            /** Format: int64 */
+            excludedExecutions?: number;
+            /** Format: int64 */
+            withoutLinkedCollections?: number;
+            /** Format: int64 */
+            missingDenominatorExecutions?: number;
+            /** Format: int64 */
+            zeroDenominatorExecutions?: number;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            collectedWeightKg?: string | null;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            denominator?: string | null;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            value?: string | null;
+        };
+        AnalyticsReport: {
+            /** Format: uuid */
+            organizationId?: string;
+            /** Format: date */
+            from?: string;
+            /** Format: date */
+            to?: string;
+            timezone?: string;
+            /** Format: date-time */
+            startInclusive?: string;
+            /** Format: date-time */
+            endExclusive?: string;
+            definitionVersion?: string;
+            /** Format: date-time */
+            generatedAt?: string;
+            /** Format: uuid */
+            municipalityId?: string | null;
+            /** Format: uuid */
+            routeId?: string | null;
+            /** Format: uuid */
+            vehicleId?: string | null;
+            /** Format: int64 */
+            completedExecutions?: number;
+            /** Format: int64 */
+            unlinkedCollectionsInPeriod?: number;
+            distanceComparison?: components["schemas"]["AnalyticsComparison"];
+            durationComparison?: components["schemas"]["AnalyticsComparison"];
+            coverage?: components["schemas"]["AnalyticsCoverage"];
+            hourlyProductivity?: components["schemas"]["AnalyticsProductivity"];
+            distanceProductivity?: components["schemas"]["AnalyticsProductivity"];
+            revenue?: components["schemas"]["AnalyticsRevenue"];
+        };
+        AnalyticsRevenue: {
+            currency?: string;
+            available?: boolean;
+            availabilityReason?: string;
+            /** Format: int64 */
+            consideredSales?: number | null;
+            /** Format: int64 */
+            excludedDraftSales?: number | null;
+            /** Format: int64 */
+            excludedReversedSales?: number | null;
+            /**
+             * @description Exact decimal string; use decimal arithmetic and preserve the documented unit
+             * @example 123.4500
+             */
+            amount?: string | null;
         };
         PagePressingResponseDTO: {
             /** Format: int32 */
@@ -5761,6 +5910,35 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["OperationalReport"];
+                };
+            };
+        };
+    };
+    get_9: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+                municipalityId?: string;
+                routeId?: string;
+                vehicleId?: string;
+            };
+            header: {
+                /** @description Active organization selection; global authority or an active membership is required */
+                "X-Organization-Id": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AnalyticsReport"];
                 };
             };
         };

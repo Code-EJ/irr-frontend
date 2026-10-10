@@ -1122,6 +1122,16 @@ td button {
 .report-title {display:flex;align-items:center;gap:.65rem;}
 .report-duration-detail {margin-top:.75rem;color:var(--accent-text);font-size:.8rem;}
 .report-duration-detail summary {cursor:pointer;font-weight:600;}
+/* Native analytics presentation. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas). */
+.analytics-heading {font-size:1.25rem;font-weight:700;margin:2rem 0 1rem;}
+.analytics-comparisons {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;}
+.analytics-card {border:1px solid var(--border);border-radius:1rem;background:var(--surface);padding:1.5rem;min-width:0;}
+.analytics-card h3 {font-size:1.1rem;font-weight:700;margin-bottom:.5rem;}
+.analytics-card p {line-height:1.65;color:var(--accent-text);}
+.analytics-values {margin:1rem 0;}
+.analytics-values>div {display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem;padding:.65rem 0;border-bottom:1px solid var(--border);}
+.analytics-values dt {color:var(--accent-text);}.analytics-values dd {font-weight:700;overflow-wrap:anywhere;}
+@media(max-width:640px){.analytics-comparisons {grid-template-columns:1fr;}}
 /* Grouped navigation and account area. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas). */
 .sidebar {padding:24px 14px 14px;overflow:hidden;}
 .sidebar .brand {padding:0 6px;flex-shrink:0;}

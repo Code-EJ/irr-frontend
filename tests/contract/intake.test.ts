@@ -1,6 +1,6 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
 import { loadEnvFile } from "node:process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, expect, it, vi } from "vitest";
 import { isAxiosError } from "axios";
@@ -21,6 +21,7 @@ import { catalog } from "../../src/features/materials/api";
 import { sales, buyers, } from "../../src/features/sales/api";
 import { processing, inventory } from "../../src/features/processing/api";
 import { fleet } from "../../src/features/fleet/api";
+import { analyticsReport } from "../../src/features/reporting/analyticsApi";
 const envFile = process.env.IRR_BACKEND_ENV;
 if (!envFile)
   throw new Error("Set IRR_BACKEND_ENV to the private local backend .env.");
@@ -82,14 +83,8 @@ function scope(token = admin, org = orgs[0]) {
   session.setToken(token);
   session.selectOrganization(org);
 }
-const pdf = () =>
-  new File(
-    [
-      "%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF",
-    ],
-    "verification.pdf",
-    { type: "application/pdf" },
-  );
+const pdfBytes = await readFile(new URL("../fixtures/verification.pdf", import.meta.url));
+const pdf = () => new File([pdfBytes], "verification.pdf", { type: "application/pdf" });
 const donation = (): DonationCreate => ({
   donorId,
   donationDate: "2026-09-28T12:00:00Z",
@@ -233,7 +228,11 @@ it("uploads, reads, downloads, renames and removes protected documents", async (
     "Comprovante de doação.pdf",
   );
   const downloaded = await safe(documents.download(proofId));
-  expect(String(downloaded).startsWith("%PDF-")).toBe(true);
+  expect(String(downloaded)).toBe(pdfBytes.toString("utf8"));
+  const binary = await safe(apiClient.get<ArrayBuffer>("/documents/" + proofId + "/download", {
+    headers: organizationHeaders(), responseType: "arraybuffer",
+  }));
+  expect(Buffer.from(binary.data)).toEqual(pdfBytes);
   scope(member);
   expect(await status(documents.rename(proofId, "denied.pdf"))).toBe(403);
   expect(await status(documents.remove(proofId))).toBe(403);
@@ -423,6 +422,8 @@ it("completes invoice-gated versioned sales with replay and exact stock restorat
   const postVersion = sale.version, postKey = randomUUID();
   sale = await safe(sales.transition(sale.id, "post", postVersion, postKey));
   expect(sale.status).toBe("POSTED");
+  const revenuePeriod = { from: "2026-10-09", to: "2026-10-09" };
+  expect((await safe(analyticsReport(revenuePeriod))).revenue.amount).toBe("0.06");
   expect((await safe(sales.transition(sale.id, "post", postVersion, postKey))).version).toBe(sale.version);
   expect(await status(sales.update(sale.id, { ...payload, version: sale.version }))).toBe(409);
   expect(await status(sales.deactivate(sale.id, sale.version))).toBe(409);
@@ -435,6 +436,7 @@ it("completes invoice-gated versioned sales with replay and exact stock restorat
   const reverseVersion = sale.version, reverseKey = randomUUID();
   sale = await safe(sales.transition(sale.id, "reverse", reverseVersion, reverseKey));
   expect(sale.status).toBe("REVERSED");
+  expect((await safe(analyticsReport(revenuePeriod))).revenue.amount).toBe("0");
   expect((await safe(sales.transition(sale.id, "reverse", reverseVersion, reverseKey))).version).toBe(sale.version);
   const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
   expect(restored.weightKg).toBe(before.weightKg); expect(restored.volumeM3).toBe(before.volumeM3);

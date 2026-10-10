@@ -3,12 +3,11 @@ import { useEffect, useState } from "react";
 import { BarChart3, CheckCircle2, Gauge, Timer, Scale } from "lucide-react";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
-import ResourcePicker from "../../shared/ui/ResourcePicker";
+import ReportFiltersForm from "./ReportFiltersForm";
 import { errorMessage } from "../../shared/api/transport";
 import { displayDuration } from "./duration";
 import { displayDecimal } from "../intake/quantities";
-import { municipalityChoices, municipalityChoice } from "../routes/api";
-import { operationalReport, reportRouteChoices, reportRouteChoice, reportVehicleChoices, reportVehicleChoice,
+import { operationalReport,
   type ReportFilters, type OperationalReport } from "./api";
 /** Calendar defaults follow the report timezone instead of the browser timezone. */
 export function defaultReportPeriod(now = new Date()): ReportFilters {
@@ -33,19 +32,12 @@ export default function OperationalReportPage() {
       .finally(() => {if (active) setBusy(false);});
     return () => {active = false;};
   }, [applied, revision]);
-  const field = (name: "municipalityId" | "routeId" | "vehicleId", value: string) => setDraft({...draft,[name]:value || undefined});
   return <Card>
     <div className="page-heading"><div><p className="eyebrow">ACOMPANHAMENTO</p>
       <h1 className="report-title"><BarChart3 aria-hidden="true" size={28}/> Relatório operacional</h1>
       <p className="page-description">Acompanhe os resultados da organização, com os dados informados pela equipe.</p></div></div>
-    <form className="report-filters" onSubmit={event => {event.preventDefault();setApplied({...draft});}}>
-      <label>Data inicial<input type="date" required value={draft.from} max={draft.to} onChange={event => setDraft({...draft,from:event.target.value})}/></label>
-      <label>Data final<input type="date" required value={draft.to} min={draft.from} onChange={event => setDraft({...draft,to:event.target.value})}/></label>
-      <ResourcePicker label="Município (opcional)" value={draft.municipalityId ?? ""} onChange={id => field("municipalityId",id)} load={municipalityChoices} resolve={municipalityChoice}/>
-      <ResourcePicker label="Rota (opcional)" value={draft.routeId ?? ""} onChange={id => field("routeId",id)} load={reportRouteChoices} resolve={reportRouteChoice}/>
-      <ResourcePicker label="Veículo (opcional)" value={draft.vehicleId ?? ""} onChange={id => field("vehicleId",id)} load={reportVehicleChoices} resolve={reportVehicleChoice}/>
-      <div className="report-filter-actions"><Button type="submit" titulo="Aplicar filtros" disabled={busy}/><Button titulo="Limpar filtros" variant="secondary" onClick={() => {const period=defaultReportPeriod();setDraft(period);setApplied(period);}}/></div>
-    </form>
+    <ReportFiltersForm draft={draft} onChange={setDraft} onApply={() => setApplied({...draft})} busy={busy}
+      onReset={() => {const period=defaultReportPeriod();setDraft(period);setApplied(period);}}/>
     <p className="report-method">Período de até 366 dias, no horário de Brasília. Execuções pela conclusão; coletas pela realização. Rotas e veículos inativos continuam disponíveis para consulta histórica.</p>
     {busy && <p role="status">Carregando relatório…</p>}
     {error && <div className="report-notice"><p role="alert">{error}</p><Button titulo="Tentar novamente" onClick={() => setRevision(n => n+1)}/></div>}

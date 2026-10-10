@@ -14,6 +14,7 @@ import {
   type Execution,
 } from "../../src/features/routes/api";
 import { operationalReport } from "../../src/features/reporting/api";
+import { analyticsReport } from "../../src/features/reporting/analyticsApi";
 import { defaultReportPeriod } from "../../src/features/reporting/OperationalReportPage";
 import { fleet } from "../../src/features/fleet/api";
 import { team } from "../../src/features/parties/api";
@@ -268,4 +269,36 @@ it("reports exact operational totals through the actual scoped v1 contract", asy
   expect(empty.reportedDistanceKm).toBeNull();
   scope();
   expect(await status(operationalReport({from:"2025-01-01",to:"2026-10-09"}))).toBe(400);
+}, 30000);
+
+/** Confirms generated analytics transport and one denominator per multi-receipt execution. */
+it("reads weighted analytics from real execution snapshots and refuses foreign attribution", async () => {
+  scope();
+  await safe(collections.create({
+    realizationDate: new Date().toISOString(), totalWeightKg: "1.2345", vehicleId: vehicle,
+    driverId: driver, teamMemberIds: [helper], routeExecutionId: execution.id,
+    inputItems: [{ materialSubtypeId: material, weightKg: "1.2345", volumeM3: "0.1234" }],
+  }));
+  const dates = defaultReportPeriod();
+  const data = await safe(analyticsReport({ ...dates, routeId: plan.id, municipalityId: municipality }));
+  expect(data.definitionVersion).toBe("analytics-1");
+  expect(data.completedExecutions).toBe(1);
+  expect(data.distanceComparison.planned).toBe("10.125");
+  expect(data.distanceComparison.actual).toBe("0.001");
+  expect(data.distanceComparison.absoluteDeviation).toBe("10.124");
+  expect(data.durationComparison.planned).toBe("5400");
+  expect(data.coverage.declaredSections).toBe(1);
+  expect(data.coverage.coveredSections).toBe(1);
+  expect(data.coverage.percentage).toBe("100.000000");
+  expect(data.distanceProductivity.consideredExecutions).toBe(1);
+  expect(data.distanceProductivity.collectionCount).toBe(2);
+  expect(data.distanceProductivity.collectedWeightKg).toBe("2.4690");
+  expect(data.distanceProductivity.denominator).toBe("0.001");
+  expect(data.distanceProductivity.value).toBe("2469.000000");
+  expect(data.revenue.available).toBe(false);
+  expect(data.revenue.amount).toBeNull();
+  scope(otherOrganization);
+  expect(await status(analyticsReport({ ...dates, routeId: plan.id }))).toBe(404);
+  expect((await safe(analyticsReport(dates))).hourlyProductivity.value).toBeNull();
+  scope();
 }, 30000);

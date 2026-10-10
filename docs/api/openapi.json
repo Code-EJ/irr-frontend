@@ -4669,6 +4669,85 @@
         }
       }
     },
+    "/api/v1/reports/analytics": {
+      "get": {
+        "tags": [
+          "Operations"
+        ],
+        "summary": "Read organization MVP analytics",
+        "description": "Live analytics-1; inclusive America/Sao_Paulo dates, at most 366 days. Completed execution cohorts, unique declared sections, weighted linked-receipt productivity and current POSTED sale-date revenue. Revenue unavailable under municipality/route/vehicle filters. Backend ratios rounded HALF_UP to six decimals.",
+        "operationId": "get_9",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "municipalityId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "vehicleId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Organization-Id",
+            "in": "header",
+            "description": "Active organization selection; global authority or an active membership is required",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsReport"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/pressings/{id}": {
       "get": {
         "tags": [
@@ -7983,6 +8062,290 @@
           "unlinkedCollections": {
             "type": "integer",
             "format": "int64"
+          }
+        }
+      },
+      "AnalyticsComparison": {
+        "type": "object",
+        "properties": {
+          "unit": {
+            "type": "string"
+          },
+          "consideredExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "excludedExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "planned": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "actual": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "signedDeviation": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "absoluteDeviation": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "percentageDeviation": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        }
+      },
+      "AnalyticsCoverage": {
+        "type": "object",
+        "properties": {
+          "consideredExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "excludedExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "declaredSections": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "coveredSections": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "duplicateRows": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "conflictingSections": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "percentage": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        }
+      },
+      "AnalyticsProductivity": {
+        "type": "object",
+        "properties": {
+          "unit": {
+            "type": "string"
+          },
+          "consideredExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectionCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "excludedExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "withoutLinkedCollections": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "missingDenominatorExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "zeroDenominatorExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "collectedWeightKg": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "denominator": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          },
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
+          }
+        }
+      },
+      "AnalyticsReport": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "from": {
+            "type": "string",
+            "format": "date"
+          },
+          "to": {
+            "type": "string",
+            "format": "date"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "startInclusive": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endExclusive": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "definitionVersion": {
+            "type": "string"
+          },
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "municipalityId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "routeId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "vehicleId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "completedExecutions": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "unlinkedCollectionsInPeriod": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "distanceComparison": {
+            "$ref": "#/components/schemas/AnalyticsComparison"
+          },
+          "durationComparison": {
+            "$ref": "#/components/schemas/AnalyticsComparison"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/AnalyticsCoverage"
+          },
+          "hourlyProductivity": {
+            "$ref": "#/components/schemas/AnalyticsProductivity"
+          },
+          "distanceProductivity": {
+            "$ref": "#/components/schemas/AnalyticsProductivity"
+          },
+          "revenue": {
+            "$ref": "#/components/schemas/AnalyticsRevenue"
+          }
+        }
+      },
+      "AnalyticsRevenue": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "availabilityReason": {
+            "type": "string"
+          },
+          "consideredSales": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "excludedDraftSales": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "excludedReversedSales": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "amount": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Exact decimal string; use decimal arithmetic and preserve the documented unit",
+            "example": "123.4500",
+            "pattern": "^-?[0-9]+(?:[.][0-9]+)?$"
           }
         }
       },

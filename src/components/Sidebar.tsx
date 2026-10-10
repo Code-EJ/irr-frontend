@@ -43,6 +43,7 @@ export default function Sidebar({ name, role, administrator, onSignOut }: {
         <h2 id="navigation-results">Resultados</h2>
         <div className="navigation-items">
           <NavLink to="/reports/operations"><BarChart3 size={18} aria-hidden="true" />Relatório operacional</NavLink>
+          <NavLink to="/reports/analytics"><BarChart3 size={18} aria-hidden="true" />Analytics</NavLink>
         </div>
       </section>
       {administrator && <section className="navigation-group" aria-labelledby="navigation-administration">
