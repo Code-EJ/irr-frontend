@@ -71,3 +71,37 @@ it("keeps a labelled reversal confirmation and its retry identity after a stock 
   expect(requests[0].headers.get("Idempotency-Key")).toBe(requests[1].headers.get("Idempotency-Key"));
   expect(screen.getByRole("heading", { name: "Reverter triagem?" })).toBeTruthy();
 });
+
+it("posts all queued pressing lines together and refuses to silently discard an unfinished line", async () => {
+  const requests: InternalAxiosRequestConfig[] = [];
+  apiClient.defaults.adapter = async config => {
+    if (config.method === "post") { requests.push(config); throw new AxiosError("network", "ERR_NETWORK", config); }
+    return response(config, { content: [{ id: "lot", sortedItemId: "sorted", materialSubtypeId: "subtype", materialName: "Papel", availableWeightKg: "1.0000", availableVolumeM3: "1.0000" }], totalElements: 1, totalPages: 1 });
+  };
+  render(<MemoryRouter><ProcessingForm kind="pressings" /></MemoryRouter>);
+  await screen.findByRole("option", { name: /Papel/ });
+  await userEvent.selectOptions(screen.getByLabelText("Lote de triagem"), "lot");
+  for (const weight of ["0,1000", "0,2000"]) {
+    await userEvent.type(screen.getByLabelText("Peso do fardo (kg)"), weight);
+    await userEvent.type(screen.getByLabelText("Volume inicial (m³)"), "0,0200");
+    await userEvent.type(screen.getByLabelText("Volume final (m³)"), "0,0100");
+    await userEvent.click(screen.getByRole("button", { name: "Adicionar item ao lote" }));
+  }
+  expect(screen.getByRole("heading", { name: "Itens do lote (2)" })).toBeTruthy();
+  await userEvent.type(screen.getByLabelText("Peso do fardo (kg)"), "0,3000");
+  await userEvent.click(screen.getByRole("button", { name: "Registrar prensagem" }));
+  expect(await screen.findByText(/Adicione o item em edição/)).toBeTruthy();
+  expect(requests).toHaveLength(0);
+  await userEvent.clear(screen.getByLabelText("Peso do fardo (kg)"));
+  await userEvent.click(screen.getByRole("button", { name: "Registrar prensagem" }));
+  await waitFor(() => expect(requests).toHaveLength(1));
+  expect(JSON.parse(requests[0].data)).toEqual({ pressedBales: ["0.1000", "0.2000"].map(weightKg => ({ sortedItemId: "sorted", materialSubtypeId: "subtype", weightKg, initialVolumeM3: "0.0200", finalVolumeM3: "0.0100", destinationType: "STOCK" })) });
+  await userEvent.click(screen.getByRole("button", { name: "Registrar prensagem" }));
+  await waitFor(() => expect(requests).toHaveLength(2));
+  expect(requests[1].headers.get("Idempotency-Key")).toBe(requests[0].headers.get("Idempotency-Key"));
+  await userEvent.click(screen.getByRole("button", { name: "Remover item 1" }));
+  await userEvent.click(screen.getByRole("button", { name: "Registrar prensagem" }));
+  await waitFor(() => expect(requests).toHaveLength(3));
+  expect(JSON.parse(requests[2].data).pressedBales).toHaveLength(1);
+  expect(requests[2].headers.get("Idempotency-Key")).not.toBe(requests[0].headers.get("Idempotency-Key"));
+});

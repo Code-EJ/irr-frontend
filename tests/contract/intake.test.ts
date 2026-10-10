@@ -458,6 +458,38 @@ it("deactivates unprocessed collections and independent donors", async () => {
   await safe(donors.deactivate(donor.id!));
   expect(await status(donors.get(donor.id!))).toBe(404);
 });
+it("posts a multi-line processing batch atomically and rolls back all lines on stock conflict", async () => {
+  scope();
+  const source = await safe(donations.create(donation()));
+  intake.push({ kind: "donation", id: source.id!, processed: true });
+  const input = source.inputItems!.find(line => line.isActive !== false)!;
+  const beforeSorting = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const sortedLine = { inputItemId: input.id!, materialSubtypeId: subtypeId, weightKg: "0.0500", volumeM3: "0.0050", rejectWeightKg: "0", rejectVolumeM3: "0", destinationType: "STOCK" as const };
+  const sortingPayload = { sortingType: "PRIMARY" as const, sortedItems: [sortedLine, { ...sortedLine, inputItemId: source.inputItems![1].id!, weightKg: "0.0600", volumeM3: "0.0060" }] };
+  const sortingKey = randomUUID();
+  const sorting = await safe(processing.create("sortings", sortingPayload, sortingKey));
+  sortings.push(sorting.id!);
+  expect("sortedItems" in sorting ? sorting.sortedItems : []).toHaveLength(2);
+  expect((await safe(processing.create("sortings", sortingPayload, sortingKey))).id).toBe(sorting.id);
+  const sortedItems = "sortedItems" in sorting ? sorting.sortedItems! : [];
+  const beforePressing = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const bales = sortedItems.map(line => ({ sortedItemId: line.id!, materialSubtypeId: subtypeId, weightKg: line.weightKg!, initialVolumeM3: line.volumeM3!, finalVolumeM3: "0.0010", destinationType: "STOCK" as const }));
+  expect(await status(processing.create("pressings", { pressedBales: [bales[0], { ...bales[1], weightKg: "99.0000" }] }, randomUUID()))).toBe(409);
+  const afterConflict = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(afterConflict.weightKg).toBe(beforePressing.weightKg);
+  expect(afterConflict.volumeM3).toBe(beforePressing.volumeM3);
+  const pressingKey = randomUUID();
+  const pressing = await safe(processing.create("pressings", { pressedBales: bales }, pressingKey));
+  pressings.push(pressing.id!);
+  expect("pressedBales" in pressing ? pressing.pressedBales : []).toHaveLength(2);
+  expect((await safe(processing.create("pressings", { pressedBales: bales }, pressingKey))).id).toBe(pressing.id);
+  expect(await status(processing.reverse("sortings", sorting.id!, randomUUID()))).toBe(409);
+  await safe(processing.reverse("pressings", pressing.id!, randomUUID()));
+  await safe(processing.reverse("sortings", sorting.id!, randomUUID()));
+  const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(restored.weightKg).toBe(beforeSorting.weightKg);
+  expect(restored.volumeM3).toBe(beforeSorting.volumeM3);
+});
 afterAll(async () => {
   if (!admin) return;
   scope();
@@ -479,13 +511,15 @@ afterAll(async () => {
     });
   }
   for (const id of pressings)
-    await clean("reverse pressing", () => processing.reverse("pressings", id, randomUUID()));
+    await clean("reverse pressing", async () => {
+      const record = await processing.get("pressings", id);
+      if (record.status === "POSTED") await processing.reverse("pressings", id, randomUUID());
+    });
   for (const id of sortings)
-    await clean("reverse sorting", () =>
-      apiClient.post("/sortings/" + id + "/reverse", null, {
-        headers: { ...organizationHeaders(), "Idempotency-Key": randomUUID() },
-      }),
-    );
+    await clean("reverse sorting", async () => {
+      const record = await processing.get("sortings", id);
+      if (record.status === "POSTED") await processing.reverse("sortings", id, randomUUID());
+    });
   for (const item of intake)
     if (!item.processed)
       await clean("deactivate intake", () =>
