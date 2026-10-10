@@ -1,5 +1,6 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
 import { loadEnvFile } from "node:process";
+import { mkdir, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, expect, it, vi } from "vitest";
 import { isAxiosError } from "axios";
@@ -489,6 +490,66 @@ it("posts a multi-line processing batch atomically and rolls back all lines on s
   const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
   expect(restored.weightKg).toBe(beforeSorting.weightKg);
   expect(restored.volumeM3).toBe(beforeSorting.volumeM3);
+});
+it("verifies a fifty-line batch across inventory pages with rollback, replay and exact restoration", async () => {
+  scope();
+  const timings: { operation: string; milliseconds: number }[] = [];
+  async function timed<T>(operation: string, action: () => Promise<T>) {
+    const started = performance.now();
+    const result = await action();
+    timings.push({ operation, milliseconds: Math.round((performance.now() - started) * 100) / 100 });
+    return result;
+  }
+  const before = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const source = await safe(donations.create(donation()));
+  intake.push({ kind: "donation", id: source.id!, processed: true });
+  const payload = { sortingType: "PRIMARY" as const, sortedItems: Array.from({ length: 50 }, () => ({ inputItemId: source.inputItems![0].id!, materialSubtypeId: subtypeId, weightKg: "0.0010", volumeM3: "0.0002", rejectWeightKg: "0", rejectVolumeM3: "0", destinationType: "STOCK" as const })) };
+  const sortingKey = randomUUID();
+  const sorting = await timed("post-50-line-sorting", () => safe(processing.create("sortings", payload, sortingKey)));
+  sortings.push(sorting.id!);
+  const items = "sortedItems" in sorting ? sorting.sortedItems! : [];
+  expect(items).toHaveLength(50);
+  expect((await timed("replay-sorting", () => safe(processing.create("sortings", payload, sortingKey)))).id).toBe(sorting.id);
+  const itemIds = new Set(items.map(item => item.id));
+  const first = await safe(inventory.lots(0));
+  expect(first.pages).toBeGreaterThan(1);
+  expect(first.pages).toBeLessThan(100);
+  const lotIds = new Set<string>();
+  let found = 0;
+  await timed("read-all-inventory-pages", async () => {
+    for (let page = 0; page < first.pages; page++) {
+      const result = page === 0 ? first : await safe(inventory.lots(page));
+      for (const lot of result.items) {
+        expect(lotIds.has(lot.id!)).toBe(false);
+        lotIds.add(lot.id!);
+        if (itemIds.has(lot.sortedItemId)) {
+          found++;
+          expect(lot.availableWeightKg).toBe("0.0010");
+          expect(lot.availableVolumeM3).toBe("0.0002");
+        }
+      }
+    }
+  });
+  expect(found).toBe(50);
+  expect(lotIds.size).toBe(first.total);
+  const beforePressing = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const bales = items.map(item => ({ sortedItemId: item.id!, materialSubtypeId: subtypeId, weightKg: "0.0010", initialVolumeM3: "0.0002", finalVolumeM3: "0.0001", destinationType: "STOCK" as const }));
+  expect(await timed("reject-last-line-and-rollback", () => status(processing.create("pressings", { pressedBales: bales.map((line, index) => index === 49 ? { ...line, weightKg: "99.0000" } : line) }, randomUUID())))).toBe(409);
+  const afterConflict = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(afterConflict.weightKg).toBe(beforePressing.weightKg);
+  expect(afterConflict.volumeM3).toBe(beforePressing.volumeM3);
+  const pressingKey = randomUUID();
+  const pressing = await timed("post-50-bale-pressing", () => safe(processing.create("pressings", { pressedBales: bales }, pressingKey)));
+  pressings.push(pressing.id!);
+  expect("pressedBales" in pressing ? pressing.pressedBales : []).toHaveLength(50);
+  expect((await timed("replay-pressing", () => safe(processing.create("pressings", { pressedBales: bales }, pressingKey)))).id).toBe(pressing.id);
+  await timed("reverse-50-bale-pressing", () => safe(processing.reverse("pressings", pressing.id!, randomUUID())));
+  await timed("reverse-50-line-sorting", () => safe(processing.reverse("sortings", sorting.id!, randomUUID())));
+  const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(restored.weightKg).toBe(before.weightKg);
+  expect(restored.volumeM3).toBe(before.volumeM3);
+  await mkdir(".local/verification", { recursive: true });
+  await writeFile(".local/verification/processing-volume.json", JSON.stringify({ verifiedAt: new Date().toISOString(), mode: "isolated-local", backendContractReference: "20a03c7", batchLines: 50, inventoryPages: first.pages, timings, caveat: "Single local sample; not a production capacity, concurrency benchmark or latency SLA." }, null, 2) + "\n");
 });
 afterAll(async () => {
   if (!admin) return;
