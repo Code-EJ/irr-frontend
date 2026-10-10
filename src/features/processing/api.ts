@@ -28,7 +28,9 @@ export const processing = {
     return (await apiClient.get<Sorting | Pressing>(`/${kind}/${id}`, { headers: organizationHeaders() })).data;
   },
   async create(kind: ProcessingKind, payload: ProcessingPayload, key: string) {
-    return (await apiClient.post<Sorting | Pressing>(`/${kind}`, payload, { headers: { ...organizationHeaders(), "Idempotency-Key": key } })).data;
+    const record = (await apiClient.post<Sorting | Pressing>(`/${kind}`, payload, { headers: { ...organizationHeaders(), "Idempotency-Key": key } })).data;
+    if (!record?.id || record.status !== "POSTED") throw new Error("Invalid processing receipt.");
+    return record;
   },
   async reverse(kind: ProcessingKind, id: string, key: string) {
     return (await apiClient.post<Schema["Result"]>(`/${kind}/${id}/reverse`, null, { headers: { ...organizationHeaders(), "Idempotency-Key": key } })).data;

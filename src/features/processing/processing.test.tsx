@@ -3,7 +3,7 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 import { apiClient } from "../../shared/api/client";
 import { session } from "../../shared/api/session";
@@ -39,6 +39,9 @@ it("preserves decimal input and retry identity after uncertain pressing delivery
   await userEvent.type(screen.getByLabelText("Volume final (m³)"), "0,0100");
   await userEvent.click(screen.getByRole("button", { name: "Registrar prensagem" }));
   await screen.findByRole("alert");
+  expect(await screen.findByText(/A edição foi bloqueada/)).toBeTruthy();
+  expect(screen.getByLabelText("Peso do fardo (kg)").closest("fieldset")?.disabled).toBe(true);
+  expect((screen.getByRole("button", { name: "Adicionar item ao lote" }) as HTMLButtonElement).disabled).toBe(true);
   await userEvent.click(screen.getByRole("button", { name: "Registrar prensagem" }));
   await waitFor(() => expect(requests).toHaveLength(2));
   expect(requests[0].headers.get("Idempotency-Key")).toBe(requests[1].headers.get("Idempotency-Key"));
@@ -75,7 +78,7 @@ it("keeps a labelled reversal confirmation and its retry identity after a stock 
 it("posts all queued pressing lines together and refuses to silently discard an unfinished line", async () => {
   const requests: InternalAxiosRequestConfig[] = [];
   apiClient.defaults.adapter = async config => {
-    if (config.method === "post") { requests.push(config); throw new AxiosError("network", "ERR_NETWORK", config); }
+    if (config.method === "post") { requests.push(config); throw new AxiosError("conflict", "ERR_BAD_REQUEST", config, undefined, response(config, {}, 409)); }
     return response(config, { content: [{ id: "lot", sortedItemId: "sorted", materialSubtypeId: "subtype", materialName: "Papel", availableWeightKg: "1.0000", availableVolumeM3: "1.0000" }], totalElements: 1, totalPages: 1 });
   };
   render(<MemoryRouter><ProcessingForm kind="pressings" /></MemoryRouter>);
@@ -104,4 +107,37 @@ it("posts all queued pressing lines together and refuses to silently discard an 
   await waitFor(() => expect(requests).toHaveLength(3));
   expect(JSON.parse(requests[2].data).pressedBales).toHaveLength(1);
   expect(requests[2].headers.get("Idempotency-Key")).not.toBe(requests[0].headers.get("Idempotency-Key"));
+});
+
+it.each([408, 500, 200])("keeps an uncertain command locked after status %s until a valid replay receipt", async initialStatus => {
+  const requests: InternalAxiosRequestConfig[] = [];
+  apiClient.defaults.adapter = async config => {
+    if (config.method === "post") {
+      requests.push(config);
+      if (requests.length === 1) {
+        if (initialStatus === 200) return response(config, {});
+        throw new AxiosError("uncertain", "ERR_BAD_RESPONSE", config, undefined, response(config, {}, initialStatus));
+      }
+      if (requests.length === 2) throw new AxiosError("denied", "ERR_BAD_REQUEST", config, undefined, response(config, {}, 403));
+      return response(config, { id: "posted", status: "POSTED" });
+    }
+    return response(config, { content: [{ id: "lot", sortedItemId: "sorted", materialSubtypeId: "subtype", materialName: "Papel", availableWeightKg: "1.0000", availableVolumeM3: "1.0000" }], totalElements: 1, totalPages: 1 });
+  };
+  render(<MemoryRouter initialEntries={["/pressings/new"]}><Routes><Route path="/pressings/new" element={<ProcessingForm kind="pressings" />} /><Route path="/pressings" element={<p>Histórico confirmado</p>} /></Routes></MemoryRouter>);
+  await screen.findByRole("option", { name: /Papel/ });
+  await userEvent.selectOptions(screen.getByLabelText("Lote de triagem"), "lot");
+  await userEvent.type(screen.getByLabelText("Peso do fardo (kg)"), "0,1000");
+  await userEvent.type(screen.getByLabelText("Volume inicial (m³)"), "0,0200");
+  await userEvent.type(screen.getByLabelText("Volume final (m³)"), "0,0100");
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await userEvent.click(screen.getByRole("button", { name: "Registrar prensagem" }));
+    await screen.findByText(/A edição foi bloqueada/);
+    expect(screen.getByLabelText("Peso do fardo (kg)").closest("fieldset")?.disabled).toBe(true);
+    expect(screen.queryByText("Histórico confirmado")).toBeNull();
+  }
+  await userEvent.click(screen.getByRole("button", { name: "Registrar prensagem" }));
+  await screen.findByText("Histórico confirmado");
+  expect(requests).toHaveLength(3);
+  expect(new Set(requests.map(request => request.headers.get("Idempotency-Key"))).size).toBe(1);
+  expect(new Set(requests.map(request => request.data)).size).toBe(1);
 });
