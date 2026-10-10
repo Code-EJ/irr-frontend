@@ -191,3 +191,5 @@ Open **Compradores** to maintain organization-owned commercial references and **
 ## Integrated acceptance
 
 [The acceptance record](docs/integrated-acceptance.md) distinguishes automated local evidence from remaining browser/operator and deployment gates. Processing forms accept an optional operation date in the device's local time; blank dates preserve server time. These controls do not edit historical records or change stock policy.
+
+Processing forms also support **Adicionar item ao lote**: queue multiple source lines, review/remove them and submit one atomic operation. Stage/date apply to the whole batch. Pending quantity edits must be added or cleared before registration. See [the processing guide](docs/processing-verification.md) for retry, rollback and historical-record rules.

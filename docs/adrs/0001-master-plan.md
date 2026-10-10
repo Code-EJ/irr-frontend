@@ -297,3 +297,7 @@ ADR-0015 step five continues through ADR-0019 into [ADR-0020](0020-sales-lifecyc
 ## Integrated acceptance checkpoint — 2026-10-09
 
 [The integrated acceptance record](../integrated-acceptance.md) consolidates existing release gates without replacing the roadmap. An incremental ADR-0019 refinement adds declared processing dates through current Swagger fields and consistent shared dialogs. The frontend remains on its existing stack and backend `20a03c7` remains unchanged. Multi-line processing, operator/browser acceptance and external release configuration remain explicit pending work.
+
+## Processing batch checkpoint — 2026-10-09
+
+Frontend `9cd733e` completes the previously documented multi-line processing form limitation through the existing Swagger arrays, following ADR-0019. The [processing guide](../processing-verification.md) records queue workflow, atomic backend verification and retry limits. No new roadmap or architecture is introduced. Remaining acceptance and release dependencies follow the [integrated acceptance record](../integrated-acceptance.md).

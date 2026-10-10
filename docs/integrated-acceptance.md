@@ -11,7 +11,7 @@ This record executes ADR-0001/0015/0019/0020 and the existing homologation check
 | Identity, profile, recovery, global/local administration | Existing component and real-backend suite, Mailpit recovery | Operator review; actual external sender and inbox delivery |
 | Fleet, team, catalog, documents and intake | Existing scoped contract fixtures | Operator validation with representative records and retained attachments |
 | Routes and approved operational report | Existing date/filter/authority contract and presentation tests | Representative-volume performance and field/operator review |
-| Sorting, pressing and stock | Real posting/replay, upstream-conflict rejection, exact conservation and compensating reversal | Multi-line processing UX; complete native-browser workflow acceptance |
+| Sorting, pressing and stock | Real posting/replay, upstream-conflict rejection, exact conservation and compensating reversal | Complete native-browser batch workflow and operator acceptance |
 | Buyers and sales | Exact totals, invoice gate, stale versions, scoped references, post/reverse replay; prior browser draft/update/post and consumed balance | Complete browser reversal and operator fiscal-document review |
 | Appearance and accessibility | Shared dialog tests and prior responsive/theme/contrast/font checks | Keyboard and assistive-technology acceptance across all workflows |
 | Docker and executable contract | Read-only local pair checks, pinned Swagger and served origin | Public deployment, real image provenance and matched release approval |
@@ -54,3 +54,7 @@ Use a designated non-production organization and synthetic commercial documents,
 6. Before public release, complete the existing email/deployment/backup/upload persistence and matched-image gates in homologation-verification.md. No local test count replaces those actions.
 
 Additional analytics require approved formulas; GPS remains planned after deployment. Those dependencies do not justify inventing APIs, resetting data or redesigning the backend.
+
+## Subsequent batch checkpoint — 2026-10-09
+
+Frontend `9cd733e` delivers the queued multi-line processing UX described in ADR-0019 and the processing guide. Latest evidence: 118 frontend tests and 24 real API tests, including atomic rollback and stock restoration. Earlier test counts remain dated evidence. Backend `20a03c7` remains the executable baseline. The multi-line UX limitation is resolved; browser/operator, representative-volume, accessibility and external release gates remain.
