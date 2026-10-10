@@ -25,7 +25,9 @@ The protected workspace now exposes a named, programmatically focusable main lan
 
 Run `npm test -- src/route/Router.test.tsx`, followed by `npm run lint`, `npm run typecheck`, `npm test` and `npm run build`. Existing identity/transport/dialog suites provide complementary revoked-session, request-scope, mutation-busy and modal focus restoration checks. Fixture-based route tests do not replace actual server authorization tests.
 
-The final full suite passed 136 tests in 17 files, including all nine route-boundary cases. Strict TypeScript checks and the production Vite build passed. The initial eight-case targeted run passed before the account-load recovery case was added; the full run includes that case.
+The final full suite passed 136 tests in 17 files, including all nine route-boundary cases. Zero-warning ESLint, strict TypeScript checks and the production Vite build passed. The initial eight-case targeted run passed before the account-load recovery case was added; the full run includes that case.
+
+Frontend implementation commit `0fb082c` was built with the existing Dockerfile and `VITE_API_BASE_URL=http://localhost:9292/api/v1`. Only the local frontend service was recreated; backend, database, Redis, Mailpit and retained data were unchanged. Running image: `sha256:7b5069bd5bd45112adb276b57de5b27e8873f6dee33bcca0319ed2a4fc5b8a13`, healthy. `npm run verify:homologation` passed all six read-only pair checks, including actual Swagger equality, exact-origin CORS, direct SPA routes and served API origin. `npm run api:check` passed for 116 supported versioned operations. Its pinned backend metadata remains `996e36f`; live backend implementation is `ebea9f2`, whose contract remains identical. Private local verification output is excluded from Git.
 
 ## Browser and operator gate
 
