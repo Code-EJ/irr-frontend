@@ -1,4 +1,5 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+import { useEffect, useRef } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -59,6 +60,11 @@ import {
 function Protected() {
   const state = useSession();
   const location = useLocation();
+  const mainRef = useRef<HTMLElement>(null);
+  // Move keyboard reading position into the new page without adding a tab stop.
+  useEffect(() => {
+    if (!state.loading) mainRef.current?.focus();
+  }, [location.pathname, state.loading, state.organization?.id]);
   if (!session.getToken()) return <Navigate to="/login" replace />;
   if (state.loading) return <p role="status">Carregando sua conta…</p>;
   if (state.error)
@@ -79,7 +85,7 @@ function Protected() {
     );
   return (
     <div className="app-shell">
-      <a href="#main-content" className="skip-link">
+      <a href="#main-content" className="skip-link" onClick={() => mainRef.current?.focus()}>
         Pular para o conteúdo
       </a>
       <Sidebar
@@ -110,7 +116,7 @@ function Protected() {
             </select>
           </label>
         </header>
-        <main id="main-content" className="workspace-content">
+        <main ref={mainRef} id="main-content" tabIndex={-1} className="workspace-content" aria-label="Conteúdo principal">
           <Outlet key={state.organization?.id ?? "no-organization"} />
         </main>
         <footer className="workspace-footer">
