@@ -309,3 +309,7 @@ Frontend `949e13d` tightens ADR-0019 uncertain-delivery behavior after acceptanc
 ## Owner-selected local validation scope — 2026-10-09
 
 The owner selected continued local validation for this execution. Public deployment and external email validation remain future operator gates, rather than dependencies for current local acceptance work. The existing architecture, contract and roadmap remain authoritative. Against served frontend `949e13d`, six read-only local pair checks and the pinned 115-operation Swagger check passed; frontend/backend/PostgreSQL/Redis/Mailpit containers were healthy.
+
+## Larger-batch local acceptance checkpoint — 2026-10-09
+
+The existing ADR-0019 acceptance sequence now has executable evidence for fifty-line sorting/pressing, complete paginated inventory reads, full rollback on a last-line conflict and exact reversal. The [integrated acceptance record](../integrated-acceptance.md) and [processing guide](../processing-verification.md) retain the measured local scope and remaining operator/browser/workload gates. All 25 real API tests pass; no backend issue or new architecture was introduced.

@@ -64,3 +64,7 @@ Frontend `9cd733e` delivers the queued multi-line processing UX described in ADR
 Frontend `949e13d` resolves a duplicate-operation risk found during acceptance review: unresolved processing commands can no longer be edited into new submissions while their original outcome is unknown. Exact command/key retention and successful-receipt validation are verified by the processing regression suite. Latest full frontend evidence is 121 passing tests, with eight targeted processing tests after the final retry-path refinement, and 24 passing real API tests. Browser/operator and external deployment/email gates remain outstanding.
 
 The owner selected local-only validation for now. Six read-only pair checks and the pinned 115-operation contract check passed against rebuilt frontend source `949e13d`; all five local service containers were healthy. Publication/external email remain future operator gates and are not claimed as executed. Local browser/operator acceptance remains separately pending.
+
+## Larger local batch checkpoint — 2026-10-09
+
+Twenty-five real-backend tests now pass, including a fifty-line sorting/pressing sample, six-page lot completeness/uniqueness, replay, rollback when the final line fails, and exact restoration. The [processing guide](processing-verification.md) records individual observed timings and their limits. This resolves the bounded local larger-batch check; production workload/concurrency and browser/operator acceptance remain separate gates. No frontend runtime or backend contract change was necessary.
