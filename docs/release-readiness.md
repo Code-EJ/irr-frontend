@@ -1,5 +1,7 @@
 # Frontend pre-release consolidation
 
+Current authority: backend ADR-0027 and [updated installation handoff](homologation-installation.md). Owner permits Railway Virginia with synthetic data only for homologation, and plans Hostinger Brazil production later. This supersedes the blanket region blocker in the historical checkpoint below. Application source/contract are unchanged; portable infrastructure/public environment verification remains separate from local frontend evidence.
+
 Latest handoff: [homologation installation](homologation-installation.md) records the owner's mandatory Brazil/São Paulo location and BRL 130/month ceiling. Provider compatibility/access remains open; Railway currently has Brazil CDN rather than compute. The new backend volume initializer passed isolated/local checks without changing the frontend API; six read-only pair checks and 116 operations passed. Broader operator/accessibility/public environment acceptance remains pending.
 
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas). Updated 2026-10-10.

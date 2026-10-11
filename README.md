@@ -2,7 +2,7 @@
 
 Current architecture: [Mermaid application and container diagrams](docs/architecture.md). Delivery status: [technical, deployment and client release gates](docs/release-readiness.md).
 
-For the next hosted environment, follow [homologation installation handoff](docs/homologation-installation.md). Brazil/São Paulo execution and the owner's BRL 130/month ceiling are mandatory; provider selection remains unresolved.
+Follow [the installation handoff](docs/homologation-installation.md): Railway Virginia for synthetic homologation; provider-independent Docker and Hostinger Brazil planning for future production. The owner's BRL 130/month ceiling remains; procurement/public deployment are pending.
 
 The remaining operator/browser/accessibility scenarios are prepared in [the final review worksheet](docs/final-operator-review.md); unchecked scenarios require actual evaluation.
 

@@ -1,5 +1,9 @@
 # Local Master Plan execution progress
 
+## Final hosting clarification — 2026-10-10
+
+Backend ADR-0027 supersedes the preceding blanket region blocker: the owner explicitly permits Railway US East Virginia for synthetic homologation only. Production remains planned for a Brazilian Hostinger VPS after budget/procurement approval. Portable backend Docker Compose artifacts do not change React/Vite, static Nginx, frontend build-time public API origin, `/api/v1` or the feature roadmap. [Updated handoff](homologation-installation.md) separates the two environments; no client-data copy, new browser acceptance or remote deploy occurred.
+
 ## Homologation handoff increment — 2026-10-10
 
 The owner requires Brazil/São Paulo execution and a BRL 130/month total ceiling for a new homologation environment. Railway's current São Paulo offering is CDN rather than compute; no foreign region fallback is authorized. Provider choice remains pending. Backend ADR-0026 adds a bounded volume initializer with immediate privilege drop; the real local Java process remains UID/GID 10001. Seven isolated storage scenarios, local health, six read-only pair checks and 116 contract operations pass. Frontend application/image baseline `232d60b` is unchanged. [Installation handoff](homologation-installation.md) records build-time public origin, CORS/recovery and acceptance steps. No remote deploy or new browser acceptance is claimed.

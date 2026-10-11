@@ -2,7 +2,7 @@
 
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
-Continue the existing Master Plan and backend ADR-0026; no frontend architecture or API changes are required by container storage initialization. The owner requires a new homologation environment, execution in Brazil (preferably São Paulo), and a total BRL 130/month ceiling. Railway-generated domains were initially preferred, but Railway currently publishes São Paulo as CDN only. Brazil-capable provider selection is pending; no foreign fallback is authorized. See [Railway's compute list](https://docs.railway.com/deployments/regions) and [staff clarification](https://station.railway.com/feedback/request-for-brazil-hosting-region-availa-64766196).
+Continue the existing Master Plan and backend ADR-0027. The final owner clarification keeps homologation on Railway US East Virginia with provider domains and **synthetic data only**. Future production is planned on a Hostinger VPS in Brazil, preferably São Paulo, after procurement/budget approval. The BRL 130/month ceiling remains, with concurrent-environment allocation pending. No real client data or production backups enter foreign homologation. This supersedes the preceding blanket Brazil-only homologation restriction; it does not change the API or application stack.
 
 ## Build and public configuration
 
@@ -12,7 +12,7 @@ Before promotion, build in an isolated directory/container with the final URL an
 
 ## Verification
 
-Follow the backend repository's `docs/deploy/railway/homologation-installation.md` only if the chosen provider meets the Brazil requirement. The non-root volume initializer has passed isolated tests and actual local backend startup, but real cloud upload/download/restart remains unverified.
+Follow the backend repository's `docs/deploy/railway/homologation-installation.md` for synthetic Railway homologation. Production follows its provider-independent `docs/deploy/portable-vps.md` and Hostinger budget plan; portable artifacts live under `deploy/`. The non-root volume initializer has passed isolated tests and actual local backend startup, but real cloud upload/download/restart remains unverified.
 
 For an actual public pair, set `IRR_FRONTEND_URL`, `IRR_API_URL` and the exact `IRR_FRONTEND_COMMIT`, remove local verification mode, and run `npm run verify:homologation` plus `npm run api:check`. These are read-only checks and do not constitute browser acceptance. Record actual HTTPS/CORS/static nested-route results rather than substitute local evidence.
 
