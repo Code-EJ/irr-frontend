@@ -1,5 +1,9 @@
 # ADR-0001: IRR frontend overhaul and coordinated system master plan
 
+## Isolated homologation execution — 2026-10-11
+
+Continue existing release sequencing under backend ADR-0028. A separate synthetic Railway environment is provisioned; the previous project remains untouched. [The installation handoff](../homologation-installation.md) records reserved origins, current local checks and remaining security, region, mail and public acceptance gates. This authorizes execution without replacing the architecture or equating provisioning with successful deployment or main merge.
+
 ## Current executive milestone order — 2026-10-10
 
 Local recovery gate update: the selected-stack V1-V4 backup restored in an isolated PostgreSQL container with 39 matching table counts, 20 matching attachment hashes/references and zero inventory reconciliation differences. The live API restarted healthy. Actual browser PDF upload/download and downloaded-byte rendering passed; in-app local-file viewer acceptance remains separately blocked by browser policy. Backend docs/recovery-verification.md and frontend docs/document-verification.md record the evidence. This completes L2, while broader local workload/browser checks remain in the progress register.

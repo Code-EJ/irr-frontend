@@ -4,6 +4,14 @@ Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
 Continue the existing Master Plan and backend ADR-0027. The final owner clarification keeps homologation on Railway US East Virginia with provider domains and **synthetic data only**. Future production is planned on a Hostinger VPS in Brazil, preferably São Paulo, after procurement/budget approval. The BRL 130/month ceiling remains, with concurrent-environment allocation pending. No real client data or production backups enter foreign homologation. This supersedes the preceding blanket Brazil-only homologation restriction; it does not change the API or application stack.
 
+## Provisioning checkpoint — 2026-10-11
+
+Backend ADR-0028 authorizes a separate `irr-homologation` project, preserving `lovely-wonder`. Four empty services, three 500 MB volumes, fresh backend-only credentials and resource ceilings have been created. The reserved frontend domain is `https://frontend-homologation-ffac.up.railway.app`; its build variable is `VITE_API_BASE_URL=https://backend-homologation-7600.up.railway.app/api/v1`. These domains are not yet serving the application. No GitHub autodeployment, image/source connection, remote administrator or main merge occurred.
+
+Desired service configuration reads back Virginia with one replica; effective volume locality remains pending because the volume API still reports its initial `sfo` metadata. Final image/security review and real deployment checks remain open. Refer to the backend's `docs/deploy/railway/execution-2026-10-11.md` for exact IDs, limits, confidential-variable handling and execution sequence. Do not put that record's private provisioning files in this repository or a frontend build context.
+
+Fresh local verification passed `npm run lint`, `npm run typecheck`, all 136 tests across 17 files, `npm run build` and `npm run api:check` (116 supported operations against pinned backend `996e36f`). This is local evidence, not a remote smoke test, successful email delivery or operator acceptance. Backend security CI still has the documented Spring advisory gate; no finding was suppressed to enable merge.
+
 ## Build and public configuration
 
 Use the maintained Dockerfile and UID 101, port 8080, `/health` and SPA fallback. Supply the final public HTTPS backend origin followed by `/api/v1` as the `VITE_API_BASE_URL` build argument. Never use local origins, private network DNS or backend secrets. The Dockerfile's local default is for development only; explicitly override it for homologation. Changing the origin requires rebuilding the static bundle.
