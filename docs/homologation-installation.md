@@ -6,7 +6,11 @@ Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
 Continue the existing Master Plan and backend ADR-0027. The final owner clarification keeps homologation on Railway US East Virginia with provider domains and **synthetic data only**. Future production is planned on a Hostinger VPS in Brazil, preferably São Paulo, after procurement/budget approval. The BRL 130/month ceiling remains, with concurrent-environment allocation pending. No real client data or production backups enter foreign homologation. This supersedes the preceding blanket Brazil-only homologation restriction; it does not change the API or application stack.
 
-## Current checkpoint — 2026-10-11: paused after public verification
+## Current checkpoint — 2026-10-11: resumed with institutional credits
+
+The owner requested activation after the pause below. Frontend deployment `18bb9965-ce81-48d1-8ce6-52e568ad80d2` from `a4dbac251d03a00afeec0299c9ca8733f1e3ed8b` is SUCCESS; the public JavaScript includes both institutional credits. Backend, PostgreSQL and Redis are also SUCCESS. Six fresh public-pair checks and all 116 pinned v1 operations passed; retained administrator/operator login and the persisted PDF SHA-256 passed. Backend `docs/deploy/railway/resume-2026-10-11.md` records the exact images and sources. Compute billing resumes; synthetic-only data, pending mail and client/security/accessibility boundaries remain. No visual browser acceptance is inferred from served assets.
+
+## Historical checkpoint — 2026-10-11: paused after public verification
 
 The separate synthetic environment successfully served the application before the owner requested a temporary shutdown. All four latest deployments now read **REMOVED**. Volumes, secrets and the previous project are preserved. Persistent volume storage can still consume shared trial credit. The earlier preparation-only statements below are historical; backend `docs/deploy/railway/execution-2026-10-11.md` records deployment identifiers, Virginia runtime/volume verification, the PORT=9191 healthcheck fix, exact public-pair checks and persisted synthetic PDF evidence.
 
