@@ -19,3 +19,9 @@ Existing [actual PDF evidence](document-verification.md), [integrated acceptance
 | C — Client delivery | NOT DELIVERED | Authorized installation, approved real-client import, public checks and client acceptance |
 
 Railway planning is authorized; resources, real secrets and deployment are not. Frontend receives only public `VITE_API_BASE_URL` at build time. Exports/comparisons remain product proposals; GPS/maps/advanced BI remain deferred.
+
+## Latest coordinated checkpoint — 2026-10-10
+
+The compatible backend Jammy patch now succeeded and runs locally as image 549937278a93; six actual pair checks and 116-operation contract verification passed. Backend/source runtime semantics are unchanged. Node/Maven build-base scans are completed, replacing the earlier missing-scan status; residual vendor/framework/build findings still need review. Backend docs/security/README.md records exact counts and nine specific critical backport/not-affected dispositions. The local candidate manifest records actual images/contract/migration hashes without release authorization.
+
+[The final operator/WCAG worksheet](final-operator-review.md) is prepared and linked from the README and scoped operator record. Its pending scenarios require genuine operator/browser evidence; no historical acceptance is widened. The backend initial-data preflight now passes eight tests including redacted malformed-input errors. The A/B/C gate statuses above remain open.

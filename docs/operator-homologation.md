@@ -1,5 +1,7 @@
 # Local browser and operator homologation
 
+Current remaining-platform checklist: [final operator and accessibility review](final-operator-review.md). This extends the accepted processing/sales scope below and preserves its historical evidence.
+
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas). Date: 2026-10-09.
 
 Status: Browser transactional workflow verified; owner accepted the local processing/sales workflow on 2026-10-09. Document-viewer acceptance remains pending. The owner explicitly volunteered to evaluate the flows. Participation is recorded separately from acceptance; no approval is inferred.
