@@ -3,6 +3,7 @@ import {useEffect,useState,type ReactNode} from "react";
 import {Link,useNavigate} from "react-router-dom";
 import {isAxiosError} from "axios";
 import Card from "../../components/Card";
+import InstitutionalFooter from "../../components/InstitutionalFooter";
 import Button from "../../components/Button";
 import {requestRecovery,confirmRecovery} from "./api";
 import {passwordError} from "./validation";
@@ -43,5 +44,5 @@ function recoveryError(error:unknown){
   return errorMessage(error);
 }
 function RecoveryLayout({children}:{children:ReactNode}){
-  return <main className="restricted-account"><Card className="identity-card"><p className="eyebrow">IRR · SEGURANÇA DA CONTA</p>{children}</Card></main>;
+  return <><main className="restricted-account"><Card className="identity-card"><p className="eyebrow">IRR · SEGURANÇA DA CONTA</p>{children}</Card></main><InstitutionalFooter /></>;
 }

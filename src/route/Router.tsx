@@ -49,6 +49,7 @@ import OrganizationsPage, {
 import Button from "../components/Button";
 import Card from "../components/Card";
 import Sidebar from "../components/Sidebar";
+import InstitutionalFooter from "../components/InstitutionalFooter";
 import {
   Recycle,
   Truck,
@@ -119,9 +120,7 @@ function Protected() {
         <main ref={mainRef} id="main-content" tabIndex={-1} className="workspace-content" aria-label="Conteúdo principal">
           <Outlet key={state.organization?.id ?? "no-organization"} />
         </main>
-        <footer className="workspace-footer">
-          IRR · Instituto de Resíduos e Reciclagem
-        </footer>
+        <InstitutionalFooter />
       </div>
     </div>
   );

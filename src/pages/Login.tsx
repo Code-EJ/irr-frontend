@@ -3,6 +3,7 @@ import { useState } from "react";
 import { isAxiosError } from "axios";
 import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import Card from "../components/Card";
+import InstitutionalFooter from "../components/InstitutionalFooter";
 import Button from "../components/Button";
 import InputText from "../components/InputText";
 import SimpleForm from "../components/SimpleForm";
@@ -21,7 +22,7 @@ export default function Login() {
         <div className="brand">
           <Recycle size={32} />
           <span>
-            IRR<small>Instituto de Resíduos e Reciclagem</small>
+            IRR<small>Instituto Referência em Resíduos</small>
           </span>
         </div>
         <div>
@@ -109,6 +110,7 @@ export default function Login() {
             organização.
           </p>
         </Card>
+        <InstitutionalFooter />
       </main>
     </div>
   );
