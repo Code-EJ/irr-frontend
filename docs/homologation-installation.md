@@ -10,7 +10,15 @@ Backend ADR-0028 authorizes a separate `irr-homologation` project, preserving `l
 
 Desired service configuration reads back Virginia with one replica; effective volume locality remains pending because the volume API still reports its initial `sfo` metadata. Final image/security review and real deployment checks remain open. Refer to the backend's `docs/deploy/railway/execution-2026-10-11.md` for exact IDs, limits, confidential-variable handling and execution sequence. Do not put that record's private provisioning files in this repository or a frontend build context.
 
-Fresh local verification passed `npm run lint`, `npm run typecheck`, all 136 tests across 17 files, `npm run build` and `npm run api:check` (116 supported operations against pinned backend `996e36f`). This is local evidence, not a remote smoke test, successful email delivery or operator acceptance. Backend security CI still has the documented Spring advisory gate; no finding was suppressed to enable merge.
+Fresh local verification passed `npm run lint`, `npm run typecheck`, all 136 tests across 17 files, `npm run build` and `npm run api:check` (116 supported operations against pinned backend `996e36f`). This is local evidence, not a remote smoke test, successful email delivery or operator acceptance. This earlier backend Spring gate is superseded locally by the supported open-source upgrade checkpoint below; the newly pushed GitHub CI result remains a separate merge requirement. No finding is suppressed.
+
+## Supported backend platform compatibility — 2026-10-11
+
+Backend ADR-0029 implements the owner's free supported Spring decision in `ca8e8df`, with Swagger constraint preservation in `02bc54d`. Boot 4.0.8 / Framework 7.0.9 does not change the frontend business contract. The actual generated Swagger matches the pre-upgrade contract semantically (only environment server origins excluded), so retain the reviewed `996e36f` specification/type baseline rather than recapture it unnecessarily.
+
+Against the new running Docker backend on the retained local database, `IRR_VERIFICATION_MODE=local IRR_API_URL=http://localhost:9292/api/v1 IRR_FRONTEND_URL=http://localhost:5173 IRR_FRONTEND_COMMIT=<current-source-sha> npm run verify:homologation` passed six read-only pair checks. Use PowerShell environment assignments on Windows. The configured API origin is `localhost`; substituting `127.0.0.1` correctly fails the served-bundle origin assertion even though both address loopback. No verification guard was relaxed.
+
+Fresh `npm run lint`, `npm run build` (including all three TypeScript project checks), `npm test` (136 tests / 17 files), and `npm run api:check` (116 v1 operations) pass. Backend's 51 unit / 101 integration tests and 185-coordinate zero-match OSV scan are documented in its dated evidence. This is local compatibility evidence, not browser/operator acceptance or published homologation. Reserved domains remain undeployed; image findings, email setup, effective volume locality and remote checks remain gates. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas).
 
 ## Build and public configuration
 
