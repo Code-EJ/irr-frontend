@@ -1,5 +1,7 @@
 # IRR frontend
 
+Current architecture: [Mermaid application and container diagrams](docs/architecture.md). Delivery status: [technical, deployment and client release gates](docs/release-readiness.md).
+
 The approved native MVP Analytics screen is available at Results → Analytics (/reports/analytics), using backend-generated /api/v1 types and server-calculated formulas. See [definitions, local commands and actual screenshots](docs/analytics-integration.md), [ADR-0021](docs/adrs/0021-approved-mvp-analytics-integration.md) and [remaining local Master Plan gates](docs/MASTER_PLAN_PROGRESS.md). The current locally verified implementation pair is frontend 9e25e91 / backend 996e36f; earlier baselines below are dated milestones.
 
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
