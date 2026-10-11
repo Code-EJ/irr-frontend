@@ -1,8 +1,10 @@
 # IRR frontend
 
+**Deploy without an AI session:** follow [the manual deployment guide](docs/manual-deployment.md), covering Railway and Hostinger/other Docker VPS hosts, validation and coordinated backend operations.
+
 Current architecture: [Mermaid application and container diagrams](docs/architecture.md). Delivery status: [technical, deployment and client release gates](docs/release-readiness.md).
 
-Follow [the installation handoff](docs/homologation-installation.md): Railway Virginia for synthetic homologation; provider-independent Docker and Hostinger Brazil planning for future production. The owner's BRL 130/month ceiling remains; procurement/public deployment are pending.
+Follow [the installation handoff](docs/homologation-installation.md) for dated evidence: Railway Virginia synthetic homologation was deployed and then paused; provider-independent Docker and Hostinger Brazil remain the future production plan. The owner's BRL 130/month production planning ceiling remains; Hostinger procurement is pending.
 
 The remaining operator/browser/accessibility scenarios are prepared in [the final review worksheet](docs/final-operator-review.md); unchecked scenarios require actual evaluation.
 

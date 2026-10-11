@@ -1,5 +1,7 @@
 # Frontend homologation installation handoff
 
+For current human-operated deployment steps, use [manual deployment](manual-deployment.md), which links the complete Railway and portable VPS procedures. This page is a dated evidence/handoff record; historical states below are not installation commands.
+
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
 Continue the existing Master Plan and backend ADR-0027. The final owner clarification keeps homologation on Railway US East Virginia with provider domains and **synthetic data only**. Future production is planned on a Hostinger VPS in Brazil, preferably São Paulo, after procurement/budget approval. The BRL 130/month ceiling remains, with concurrent-environment allocation pending. No real client data or production backups enter foreign homologation. This supersedes the preceding blanket Brazil-only homologation restriction; it does not change the API or application stack.
