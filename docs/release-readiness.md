@@ -1,5 +1,7 @@
 # Frontend pre-release consolidation
 
+Latest handoff: [homologation installation](homologation-installation.md) records the owner's mandatory Brazil/São Paulo location and BRL 130/month ceiling. Provider compatibility/access remains open; Railway currently has Brazil CDN rather than compute. The new backend volume initializer passed isolated/local checks without changing the frontend API; six read-only pair checks and 116 operations passed. Broader operator/accessibility/public environment acceptance remains pending.
+
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas). Updated 2026-10-10.
 
 Backend ADR-0025 continues the existing Master Plans and frontend ADR-0021. The coordinated closure matrix, security inventories, client-data procedure and Railway preparation are in backend `docs/release-readiness.md`, `docs/security/`, `docs/data/initial-load.md` and `docs/deploy/railway/preparation.md`. Architecture diagrams are in [the frontend architecture guide](architecture.md).
