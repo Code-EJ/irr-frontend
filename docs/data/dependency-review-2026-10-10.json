@@ -1,0 +1,404 @@
+{
+  "date": "2026-10-10",
+  "maintainer": "Enzo Ribas (https://github.com/oEnzoRibas)",
+  "sourceBefore": "1fe2d9b",
+  "lockfileSha256": "084c2e1c3d8dad9a00bbbaf53e0827e4010cde4aee89c3ed8c3a5f794f660f4c",
+  "change": {
+    "package": "source-map-js",
+    "from": "1.2.1",
+    "to": "1.2.2"
+  },
+  "before": {
+    "counts": {
+      "info": 0,
+      "low": 0,
+      "moderate": 2,
+      "high": 6,
+      "critical": 0,
+      "total": 8
+    },
+    "findings": [
+      {
+        "package": "braces",
+        "severity": "high",
+        "direct": false,
+        "range": "*",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          {
+            "name": "braces",
+            "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+            "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+            "range": "<=3.0.3"
+          }
+        ]
+      },
+      {
+        "package": "chokidar",
+        "severity": "high",
+        "direct": false,
+        "range": "2.0.0 - 3.6.0",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          "braces"
+        ]
+      },
+      {
+        "package": "fast-glob",
+        "severity": "high",
+        "direct": false,
+        "range": "*",
+        "fixAvailable": true,
+        "via": [
+          "micromatch"
+        ]
+      },
+      {
+        "package": "micromatch",
+        "severity": "high",
+        "direct": false,
+        "range": ">=0.2.0",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          "braces"
+        ]
+      },
+      {
+        "package": "postcss-nested",
+        "severity": "moderate",
+        "direct": false,
+        "range": "2.0.3 - 6.2.0",
+        "fixAvailable": true,
+        "via": [
+          "postcss-selector-parser"
+        ]
+      },
+      {
+        "package": "postcss-selector-parser",
+        "severity": "moderate",
+        "direct": false,
+        "range": "<7.1.6",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          {
+            "name": "postcss-selector-parser",
+            "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+            "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+            "range": "<7.1.6"
+          }
+        ]
+      },
+      {
+        "package": "source-map-js",
+        "severity": "high",
+        "direct": false,
+        "range": "1.0.0 - 1.2.1",
+        "fixAvailable": true,
+        "via": [
+          {
+            "name": "source-map-js",
+            "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+            "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+            "range": ">=1.0.0 <1.2.2"
+          }
+        ]
+      },
+      {
+        "package": "tailwindcss",
+        "severity": "high",
+        "direct": true,
+        "range": "<=0.0.0-oxide-insiders.ff2c25f || 0.5.0 - 3.4.19",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          "chokidar",
+          "fast-glob",
+          "micromatch",
+          "postcss-nested",
+          "postcss-selector-parser"
+        ]
+      }
+    ]
+  },
+  "after": {
+    "counts": {
+      "info": 0,
+      "low": 0,
+      "moderate": 2,
+      "high": 5,
+      "critical": 0,
+      "total": 7
+    },
+    "findings": [
+      {
+        "package": "braces",
+        "severity": "high",
+        "direct": false,
+        "range": "*",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          {
+            "name": "braces",
+            "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+            "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+            "range": "<=3.0.3"
+          }
+        ]
+      },
+      {
+        "package": "chokidar",
+        "severity": "high",
+        "direct": false,
+        "range": "2.0.0 - 3.6.0",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          "braces"
+        ]
+      },
+      {
+        "package": "fast-glob",
+        "severity": "high",
+        "direct": false,
+        "range": "*",
+        "fixAvailable": true,
+        "via": [
+          "micromatch"
+        ]
+      },
+      {
+        "package": "micromatch",
+        "severity": "high",
+        "direct": false,
+        "range": ">=0.2.0",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          "braces"
+        ]
+      },
+      {
+        "package": "postcss-nested",
+        "severity": "moderate",
+        "direct": false,
+        "range": "2.0.3 - 6.2.0",
+        "fixAvailable": true,
+        "via": [
+          "postcss-selector-parser"
+        ]
+      },
+      {
+        "package": "postcss-selector-parser",
+        "severity": "moderate",
+        "direct": false,
+        "range": "<7.1.6",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          {
+            "name": "postcss-selector-parser",
+            "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+            "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+            "range": "<7.1.6"
+          }
+        ]
+      },
+      {
+        "package": "tailwindcss",
+        "severity": "high",
+        "direct": true,
+        "range": "<=0.0.0-oxide-insiders.ff2c25f || 0.5.0 - 3.4.19",
+        "fixAvailable": {
+          "name": "tailwindcss",
+          "version": "4.3.3",
+          "isSemVerMajor": true
+        },
+        "via": [
+          "chokidar",
+          "fast-glob",
+          "micromatch",
+          "postcss-nested",
+          "postcss-selector-parser"
+        ]
+      }
+    ]
+  },
+  "production": {
+    "counts": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "findings": []
+  },
+  "imageScan": {
+    "status": "not-completed",
+    "reason": "Docker Scout requires Docker account authentication"
+  },
+  "limitations": [
+    "Point-in-time registry matching; no reachability or image OS clean claim",
+    "Remaining Tailwind 3 transitive findings are not suppressed"
+  ],
+  "outdated": {
+    "@eslint/js": {
+      "current": "9.39.5",
+      "wanted": "9.39.5",
+      "latest": "10.0.1"
+    },
+    "@types/node": {
+      "current": "24.19.0",
+      "wanted": "24.19.2",
+      "latest": "26.6.5"
+    },
+    "@types/react": {
+      "current": "18.3.18",
+      "wanted": "18.3.31",
+      "latest": "19.3.0"
+    },
+    "@types/react-dom": {
+      "current": "18.3.5",
+      "wanted": "18.3.7",
+      "latest": "19.3.0"
+    },
+    "@vitejs/plugin-react": {
+      "current": "4.3.4",
+      "wanted": "4.7.0",
+      "latest": "6.1.2"
+    },
+    "autoprefixer": {
+      "current": "10.4.20",
+      "wanted": "10.6.1",
+      "latest": "10.6.1"
+    },
+    "eslint": {
+      "current": "9.39.5",
+      "wanted": "9.39.5",
+      "latest": "10.12.0"
+    },
+    "eslint-plugin-react": {
+      "current": "7.37.4",
+      "wanted": "7.37.5",
+      "latest": "7.37.5"
+    },
+    "eslint-plugin-react-hooks": {
+      "current": "5.1.0",
+      "wanted": "5.2.0",
+      "latest": "7.1.1"
+    },
+    "eslint-plugin-react-refresh": {
+      "current": "0.4.18",
+      "wanted": "0.4.26",
+      "latest": "0.5.7"
+    },
+    "formik": {
+      "current": "2.4.6",
+      "wanted": "2.4.9",
+      "latest": "2.4.9"
+    },
+    "globals": {
+      "current": "15.14.0",
+      "wanted": "15.15.0",
+      "latest": "17.13.0"
+    },
+    "lucide-react": {
+      "current": "0.476.0",
+      "wanted": "0.476.0",
+      "latest": "1.55.0"
+    },
+    "postcss": {
+      "current": "8.5.28",
+      "wanted": "8.5.29",
+      "latest": "8.5.29"
+    },
+    "react": {
+      "current": "18.3.1",
+      "wanted": "18.3.1",
+      "latest": "19.3.0"
+    },
+    "react-dom": {
+      "current": "18.3.1",
+      "wanted": "18.3.1",
+      "latest": "19.3.0"
+    },
+    "react-toastify": {
+      "current": "11.0.3",
+      "wanted": "11.1.0",
+      "latest": "11.1.0"
+    },
+    "tailwindcss": {
+      "current": "3.4.17",
+      "wanted": "3.4.19",
+      "latest": "4.3.3"
+    },
+    "typescript": {
+      "current": "5.9.3",
+      "wanted": "5.9.3",
+      "latest": "7.0.2"
+    },
+    "typescript-eslint": {
+      "current": "8.70.1",
+      "wanted": "8.71.1",
+      "latest": "8.71.1"
+    },
+    "vite": {
+      "current": "6.4.3",
+      "wanted": "6.4.4",
+      "latest": "8.3.4"
+    },
+    "vitest": {
+      "current": "4.1.11",
+      "wanted": "4.1.11",
+      "latest": "5.0.3"
+    }
+  },
+  "updatePolicy": "Only the compatible security patch is applied; newer allowed/minor and major versions are inventory, not automatic upgrades.",
+  "verification": {
+    "implementationCommit": "511f461",
+    "lint": "passed with zero warnings",
+    "types": "passed",
+    "build": "passed",
+    "tests": {
+      "files": 17,
+      "passed": 136
+    },
+    "dockerBuild": "passed",
+    "livePairReadOnlyChecks": 6,
+    "contractOperations": 116,
+    "runningFrontendImageId": "sha256:72474e8d8537a48255e21d1c62dfc37080059692cc20a7e0ae400c8e9f938165"
+  }
+}
