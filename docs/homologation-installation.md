@@ -4,7 +4,17 @@ Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
 Continue the existing Master Plan and backend ADR-0027. The final owner clarification keeps homologation on Railway US East Virginia with provider domains and **synthetic data only**. Future production is planned on a Hostinger VPS in Brazil, preferably São Paulo, after procurement/budget approval. The BRL 130/month ceiling remains, with concurrent-environment allocation pending. No real client data or production backups enter foreign homologation. This supersedes the preceding blanket Brazil-only homologation restriction; it does not change the API or application stack.
 
-## Provisioning checkpoint — 2026-10-11
+## Current checkpoint — 2026-10-11: paused after public verification
+
+The separate synthetic environment successfully served the application before the owner requested a temporary shutdown. All four latest deployments now read **REMOVED**. Volumes, secrets and the previous project are preserved. Persistent volume storage can still consume shared trial credit. The earlier preparation-only statements below are historical; backend `docs/deploy/railway/execution-2026-10-11.md` records deployment identifiers, Virginia runtime/volume verification, the PORT=9191 healthcheck fix, exact public-pair checks and persisted synthetic PDF evidence.
+
+Schedule Paulo's functional session before resuming compute. Start PostgreSQL and Redis, then deploy reviewed backend/frontend sources and repeat the public pair verification, scoped operator login and attachment download. The latest frontend footer change remains local/versioned until that next source upload; CLI uploads do not automatically follow GitHub pushes. Use the private operator credentials for routine client testing and keep the platform administrator account with the owner. Email recovery remains disabled; browser/operator/accessibility acceptance and residual security review are still pending.
+
+The shared institutional footer identifies **Instituto Referência em Resíduos** and **Desenvolvido pela Code Soluções em Tecnologia Jr.** on authenticated pages, login and public recovery pages. It uses existing theme/contrast tokens, wrapping text and semantic footer markup; no new library or API change was introduced. Login branding uses the same institutional name. Lint, types, unit tests and build results are recorded in the release checkpoint. Visual browser acceptance remains pending while cloud services are paused.
+
+Prepared review: [frontend #67](https://github.com/Code-EJ/irr-frontend/pull/67) and [backend #79](https://github.com/Code-EJ/irr-backend/pull/79). Both remain drafts, with no main merge or production-readiness claim.
+
+## Historical provisioning checkpoint — 2026-10-11
 
 Backend ADR-0028 authorizes a separate `irr-homologation` project, preserving `lovely-wonder`. Four empty services, three 500 MB volumes, fresh backend-only credentials and resource ceilings have been created. The reserved frontend domain is `https://frontend-homologation-ffac.up.railway.app`; its build variable is `VITE_API_BASE_URL=https://backend-homologation-7600.up.railway.app/api/v1`. These domains are not yet serving the application. No GitHub autodeployment, image/source connection, remote administrator or main merge occurred.
 

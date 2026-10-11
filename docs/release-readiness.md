@@ -1,5 +1,11 @@
 # Frontend pre-release consolidation
 
+## Current handoff — 2026-10-11
+
+The public synthetic pair was verified, including HTTPS/direct routes, pinned OpenAPI, exact CORS, scoped operator authentication and persisted PDF upload/download. The owner subsequently paused all four Railway deployments to conserve compute credit; current status is REMOVED with retained volumes. [Installation handoff](homologation-installation.md) documents the pause, storage-cost caveat, session restart checks and shared institutional credits. The footer change is included in the frontend PR but has not been uploaded to the paused cloud environment. New frontend lint/type/build/test results supersede only those local checks, not pending browser/accessibility/client acceptance. Earlier checkpoints below remain dated history. No recovery email delivery, main merge or production clearance is claimed.
+
+Local verification for the institutional footer: `npm run lint` passed with zero warnings; `npm run build` includes all three TypeScript project checks and passed; `npm test` passed 136 tests across 17 files; `npm run api:check` verified 116 supported v1 operations against pinned backend `996e36f`. The footer reuses existing appearance tokens and wraps its Portuguese credits. No browser screenshot or completed visual/accessibility acceptance is claimed for this change.
+
 Current authority: backend ADR-0027 and [updated installation handoff](homologation-installation.md). Owner permits Railway Virginia with synthetic data only for homologation, and plans Hostinger Brazil production later. This supersedes the blanket region blocker in the historical checkpoint below. Application source/contract are unchanged; portable infrastructure/public environment verification remains separate from local frontend evidence.
 
 Latest handoff: [homologation installation](homologation-installation.md) records the owner's mandatory Brazil/São Paulo location and BRL 130/month ceiling. Provider compatibility/access remains open; Railway currently has Brazil CDN rather than compute. The new backend volume initializer passed isolated/local checks without changing the frontend API; six read-only pair checks and 116 operations passed. Broader operator/accessibility/public environment acceptance remains pending.
