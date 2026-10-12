@@ -1,64 +1,66 @@
-import { MenuIcon } from 'lucide-react';
-import React from 'react';
+/** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+import { Link, NavLink } from "react-router-dom";
+import { BarChart3, Files, HandHeart, Layers3, LayoutDashboard, LogOut,
+  MapPinned, PackagePlus, Recycle, Truck, UserRound, UsersRound } from "lucide-react";
 
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-
-  const menuItems = [
-    { label: 'Menu', link: '/menu' },
-    { label: 'Cadastro de Usuários', link: '/users-register' },
-    { label: 'Manejo de Usuários', link: '/users-management' },
-    { label: 'Tipologia', link: '/typology-list' },
-    { label: 'Subtipologia', link: '/subtypology-list' },
-    { label: 'Triagem', link: '/triage-list' },
-    { label: 'Prensagem', link: '/pressing-list' },
-    { label: 'Coleta', link: '/collection-list' },
-    { label: 'Doação', link: '/donation-list' },
-    { label: 'Doador', link: '/donator-list' },
-    { label: 'Veículo', link: '/vehicle-list' },
-    { label: 'Motorista', link: '/driver-list' },
-    { label: 'Material de Entrada', link: '/input-material-list' },
-    { label: 'Material de Saída', link: '/output-material-list' },
-    { label: 'Documento', link: '/document-list' },
-    { label: 'Mercado', link: '/sales-list' },
-    { label: 'Perfil', link: '/profile' },
-  ];
-
-  const handleMenuItemClick = (link: string) => {
-    window.location.href = link;
-  };
-
-  return (
-    <div
-      className={`fixed top-0 left-0 w-64 h-full bg-white shadow-md p-4 overflow-y-auto ${isOpen ? 'block' : 'hidden'}`}
-      aria-hidden={!isOpen}
-    >
-      <button
-        className="absolute top-4 right-4 text-3xl text-gray-700" // Alterei para text-3xl para aumentar o tamanho
-        onClick={onClose}
-        aria-label="Fechar sidebar"
-      >
-        <MenuIcon onClick={onClose} />
-      </button>
-      <ul className="p-0 m-0 mt-12 space-y-2">
-        {menuItems.map((item, index) => (
-          <li key={index} className="border-b border-gray-300">
-            <button
-              onClick={() => handleMenuItemClick(item.link)}
-              aria-label={`Ir para ${item.label}`}
-              className="w-full text-left p-2 text-gray-700 hover:bg-gray-100 focus:outline-none"
-            >
-              {item.label}
-            </button>
-          </li>
-        ))}
-      </ul>
+/** Groups existing destinations by task, retaining role visibility and a separate account footer. */
+export default function Sidebar({ name, role, administrator, onSignOut }: {
+  name: string;
+  role: string;
+  administrator: boolean;
+  onSignOut: () => void;
+}) {
+  return <aside className="sidebar">
+    <Link className="brand" to="/menu">
+      <span className="brand-icon"><Recycle size={26} aria-hidden="true" /></span>
+      <span>IRR<small>Gestão de resíduos</small></span>
+    </Link>
+    <nav aria-label="Navegação principal">
+      <NavLink to="/menu"><LayoutDashboard size={18} aria-hidden="true" />Visão geral</NavLink>
+      <section className="navigation-group" aria-labelledby="navigation-operation">
+        <h2 id="navigation-operation">Operação</h2>
+        <div className="navigation-items">
+          <NavLink to="/routes"><MapPinned size={18} aria-hidden="true" />Rotas</NavLink>
+          <NavLink to="/intake"><PackagePlus size={18} aria-hidden="true" />Entradas</NavLink>
+          <NavLink to="/sortings"><Layers3 size={18} aria-hidden="true" />Triagem</NavLink>
+          <NavLink to="/pressings"><Recycle size={18} aria-hidden="true" />Prensagem</NavLink>
+          <NavLink to="/inventory"><PackagePlus size={18} aria-hidden="true" />Estoque</NavLink>
+          <NavLink to="/sales"><HandHeart size={18} aria-hidden="true" />Vendas</NavLink>
+          <NavLink to="/documents"><Files size={18} aria-hidden="true" />Documentos</NavLink>
+        </div>
+      </section>
+      <section className="navigation-group" aria-labelledby="navigation-registers">
+        <h2 id="navigation-registers">Cadastros</h2>
+        <div className="navigation-items">
+          <NavLink to="/vehicle-list"><Truck size={18} aria-hidden="true" />Veículos</NavLink>
+          <NavLink to="/team"><UsersRound size={18} aria-hidden="true" />Equipe</NavLink>
+          <NavLink to="/materials"><Layers3 size={18} aria-hidden="true" />Materiais</NavLink>
+          <NavLink to="/donors"><HandHeart size={18} aria-hidden="true" />Doadores</NavLink>
+          <NavLink to="/buyers"><UsersRound size={18} aria-hidden="true" />Compradores</NavLink>
+        </div>
+      </section>
+      <section className="navigation-group" aria-labelledby="navigation-results">
+        <h2 id="navigation-results">Resultados</h2>
+        <div className="navigation-items">
+          <NavLink to="/reports/operations"><BarChart3 size={18} aria-hidden="true" />Relatório operacional</NavLink>
+          <NavLink to="/reports/analytics"><BarChart3 size={18} aria-hidden="true" />Analytics</NavLink>
+        </div>
+      </section>
+      {administrator && <section className="navigation-group" aria-labelledby="navigation-administration">
+        <h2 id="navigation-administration">Administração</h2>
+        <div className="navigation-items">
+          <NavLink to="/organizations"><UsersRound size={18} aria-hidden="true" />Organizações</NavLink>
+          <NavLink to="/users"><UsersRound size={18} aria-hidden="true" />Usuários</NavLink>
+        </div>
+      </section>}
+    </nav>
+    <div className="sidebar-account">
+      <Link to="/profile" className="sidebar-profile" aria-label="Minha conta">
+        <span className="avatar" aria-hidden="true">{name.slice(0, 1)}</span>
+        <span className="sidebar-identity"><strong>{name}</strong><small>{role}</small></span>
+        <UserRound size={16} aria-hidden="true" />
+      </Link>
+      <button className="sidebar-signout" onClick={onSignOut}><LogOut size={16} aria-hidden="true" />Sair da conta</button>
     </div>
-  );
-};
-
-export default Sidebar;
+  </aside>;
+}

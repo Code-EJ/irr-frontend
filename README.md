@@ -1,19 +1,31 @@
 # IRR frontend
 
+**Deploy without an AI session:** follow [the manual deployment guide](docs/manual-deployment.md), covering Railway and Hostinger/other Docker VPS hosts, validation and coordinated backend operations.
+
+Current architecture: [Mermaid application and container diagrams](docs/architecture.md). Delivery status: [technical, deployment and client release gates](docs/release-readiness.md).
+
+Follow [the installation handoff](docs/homologation-installation.md) for dated evidence: Railway Virginia synthetic homologation was deployed and then paused; provider-independent Docker and Hostinger Brazil remain the future production plan. The owner's BRL 130/month production planning ceiling remains; Hostinger procurement is pending.
+
+The remaining operator/browser/accessibility scenarios are prepared in [the final review worksheet](docs/final-operator-review.md); unchecked scenarios require actual evaluation.
+
+The approved native MVP Analytics screen is available at Results → Analytics (/reports/analytics), using backend-generated /api/v1 types and server-calculated formulas. See [definitions, local commands and actual screenshots](docs/analytics-integration.md), [ADR-0021](docs/adrs/0021-approved-mvp-analytics-integration.md) and [remaining local Master Plan gates](docs/MASTER_PLAN_PROGRESS.md). The current locally verified implementation pair is frontend 9e25e91 / backend 996e36f; earlier baselines below are dated milestones.
+
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 
-React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend commit **0dc0d1f** and exclusively **/api/v1**. Supported slices are sign-in/current account, organization selection, vehicles, the material category/type/subtype hierarchy, donors, operational staff, documents, collections and donations. Processing, inventory, sales and reports remain gated while their existing Master Plan slices are implemented. A passing build does not mean the whole application is finished.
+The [document verification record](docs/document-verification.md) contains the real upload/download screenshot, downloaded-PDF render and remaining viewer limitation. The corresponding backend selected-stack recovery rehearsal passed for V1-V4 with 39 tables and 20 verified attachments.
+
+React 18, TypeScript, Vite, React Router, Axios, Formik and Tailwind interface for IRR. The current integration uses backend source **996e36f** and exclusively **/api/v1**. Supported slices include identity/profile/recovery/administration, organization selection, fleet, material hierarchy, parties, documents, intake, routes/executions, sorting, pressing, inventory, buyers/sales, operations reporting and approved MVP Analytics. Earlier 0dc0d1f integration evidence remains historical. A passing build does not mean the whole application is finished; see the remaining local and external acceptance gates.
 
 ## Run locally, step by step
 
-1. Start the backend from its repository using its README and existing private environment configuration:
+1. Start the backend from its repository using its README and existing private environment configuration. The current identity worktree uses its retained private Compose configuration:
 
    ~~~powershell
-   Set-Location '../back-irr-v2'
-   docker compose up -d --build --wait
+   Set-Location '../irr-backend-identity'
+   docker compose -p irr-identity-verification -f .local/identity/compose.json up -d --build --wait
    ~~~
 
-   Check readiness at http://localhost:9191/actuator/health/readiness. PostgreSQL and Redis are backend-only Docker services. Do not publish them or put their credentials in the browser. Do not delete named volumes to resolve an integration error.
+   Check current-worktree readiness at http://localhost:9292/actuator/health/readiness and Swagger at http://localhost:9292/swagger-ui/index.html. Use VITE_API_BASE_URL=http://localhost:9292/api/v1 in the ignored frontend environment file. A new checkout without the retained private stack follows the backend README's standard Compose setup (default port 9191) and must use its matching API origin instead. PostgreSQL and Redis are backend-only Docker services. Do not publish them or put their credentials in the browser. Do not delete named volumes to resolve an integration error.
 
 2. Use Node.js 24 and npm. From this frontend repository:
 
@@ -74,12 +86,14 @@ If port 5173 is occupied, stop the other frontend process instead of changing or
 Swagger is the official API documentation. Markdown guides explain integration and operations, not a competing HTTP specification. DTOs are generated into src/shared/api/schema.d.ts. To intentionally review a backend contract change:
 
 ~~~powershell
+$env:BACKEND_COMMIT = (git -C ../irr-backend-identity rev-parse HEAD)
+$env:OPENAPI_URL = "http://localhost:9292/v3/api-docs"
 npm run api:capture
 npm run api:generate
 git diff -- docs/api src/shared/api/schema.d.ts
 ~~~
 
-The current capture script records the frozen 0dc0d1f baseline. Before accepting a different backend, update that reference deliberately and validate the matched backend/frontend pair. Do not blindly capture an unrelated running server to make a test pass. CI regenerates types from the pinned snapshot and fails on a tracked diff.
+The current capture script requires BACKEND_COMMIT as a full verified Git SHA and OPENAPI_URL for the intended running backend. The pinned metadata identifies the locally verified identity contract. The original 0dc0d1f baseline is historical; v1 freezes only at the first release/homologation manifest. Before accepting a different backend, review the contract diff and validate the matched pair. Do not blindly capture an unrelated running server to make a test pass. CI regenerates types from the pinned snapshot and fails on a tracked diff.
 
 ## Verify
 
@@ -121,7 +135,7 @@ Browser verification and dated results are in [the integration execution record]
 | src/route/Router.tsx | Active guarded navigation and pending-workflow gating |
 | src/pages/VehiclePages | Integrated fleet pages |
 | src/components | Existing shared presentation and typed controls |
-| src/pages, src/models, src/services, src/bases | Remaining legacy workflow code, kept for incremental replacement; legacy BaseService fails closed |
+| src/pages | Retained active login/fleet presentation; obsolete services/models/bases and unreachable workflow closures were removed after replacement verification |
 | tests/contract | Opt-in real-backend acceptance |
 | docs/adrs | Historical decisions and ADR-0015 integration decision |
 | docs/api | Pinned executable contract and baseline digest |
@@ -131,3 +145,63 @@ Browser verification and dated results are in [the integration execution record]
 Follow [ADR-0001](docs/adrs/0001-master-plan.md), [ADR-0003](docs/adrs/0003-architecture-and-dependencies.md) and [ADR-0015](docs/adrs/0015-frontend-contract-integration.md). ADR-0014 in the backend supersedes old aliases and transitional references in earlier ADRs. [Dependency notes](docs/dependencies.md) describe the retained stack and precise tooling changes. Inventory arithmetic, authorization and domain transitions remain backend responsibilities; later UI slices preserve decimal strings, versions and idempotency semantics.
 
 Use feature/refactor branches and coherent semantic commits. Keep engineering identifiers, documentation and comments in English. All active product UI, accessibility labels and user-facing errors use Brazilian Portuguese (pt-BR), as requested by the owner. ABNT2 refers to the operating-system keyboard layout; the application accepts accented Unicode input without changing the user's keyboard. Use TSDoc/JSDoc in TypeScript and JavaDoc in the backend. Attribute Enzo Ribas (@oEnzoRibas) for these changes without replacing historical contributor credits. Remove legacy code only after the corresponding replacement is verified. No Kubernetes or backend architecture rewrite is part of this frontend phase.
+
+## Identity & Access completion
+
+The next Master Plan gate is first deployment/homologation. [Pair verification instructions](docs/homologation-verification.md) describe `npm run verify:homologation`, which checks health, pinned OpenAPI, exact CORS, direct SPA routes and served API configuration without changing accounts or business data. Local results do not replace external email smoke or operator release approval.
+
+[ADR-0016](docs/adrs/0016-global-identity-and-recovery-integration.md) extends the existing integration; backend ADR-0017/0018 own global authority and recovery policy. Administrador Geral can manage users/organizations and operate in any selected active organization without membership. Administrador da Organização reuses MANAGER and stays local. User creation includes ADMINISTRATOR; the server protects the last active global administrator with 409.
+
+Use Organizations to create/edit/deactivate units and manage MEMBER/MANAGER/revocation. New organization onboarding creates the unit, then creates or selects the responsible user, then grants MANAGER. A failed grant retains the created identifiers for retry. If you leave the page, resume through organization member management. Credentials never belong to Organization or browser storage.
+
+Login → Esqueci minha senha requests a neutral recovery message. The link opens /reset-password with a fragment token, immediately removed from history and held only in memory. Refresh requires reopening the email link. Successful reset clears local session state and returns to login; the backend revokes previous sessions. Invalid, expired or used links require another request. Disabled mail returns an explicit unavailable state.
+
+### Local verification environment
+
+For the isolated identity rehearsal, the backend listens on 9292, frontend on 5273, and local Mailpit on 8025. These are deliberate local overrides; normal README examples use backend 9191/frontend 5173. Keep VITE_API_BASE_URL and backend PASSWORD_RESET_BASE_URL matched to the actual frontend/backend pair. See the backend docs/email-recovery.md for Docker startup and sender configuration.
+
+Local access correction (2026-10-04): the standard frontend at 5173 was rebuilt against the running identity backend at 9292. Its ignored `.env` now sets `VITE_API_BASE_URL=http://localhost:9292/api/v1`; the separate rehearsal frontend at 5273 remains available. The old backend listener at 9191 is stopped. If changing the local API address, update this public value and run `docker compose up -d --build frontend`: restarting an existing static image does not update its compiled API URL. Administrator login, CORS for 5173, the served API origin and container health were verified. Recovery links still use the configured rehearsal frontend at 5273. No database or credential reset was performed.
+
+```powershell
+$env:VITE_API_BASE_URL = 'http://localhost:9292/api/v1'
+$env:IRR_BACKEND_ENV = (Resolve-Path '../irr-backend-identity/.local/identity/contract.env').Path
+$env:IRR_MAILPIT_URL = 'http://localhost:8025'
+npm run dev:credentials
+npm run test:contract
+```
+
+The credentials helper creates ignored .env-dev from the private backend file without printing values. Read that private file locally for development sign-in. It preserves an existing .env-dev; after changing your password, update your private reference deliberately. Vite does not load .env-dev, and no DEV_ADMIN_PASSWORD or mail key may be renamed to VITE_* or included in the bundle. Public examples contain placeholders only.
+
+The contract suite includes real email capture, credential replacement/replay, global authority, organization CRUD and local manager restrictions in addition to earlier identity/fleet/intake workflows. Fixture history is retained in deactivated test organizations, without a database reset. External Brevo sender/domain approval and Railway mail Variables remain operator actions before homologation. The subsequent owner decision permits Routes development while external configuration/homologation remains pending; native reporting follows Routes in ADR-0001.
+
+## Route planning and execution
+
+The current Routes integration includes municipal plans, ordered neighborhood/street coverage, dated fleet/team assignments, start/coverage/completion/cancellation and optional completed-execution collection linkage. Select an organization before opening `/routes`. Global administrators curate territory; organization administration manages plans/scheduling; members record permitted field operations. Platform content is Brazilian Portuguese. See [the Routes development and verification guide](docs/routes-integration.md) for step-by-step Docker/source operation, credentials, tests, exact contract behavior and rollout. No new secret/service is needed. Backend V4 must run before the matching frontend; preserve database volumes. Analytics and GPS remain future phases.
+
+Final local acceptance and remaining release gates: [Routes verification record](docs/routes-verification.md).
+
+## Native operational reporting
+
+Open **Relatório operacional** after selecting an organization. The four approved metrics use the current Swagger contract, exact decimal quantities, Brazilian calendar dates and optional municipality/route/vehicle filters. See [user workflow and development](docs/reporting-integration.md) and [verification evidence](docs/reporting-verification.md). For the local identity worktree stack, set the public VITE_API_BASE_URL in the ignored local environment to http://localhost:9292/api/v1 and rebuild the frontend container. Development credentials remain in the ignored private environment file.
+
+## Navigation and duration
+
+The sidebar groups Operation, Registers, Results and global Administration, with profile/sign-out in the account footer. Operational duration now progresses from seconds to minutes, hours, days, approximate months and years. Expand **Ver segundos exatos** for the original quantity. [Presentation rules and local verification](docs/reporting-verification.md) document the tested boundaries without changing the backend contract.
+
+## Processing and accessibility
+
+Sorting, pressing and read-only organization stock are available through **Triagem**, **Prensagem** and **Estoque**. The global **Acessibilidade** control provides persisted device/light/dark theme, font enlargement and high contrast. See [the workflow, limitations and verification commands](docs/processing-verification.md), maintained by [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas). Product text remains Brazilian Portuguese; technical documentation remains English.
+
+## Code quality commands
+
+Run `npm run lint` for ESLint with zero warnings allowed, `npm run lint:fix` for deliberate local autofixes, and `npm run typecheck` for TypeScript. CI checks lint and types before testing/building. Generated API types and private local artifacts are excluded from lint. Maintainer: Enzo Ribas (https://github.com/oEnzoRibas).
+
+## Buyers and sales
+
+Open **Compradores** to maintain organization-owned commercial references and **Vendas** to create or edit drafts, register against an invoice and reverse registered sales. Save local edits before registering; drafts do not reserve inventory. Posted and reversed records retain history and are read-only. See [the sales development and verification guide](docs/sales-verification.md) and [ADR-0020](docs/adrs/0020-sales-lifecycle-integration.md). Development credentials remain in the ignored `.env-dev` described above; no secret is bundled or committed.
+
+## Integrated acceptance
+
+[The acceptance record](docs/integrated-acceptance.md) distinguishes automated local evidence from remaining browser/operator and deployment gates. Processing forms accept an optional operation date in the device's local time; blank dates preserve server time. These controls do not edit historical records or change stock policy.
+
+Processing forms also support **Adicionar item ao lote**: queue multiple source lines, review/remove them and submit one atomic operation. Stage/date apply to the whole batch. Pending quantity edits must be added or cleared before registration. See [the processing guide](docs/processing-verification.md) for retry, rollback and historical-record rules.

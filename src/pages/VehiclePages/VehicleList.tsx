@@ -8,8 +8,7 @@ import { fleet, type Vehicle } from "../../features/fleet/api";
 import { useSession } from "../../features/identity/SessionProvider";
 import { errorMessage } from "../../shared/api/transport";
 export default function VehicleList() {
-  const { membership } = useSession();
-  const manager = membership?.role === "MANAGER";
+  const { canManage: manager } = useSession();
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState({ licensePlate: "", model: "" });
   const [filters, setFilters] = useState(query);

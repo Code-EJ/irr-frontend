@@ -1,8 +1,9 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
 import { useState } from "react";
 import { isAxiosError } from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import Card from "../components/Card";
+import InstitutionalFooter from "../components/InstitutionalFooter";
 import Button from "../components/Button";
 import InputText from "../components/InputText";
 import SimpleForm from "../components/SimpleForm";
@@ -13,6 +14,7 @@ import { errorMessage } from "../shared/api/transport";
 export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   if (session.getToken()) return <Navigate to="/menu" replace />;
   return (
     <div className="login-layout">
@@ -20,7 +22,7 @@ export default function Login() {
         <div className="brand">
           <Recycle size={32} />
           <span>
-            IRR<small>Instituto de Resíduos e Reciclagem</small>
+            IRR<small>Instituto Referência em Resíduos</small>
           </span>
         </div>
         <div>
@@ -51,6 +53,7 @@ export default function Login() {
           <p className="my-3">
             Entre com sua conta para acessar sua organização.
           </p>
+          {location.state?.passwordChanged && <p role="status">Senha alterada. Entre com sua nova senha.</p>}
           <SimpleForm
             initialValues={{ email: "", password: "" }}
             onSubmit={async (values) => {
@@ -101,11 +104,13 @@ export default function Login() {
               </>
             )}
           </SimpleForm>
+          <p className="login-help"><Link to="/forgot-password">Esqueci minha senha</Link></p>
           <p className="login-help">
             Precisa de acesso? Entre em contato com o administrador da sua
             organização.
           </p>
         </Card>
+        <InstitutionalFooter />
       </main>
     </div>
   );

@@ -1,4 +1,6 @@
 # Frontend integration execution record
+> Historical integration evidence is superseded where it conflicts with frontend ADR-0016 and backend ADR-0017/0018. Current global authority/recovery verification is recorded in identity-verification.md.
+
 
 Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 

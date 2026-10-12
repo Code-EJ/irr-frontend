@@ -1,5 +1,8 @@
 # ADR-0009: Organization-owned catalogs and stock, explicit membership foundation
 
+> **PARTIALLY SUPERSEDED BY ADR-0017 / ADR-0018 (2026-10-04).** Global administrator creation and cross-organization authority, final BOOTSTRAP_ADMIN_* names and public email recovery now follow those backend decisions. Historical contrary statements below are retained as decision history, not current policy. Unrelated decisions remain applicable.
+
+
 - Status: Organization ownership model accepted by the owner on 2026-09-27; membership foundation implemented; catalog/operational ownership cutover remains pending.
 - Author and documentation maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
 - Related: [master plan](0001-master-plan.md), [target database topology](0002-database-schema-redesign.md), [identity boundary](0008-identity-and-attachment-boundaries.md).

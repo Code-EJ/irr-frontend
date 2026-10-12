@@ -1,0 +1,37 @@
+# ADR-0019: Processing and read-only inventory integration
+
+- Status: Accepted; initial frontend slice implemented, local API verified; operator acceptance pending.
+- Date: 2026-10-09.
+- Maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).
+
+## Context and drivers
+
+The owner explicitly selected sorting, pressing and stock as the next integration after accessibility. This resumes the sequence already established in ADR-0015 and ADR-0001 after the owner-prioritized Routes/reporting slices. Backend ADR-0014's v1-only contract and the actual Swagger baseline 20a03c7 remain authoritative. No backend redesign or new roadmap is introduced. Current frontend retains React, TypeScript, Axios, native dialogs and exact decimal strings.
+
+## Decision and considered options
+
+Implement feature-owned adapters and incremental screens for posted sorting, posted pressing, explicit reversal and read-only balances/lots/movements. Reuse the shared organization transport, paginated selectors, exact quantities and server-enforced stock invariants. Rewriting the frontend, generic CRUD abstractions and direct stock editing are rejected: processing is transactional posting, not freely editable CRUD. Existing disabled legacy workflows remain until a verified replacement permits removal.
+
+Sorting consumes explicitly selected collection/donation input and produces net stock after declared rejects. Pressing selects an available sorted lot, preserves source mass and reduces volume through the existing command. Do not infer available raw intake from its original quantity; the backend checks current consumption. No guessed lot lookup or client-computed stock balance. Creation and reversal send a stable Idempotency-Key for one unchanged payload; a retry reuses it and changed payloads get a new key. Display successful posted/reversed records and retained history. Reversal requires a confirmation explaining downstream conflicts; never replace it with DELETE or silently retry a conflict.
+
+## Implementation sequence and acceptance
+
+Inspect Swagger, processing DTOs and inventory semantics; implement sorting create/list/detail/reversal; pressing create/list/detail/reversal; read-only inventory balances/lots/movements. Preserve selected organization scope, exact kg/m3, pagination, safe loading/error/retry states and Portuguese content. Reference choices stay bounded. Existing v1-only permissions and transaction policy remain backend decisions. Verify lint/types/build/component tests, real posting/idempotent replay/pressing/reversal/stock conservation against local backend, and actual browser forms. Compilation alone does not establish completion. Document remaining limitations and remove only replaced legacy dependency closures.
+
+## Consequences and remaining dependencies
+
+The initial forms post one source line at server time, preserving the subtype of the selected source. They do not offer historical date selection or multi-line batch entry yet. Keys survive retries inside the mounted form/confirmation, not navigation/reload. These limits and verification results are recorded in [the delivery evidence](../processing-verification.md). Native browser form inspection complements real backend posting tests; it does not substitute for operator workflow acceptance.
+
+The existing ledger stays the sole stock authority; no migration, cache, new library or backend capability is assumed. Historical records cannot be overwritten. Stock conflicts may require reversing downstream allocation first. Sales remains a subsequent integration with its established draft/post/reverse decisions. Additional analytics formulas, deployment/email configuration and realistic-volume performance review remain their existing separate gates. Accessibility preferences are local presentation settings and change no organization/account policy.
+
+## Incremental acceptance refinement — 2026-10-09
+
+Frontend `a528f90` adds optional declared date/time using the existing SortingCreateRequestDTO.sortingDate and PressingCreateRequestDTO.pressingDate contract. Blank dates retain server-time behavior. This supersedes only the initial form's server-time-only limitation; the single-source-line limit and other consequences remain. The device's local wall time is converted to an offset-qualified instant before submission, and the same instant remains in an unchanged retry payload. Backend audit timestamps remain independent. No historical record is edited, database recreated or backend capability introduced. Shared dialog headings/descriptions/footer replace nested cards in processing details and reversal. See the [consolidated acceptance record](../integrated-acceptance.md).
+
+## Multi-line batch execution — 2026-10-09
+
+Frontend `9cd733e` removes the remaining single-source-line form limit using the existing sortedItems/pressedBales arrays. Operators explicitly queue normalized lines, inspect their source and quantities, remove unwanted lines and submit one atomic command. Source pagination and source-type changes retain queued snapshots. Sorting stage and optional date apply to the whole operation. The unchanged one-item path remains available. Unfinished quantity edits block submission rather than silently disappearing. The backend checks cumulative availability and rolls back the entire batch on any invalid line; the browser does not reserve or derive inventory. Retry identity covers the full ordered command. No backend capability, migration or dependency was added. The initial single-line consequences above are historical evidence superseded by this checkpoint. Browser/operator acceptance and external release gates remain open.
+
+## Uncertain-delivery correction — 2026-10-09
+
+Frontend `949e13d` tightens retry handling after network failure, HTTP 408/5xx or an incomplete success receipt. The mounted form retains the original command and disables editing/addition/removal until a valid idempotent replay receipt confirms the result. A later rejected retry cannot prove the earlier operation was absent and therefore does not unlock the form. Definitive initial 4xx rejection still permits corrections and a new command identity. This supersedes the earlier ability to edit an unresolved command, while retaining the existing backend contract and command-key generation. Retry reconstructs neither the operation timestamp nor queued lines from current selectors. Navigation/reload still loses local receipt state; consult history before issuing another operation. This addresses an acceptance defect without changing backend behavior or architecture.

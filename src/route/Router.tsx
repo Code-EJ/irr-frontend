@@ -1,12 +1,13 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
+import { useEffect, useRef } from "react";
 import {
   BrowserRouter,
   Routes,
   Route,
   Navigate,
   Link,
-  NavLink,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 import {
   SessionProvider,
@@ -22,24 +23,49 @@ import TeamPage from "../features/parties/TeamPage";
 import DocumentsPage from "../features/documents/DocumentsPage";
 import IntakeList from "../features/intake/IntakeList";
 import IntakeForm from "../features/intake/IntakeForm";
-import UserDetails from "../pages/Profile/UserDetails";
+import OperationalReportPage from "../features/reporting/OperationalReportPage";
+import AnalyticsPage from "../features/reporting/AnalyticsPage";
+import ProcessingPage from "../features/processing/ProcessingPage";
+import ProcessingForm from "../features/processing/ProcessingForm";
+import InventoryPage from "../features/processing/InventoryPage";
+import BuyersPage from "../features/sales/BuyersPage";
+import SalesPage from "../features/sales/SalesPage";
+import SalePage from "../features/sales/SalePage";
+import RoutesPage from "../features/routes/RoutesPage";
+import RouteForm from "../features/routes/RouteForm";
+import ExecutionsPage from "../features/routes/ExecutionsPage";
+import ExecutionForm from "../features/routes/ExecutionForm";
+import ExecutionPage from "../features/routes/ExecutionPage";
+import ProfilePage from "../features/identity/ProfilePage";
+import PasswordPage from "../features/identity/PasswordPage";
+import UsersPage from "../features/identity/UsersPage";
+import UserPage from "../features/identity/UserPage";
+import RecoveryPage, {
+  ResetPasswordPage,
+} from "../features/identity/RecoveryPage";
+import OrganizationsPage, {
+  OrganizationPage,
+} from "../features/identity/OrganizationsPage";
 import Button from "../components/Button";
 import Card from "../components/Card";
+import Sidebar from "../components/Sidebar";
+import InstitutionalFooter from "../components/InstitutionalFooter";
 import {
   Recycle,
-  LayoutDashboard,
   Truck,
   Layers3,
-  UserRound,
   ArrowUpRight,
-  LogOut,
-  HandHeart,
-  UsersRound,
-  Files,
   PackagePlus,
+  MapPinned,
 } from "lucide-react";
 function Protected() {
   const state = useSession();
+  const location = useLocation();
+  const mainRef = useRef<HTMLElement>(null);
+  // Move keyboard reading position into the new page without adding a tab stop.
+  useEffect(() => {
+    if (!state.loading) mainRef.current?.focus();
+  }, [location.pathname, state.loading, state.organization?.id]);
   if (!session.getToken()) return <Navigate to="/login" replace />;
   if (state.loading) return <p role="status">Carregando sua conta…</p>;
   if (state.error)
@@ -50,64 +76,29 @@ function Protected() {
         <Button titulo="Sair" onClick={() => session.clear()} />
       </Card>
     );
+  if (state.account?.mustChangePassword)
+    return location.pathname === "/profile/password" ? (
+      <main className="restricted-account">
+        <PasswordPage mandatory />
+      </main>
+    ) : (
+      <Navigate to="/profile/password" replace />
+    );
   return (
     <div className="app-shell">
-      <a href="#main-content" className="skip-link">
+      <a href="#main-content" className="skip-link" onClick={() => mainRef.current?.focus()}>
         Pular para o conteúdo
       </a>
-      <aside className="sidebar">
-        <Link className="brand" to="/menu">
-          <span className="brand-icon">
-            <Recycle size={26} />
-          </span>
-          <span>
-            IRR<small>Gestão de resíduos</small>
-          </span>
-        </Link>
-        <p className="nav-caption">ÁREA DE TRABALHO</p>
-        <nav aria-label="Navegação principal">
-          <NavLink to="/menu">
-            <LayoutDashboard size={19} />
-            Visão geral
-          </NavLink>
-          <NavLink to="/vehicle-list">
-            <Truck size={19} />
-            Veículos
-          </NavLink>
-          <NavLink to="/materials">
-            <Layers3 size={19} />
-            Materiais
-          </NavLink>
-          <NavLink to="/profile">
-            <UserRound size={19} />
-            Minha conta
-          </NavLink>
-          <NavLink to="/donors">
-            <HandHeart size={19} />
-            Doadores
-          </NavLink>
-          <NavLink to="/team">
-            <UsersRound size={19} />
-            Equipe
-          </NavLink>
-          <NavLink to="/documents">
-            <Files size={19} />
-            Documentos
-          </NavLink>
-          <NavLink to="/intake">
-            <PackagePlus size={19} />
-            Entradas
-          </NavLink>
-        </nav>
-        <div className="sidebar-note">
-          <Recycle size={25} />
-          <p>
-            Cada etapa conta.
-            <br />
-            <strong>Um novo ciclo começa aqui.</strong>
-          </p>
-        </div>
-      </aside>
+      <Sidebar
+        name={state.account?.fullName ?? "Minha conta"}
+        role={state.account?.userRole === "ADMINISTRATOR"
+          ? "Administrador Geral"
+          : state.membership?.role === "MANAGER"
+            ? "Administrador da Organização"
+            : state.membership ? "Membro da organização" : "Selecione uma organização"}
+        administrator={state.account?.userRole === "ADMINISTRATOR"}
+        onSignOut={() => session.clear()}
+      />
       <div className="workspace">
         <header className="workspace-header">
           <label className="organization-picker">
@@ -125,34 +116,25 @@ function Protected() {
               ))}
             </select>
           </label>
-          <div className="account-summary">
-            <span className="avatar" aria-hidden="true">
-              {state.account?.fullName?.slice(0, 1)}
-            </span>
-            <span>
-              {state.account?.fullName}
-              <small>
-                {state.membership
-                  ? state.membership.role === "MANAGER"
-                    ? "Gestor da organização"
-                    : "Membro da organização"
-                  : "Selecione uma organização"}
-              </small>
-            </span>
-          </div>
-          <button className="signout" onClick={() => session.clear()}>
-            <LogOut size={17} />
-            Sair
-          </button>
         </header>
-        <main id="main-content" className="workspace-content">
+        <main ref={mainRef} id="main-content" tabIndex={-1} className="workspace-content" aria-label="Conteúdo principal">
           <Outlet key={state.organization?.id ?? "no-organization"} />
         </main>
-        <footer className="workspace-footer">
-          IRR · Instituto de Resíduos e Reciclagem
-        </footer>
+        <InstitutionalFooter />
       </div>
     </div>
+  );
+}
+/** UI guard complements server-side authorization and works without organization selection. */
+function AdministratorOnly() {
+  return useSession().account?.userRole === "ADMINISTRATOR" ? (
+    <Outlet />
+  ) : (
+    <Card>
+      <h1>Acesso restrito</h1>
+      <p role="alert">Somente administradores podem gerenciar usuários.</p>
+      <Link to="/menu">Voltar ao início</Link>
+    </Card>
   );
 }
 function Scoped({ manager = false }: { manager?: boolean }) {
@@ -168,11 +150,12 @@ function Scoped({ manager = false }: { manager?: boolean }) {
         </p>
       </Card>
     );
-  if (manager && state.membership?.role !== "MANAGER")
+  if (manager && !state.canManage)
     return (
       <Card>
         <p role="alert">
-          Somente gestores da organização podem alterar veículos.
+          Somente administradores da organização ou Administradores Gerais podem
+          alterar veículos.
         </p>
         <Link to="/vehicle-list">Voltar para veículos</Link>
       </Card>
@@ -211,6 +194,15 @@ function Home() {
         <span>Seu dia a dia, mais simples</span>
       </div>
       <div className="quick-grid">
+        <Link to="/routes" className="quick-card">
+          <span className="quick-icon">
+            <MapPinned />
+          </span>
+          <ArrowUpRight className="quick-arrow" />
+          <h3>Rotas</h3>
+          <p>Planeje a cobertura e acompanhe execuções de coleta.</p>
+          <strong>Acessar rotas →</strong>
+        </Link>
         <Link to="/vehicle-list" className="quick-card">
           <span className="quick-icon">
             <Truck />
@@ -239,13 +231,7 @@ function Home() {
           <strong>Acessar entradas →</strong>
         </Link>
       </div>
-      <div className="coming-next">
-        <span className="status-pill">Em breve</span>
-        <p>
-          Processamento, estoque e vendas estarão disponíveis nas próximas
-          etapas.
-        </p>
-      </div>
+      <Link className="primary-link" to="/sales">Acessar vendas e comercialização →</Link>
     </div>
   );
 }
@@ -255,10 +241,44 @@ export default function AppRouter() {
       <SessionProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<RecoveryPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route element={<Protected />}>
             <Route path="/menu" element={<Home />} />
-            <Route path="/profile" element={<UserDetails />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/password" element={<PasswordPage />} />
+            <Route element={<AdministratorOnly />}>
+              <Route path="/organizations" element={<OrganizationsPage />} />
+              <Route
+                path="/organizations/new"
+                element={<OrganizationPage key="new" />}
+              />
+              <Route path="/organizations/:id" element={<OrganizationPage />} />
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/users/new" element={<UserPage key="new" />} />
+              <Route path="/users/:id" element={<UserPage />} />
+            </Route>
             <Route element={<Scoped />}>
+              <Route path="/buyers" element={<BuyersPage />} />
+              <Route path="/sales" element={<SalesPage />} />
+              <Route path="/sales/new" element={<SalePage key="new-sale" />} />
+              <Route path="/sales/:id" element={<SalePage />} />
+              <Route path="/sortings" element={<ProcessingPage key="sortings" kind="sortings" />} />
+              <Route path="/sortings/new" element={<ProcessingForm key="new-sorting" kind="sortings" />} />
+              <Route path="/pressings" element={<ProcessingPage key="pressings" kind="pressings" />} />
+              <Route path="/pressings/new" element={<ProcessingForm key="new-pressing" kind="pressings" />} />
+              <Route path="/inventory" element={<InventoryPage />} />
+              <Route path="/reports/operations" element={<OperationalReportPage />} />
+              <Route path="/reports/analytics" element={<AnalyticsPage />} />
+              <Route path="/routes" element={<RoutesPage />} />
+              <Route
+                path="/routes/new"
+                element={<RouteForm key="new-route" />}
+              />
+              <Route path="/routes/:id" element={<RouteForm />} />
+              <Route path="/route-executions" element={<ExecutionsPage />} />
+              <Route path="/route-executions/new" element={<ExecutionForm />} />
+              <Route path="/route-executions/:id" element={<ExecutionPage />} />
               <Route path="/donors" element={<DonorsPage />} />
               <Route path="/team" element={<TeamPage />} />
               <Route path="/documents" element={<DocumentsPage />} />

@@ -42,7 +42,7 @@ export function createClient(baseURL: string) {
       throw new CanceledError(
         "Organization changed before the request was sent.",
       );
-    if (token && config.url !== "/session/authenticate")
+    if (token && !["/session/authenticate","/session/password-recovery/request","/session/password-recovery/confirm"].includes(config.url!))
       config.headers.set("Authorization", "Bearer " + token);
     else config.headers.delete("Authorization");
     const generation = session.getGeneration();
@@ -69,7 +69,7 @@ export function createClient(baseURL: string) {
         );
       if (
         error.response?.status === 401 &&
-        config?.url !== "/session/authenticate"
+        !["/session/authenticate","/session/password-recovery/request","/session/password-recovery/confirm"].includes(config?.url??"")
       )
         session.clear();
       return Promise.reject(error);

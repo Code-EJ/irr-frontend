@@ -1,5 +1,8 @@
 # ADR-0008: Administrator provisioning and creator-scoped attachment lifecycle
 
+> **PARTIALLY SUPERSEDED BY ADR-0017 / ADR-0018 (2026-10-04).** Global administrator creation and cross-organization authority, final BOOTSTRAP_ADMIN_* names and public email recovery now follow those backend decisions. Historical contrary statements below are retained as decision history, not current policy. Unrelated decisions remain applicable.
+
+
 - Status: Accepted and implemented for the pre-production backend; organization scope and remaining domain gates are not completed by this slice.
 - Date: 2026-09-26.
 - Author and documentation maintainer: [Enzo Ribas (@oEnzoRibas)](https://github.com/oEnzoRibas).

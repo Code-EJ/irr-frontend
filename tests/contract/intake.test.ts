@@ -1,5 +1,6 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
 import { loadEnvFile } from "node:process";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, expect, it, vi } from "vitest";
 import { isAxiosError } from "axios";
@@ -17,7 +18,10 @@ import {
 } from "../../src/features/intake/api";
 import { driverChoices } from "../../src/features/intake/choices";
 import { catalog } from "../../src/features/materials/api";
+import { sales, buyers, } from "../../src/features/sales/api";
+import { processing, inventory } from "../../src/features/processing/api";
 import { fleet } from "../../src/features/fleet/api";
+import { analyticsReport } from "../../src/features/reporting/analyticsApi";
 const envFile = process.env.IRR_BACKEND_ENV;
 if (!envFile)
   throw new Error("Set IRR_BACKEND_ENV to the private local backend .env.");
@@ -44,6 +48,8 @@ const intake: {
 }[] = [];
 const uploads: string[] = [];
 const sortings: string[] = [];
+const pressings: string[] = [];
+const saleIds: string[] = [];
 let admin = "",
   member = "",
   adminId = "",
@@ -77,14 +83,8 @@ function scope(token = admin, org = orgs[0]) {
   session.setToken(token);
   session.selectOrganization(org);
 }
-const pdf = () =>
-  new File(
-    [
-      "%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF",
-    ],
-    "verification.pdf",
-    { type: "application/pdf" },
-  );
+const pdfBytes = await readFile(new URL("../fixtures/verification.pdf", import.meta.url));
+const pdf = () => new File([pdfBytes], "verification.pdf", { type: "application/pdf" });
 const donation = (): DonationCreate => ({
   donorId,
   donationDate: "2026-09-28T12:00:00Z",
@@ -228,7 +228,11 @@ it("uploads, reads, downloads, renames and removes protected documents", async (
     "Comprovante de doação.pdf",
   );
   const downloaded = await safe(documents.download(proofId));
-  expect(String(downloaded).startsWith("%PDF-")).toBe(true);
+  expect(String(downloaded)).toBe(pdfBytes.toString("utf8"));
+  const binary = await safe(apiClient.get<ArrayBuffer>("/documents/" + proofId + "/download", {
+    headers: organizationHeaders(), responseType: "arraybuffer",
+  }));
+  expect(Buffer.from(binary.data)).toEqual(pdfBytes);
   scope(member);
   expect(await status(documents.rename(proofId, "denied.pdf"))).toBe(403);
   expect(await status(documents.remove(proofId))).toBe(403);
@@ -334,6 +338,7 @@ it("refuses updates and deactivation after sorting has consumed a donation", asy
       "/sortings",
       {
         sortingType: "PRIMARY",
+        sortingDate: "2026-10-01T10:30:00-03:00",
         sortedItems: [
           {
             inputItemId: item.id,
@@ -352,6 +357,7 @@ it("refuses updates and deactivation after sorting has consumed a donation", asy
     ),
   );
   sortings.push(sorted.data.id);
+  expect(new Date(sorted.data.sortingDate).toISOString()).toBe("2026-10-01T13:30:00.000Z");
   intake[0].processed = true;
   expect(
     await status(
@@ -362,6 +368,82 @@ it("refuses updates and deactivation after sorting has consumed a donation", asy
     ),
   ).toBe(409);
   expect(await status(donations.deactivate(source.id!))).toBe(409);
+});
+it("posts and replays pressing, blocks upstream reversal and restores exact inventory", async () => {
+  scope(member);
+  const sorting = await safe(processing.get("sortings", sortings[0]));
+  const line = "sortedItems" in sorting ? sorting.sortedItems![0] : undefined;
+  expect(line).toBeDefined();
+  const before = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const payload = { pressingDate: "2026-10-02T10:30:00-03:00", pressedBales: [{ sortedItemId: line!.id!, materialSubtypeId: subtypeId, weightKg: "0.2000", initialVolumeM3: "0.0200", finalVolumeM3: "0.0100", destinationType: "STOCK" as const }] };
+  const key = randomUUID();
+  const posted = await safe(processing.create("pressings", payload, key));
+  pressings.push(posted.id!);
+  expect(new Date("pressingDate" in posted ? posted.pressingDate! : "").toISOString()).toBe("2026-10-02T13:30:00.000Z");
+  expect((await safe(processing.create("pressings", payload, key))).id).toBe(posted.id);
+  const after = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(after.weightKg).toBe(before.weightKg);
+  expect(after.volumeM3).toBe("0.0300");
+  expect((await safe(inventory.lots(0))).items.some(value => value.pressedBaleId)).toBe(true);
+  expect((await safe(inventory.movements(0))).items.some(value => value.kind === "PRESSING")).toBe(true);
+  expect(await status(processing.reverse("sortings", sortings[0], randomUUID()))).toBe(409);
+  scope(admin, orgs[1]);
+  expect(await status(processing.get("pressings", posted.id!))).toBe(404);
+  scope(member);
+  const reversalKey = randomUUID();
+  const reversed = await safe(processing.reverse("pressings", posted.id!, reversalKey));
+  expect((await safe(processing.reverse("pressings", posted.id!, reversalKey))).reversalOperationId).toBe(reversed.reversalOperationId);
+  pressings.pop();
+  const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(restored.weightKg).toBe(before.weightKg);
+  expect(restored.volumeM3).toBe(before.volumeM3);
+});
+it("completes invoice-gated versioned sales with replay and exact stock restoration", async () => {
+  scope();
+  const buyer = await safe(buyers.create({ name: "Sales contract buyer", document: "12345678000199" }));
+  await safe(buyers.update(buyer.id!, { name: "Updated sales buyer", document: "12345678000199" }));
+  expect((await safe(buyers.get(buyer.id!))).name).toBe("Updated sales buyer");
+  scope(member);
+  expect(await status(buyers.create({ name: "Forbidden member buyer" }))).toBe(403);
+  expect(await status(buyers.update(buyer.id!, { name: "Forbidden edit" }))).toBe(403);
+  const sortedLot = (await safe(inventory.lots(0))).items.find(value => value.sortedItemId)!;
+  const pressing = await safe(processing.create("pressings", { pressedBales: [{ sortedItemId: sortedLot.sortedItemId!, materialSubtypeId: subtypeId, weightKg: "0.2000", initialVolumeM3: "0.0200", finalVolumeM3: "0.0100", destinationType: "STOCK" }] }, randomUUID()));
+  pressings.push(pressing.id!);
+  const lot = (await safe(inventory.lots(0))).items.find(value => value.pressedBaleId)!;
+  const before = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const payload = { saleDate: "2026-10-09T12:00:00Z", buyerId: buyer.id!, items: [{ stockLotId: lot.id!, materialSubtypeId: subtypeId, weightKg: "0.0500", volumeM3: "0.0050", unitPrice: "1.2345" }] };
+  let sale = await safe(sales.create(payload)); saleIds.push(sale.id);
+  expect(sale.status).toBe("DRAFT"); expect(sale.totalValue).toBe("0.06");
+  expect((await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!.weightKg).toBe(before.weightKg);
+  expect(await status(sales.transition(sale.id, "post", sale.version, randomUUID()))).toBe(400);
+  const oldVersion = sale.version;
+  sale = await safe(sales.update(sale.id, { ...payload, nfeAttachmentId: proofId, version: sale.version }));
+  expect(await status(sales.update(sale.id, { ...payload, version: oldVersion }))).toBe(409);
+  const postVersion = sale.version, postKey = randomUUID();
+  sale = await safe(sales.transition(sale.id, "post", postVersion, postKey));
+  expect(sale.status).toBe("POSTED");
+  const revenuePeriod = { from: "2026-10-09", to: "2026-10-09" };
+  expect((await safe(analyticsReport(revenuePeriod))).revenue.amount).toBe("0.06");
+  expect((await safe(sales.transition(sale.id, "post", postVersion, postKey))).version).toBe(sale.version);
+  expect(await status(sales.update(sale.id, { ...payload, version: sale.version }))).toBe(409);
+  expect(await status(sales.deactivate(sale.id, sale.version))).toBe(409);
+  expect(await status(processing.reverse("pressings", pressing.id!, randomUUID()))).toBe(409);
+  const after = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(after.weightKg).toBe("0.3500"); expect(after.volumeM3).toBe("0.0250");
+  scope(admin, orgs[1]); expect(await status(sales.get(sale.id))).toBe(404); expect(await status(buyers.get(buyer.id!))).toBe(404);
+  scope(); expect(await status(buyers.deactivate(buyer.id!))).toBe(409);
+  scope(member);
+  const reverseVersion = sale.version, reverseKey = randomUUID();
+  sale = await safe(sales.transition(sale.id, "reverse", reverseVersion, reverseKey));
+  expect(sale.status).toBe("REVERSED");
+  expect((await safe(analyticsReport(revenuePeriod))).revenue.amount).toBe("0");
+  expect((await safe(sales.transition(sale.id, "reverse", reverseVersion, reverseKey))).version).toBe(sale.version);
+  const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(restored.weightKg).toBe(before.weightKg); expect(restored.volumeM3).toBe(before.volumeM3);
+  const excess = await safe(sales.create({ ...payload, nfeAttachmentId: proofId, items: [{ ...payload.items[0], weightKg: "99.0000" }] })); saleIds.push(excess.id);
+  expect(await status(sales.transition(excess.id, "post", excess.version, randomUUID()))).toBe(409);
+  expect(await status(sales.deactivate(excess.id, excess.version + 1))).toBe(409);
+  await safe(sales.deactivate(excess.id, excess.version)); expect(await status(sales.get(excess.id))).toBe(404);
 });
 it("deactivates unprocessed collections and independent donors", async () => {
   scope(member);
@@ -379,6 +461,98 @@ it("deactivates unprocessed collections and independent donors", async () => {
   await safe(donors.deactivate(donor.id!));
   expect(await status(donors.get(donor.id!))).toBe(404);
 });
+it("posts a multi-line processing batch atomically and rolls back all lines on stock conflict", async () => {
+  scope();
+  const source = await safe(donations.create(donation()));
+  intake.push({ kind: "donation", id: source.id!, processed: true });
+  const input = source.inputItems!.find(line => line.isActive !== false)!;
+  const beforeSorting = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const sortedLine = { inputItemId: input.id!, materialSubtypeId: subtypeId, weightKg: "0.0500", volumeM3: "0.0050", rejectWeightKg: "0", rejectVolumeM3: "0", destinationType: "STOCK" as const };
+  const sortingPayload = { sortingType: "PRIMARY" as const, sortedItems: [sortedLine, { ...sortedLine, inputItemId: source.inputItems![1].id!, weightKg: "0.0600", volumeM3: "0.0060" }] };
+  const sortingKey = randomUUID();
+  const sorting = await safe(processing.create("sortings", sortingPayload, sortingKey));
+  sortings.push(sorting.id!);
+  expect("sortedItems" in sorting ? sorting.sortedItems : []).toHaveLength(2);
+  expect((await safe(processing.create("sortings", sortingPayload, sortingKey))).id).toBe(sorting.id);
+  const sortedItems = "sortedItems" in sorting ? sorting.sortedItems! : [];
+  const beforePressing = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const bales = sortedItems.map(line => ({ sortedItemId: line.id!, materialSubtypeId: subtypeId, weightKg: line.weightKg!, initialVolumeM3: line.volumeM3!, finalVolumeM3: "0.0010", destinationType: "STOCK" as const }));
+  expect(await status(processing.create("pressings", { pressedBales: [bales[0], { ...bales[1], weightKg: "99.0000" }] }, randomUUID()))).toBe(409);
+  const afterConflict = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(afterConflict.weightKg).toBe(beforePressing.weightKg);
+  expect(afterConflict.volumeM3).toBe(beforePressing.volumeM3);
+  const pressingKey = randomUUID();
+  const pressing = await safe(processing.create("pressings", { pressedBales: bales }, pressingKey));
+  pressings.push(pressing.id!);
+  expect("pressedBales" in pressing ? pressing.pressedBales : []).toHaveLength(2);
+  expect((await safe(processing.create("pressings", { pressedBales: bales }, pressingKey))).id).toBe(pressing.id);
+  expect(await status(processing.reverse("sortings", sorting.id!, randomUUID()))).toBe(409);
+  await safe(processing.reverse("pressings", pressing.id!, randomUUID()));
+  await safe(processing.reverse("sortings", sorting.id!, randomUUID()));
+  const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(restored.weightKg).toBe(beforeSorting.weightKg);
+  expect(restored.volumeM3).toBe(beforeSorting.volumeM3);
+});
+it("verifies a fifty-line batch across inventory pages with rollback, replay and exact restoration", async () => {
+  scope();
+  const timings: { operation: string; milliseconds: number }[] = [];
+  async function timed<T>(operation: string, action: () => Promise<T>) {
+    const started = performance.now();
+    const result = await action();
+    timings.push({ operation, milliseconds: Math.round((performance.now() - started) * 100) / 100 });
+    return result;
+  }
+  const before = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const source = await safe(donations.create(donation()));
+  intake.push({ kind: "donation", id: source.id!, processed: true });
+  const payload = { sortingType: "PRIMARY" as const, sortedItems: Array.from({ length: 50 }, () => ({ inputItemId: source.inputItems![0].id!, materialSubtypeId: subtypeId, weightKg: "0.0010", volumeM3: "0.0002", rejectWeightKg: "0", rejectVolumeM3: "0", destinationType: "STOCK" as const })) };
+  const sortingKey = randomUUID();
+  const sorting = await timed("post-50-line-sorting", () => safe(processing.create("sortings", payload, sortingKey)));
+  sortings.push(sorting.id!);
+  const items = "sortedItems" in sorting ? sorting.sortedItems! : [];
+  expect(items).toHaveLength(50);
+  expect((await timed("replay-sorting", () => safe(processing.create("sortings", payload, sortingKey)))).id).toBe(sorting.id);
+  const itemIds = new Set(items.map(item => item.id));
+  const first = await safe(inventory.lots(0));
+  expect(first.pages).toBeGreaterThan(1);
+  expect(first.pages).toBeLessThan(100);
+  const lotIds = new Set<string>();
+  let found = 0;
+  await timed("read-all-inventory-pages", async () => {
+    for (let page = 0; page < first.pages; page++) {
+      const result = page === 0 ? first : await safe(inventory.lots(page));
+      for (const lot of result.items) {
+        expect(lotIds.has(lot.id!)).toBe(false);
+        lotIds.add(lot.id!);
+        if (itemIds.has(lot.sortedItemId)) {
+          found++;
+          expect(lot.availableWeightKg).toBe("0.0010");
+          expect(lot.availableVolumeM3).toBe("0.0002");
+        }
+      }
+    }
+  });
+  expect(found).toBe(50);
+  expect(lotIds.size).toBe(first.total);
+  const beforePressing = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  const bales = items.map(item => ({ sortedItemId: item.id!, materialSubtypeId: subtypeId, weightKg: "0.0010", initialVolumeM3: "0.0002", finalVolumeM3: "0.0001", destinationType: "STOCK" as const }));
+  expect(await timed("reject-last-line-and-rollback", () => status(processing.create("pressings", { pressedBales: bales.map((line, index) => index === 49 ? { ...line, weightKg: "99.0000" } : line) }, randomUUID())))).toBe(409);
+  const afterConflict = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(afterConflict.weightKg).toBe(beforePressing.weightKg);
+  expect(afterConflict.volumeM3).toBe(beforePressing.volumeM3);
+  const pressingKey = randomUUID();
+  const pressing = await timed("post-50-bale-pressing", () => safe(processing.create("pressings", { pressedBales: bales }, pressingKey)));
+  pressings.push(pressing.id!);
+  expect("pressedBales" in pressing ? pressing.pressedBales : []).toHaveLength(50);
+  expect((await timed("replay-pressing", () => safe(processing.create("pressings", { pressedBales: bales }, pressingKey)))).id).toBe(pressing.id);
+  await timed("reverse-50-bale-pressing", () => safe(processing.reverse("pressings", pressing.id!, randomUUID())));
+  await timed("reverse-50-line-sorting", () => safe(processing.reverse("sortings", sorting.id!, randomUUID())));
+  const restored = (await safe(inventory.balances(0))).items.find(value => value.materialSubtypeId === subtypeId)!;
+  expect(restored.weightKg).toBe(before.weightKg);
+  expect(restored.volumeM3).toBe(before.volumeM3);
+  await mkdir(".local/verification", { recursive: true });
+  await writeFile(".local/verification/processing-volume.json", JSON.stringify({ verifiedAt: new Date().toISOString(), mode: "isolated-local", backendContractReference: "20a03c7", batchLines: 50, inventoryPages: first.pages, timings, caveat: "Single local sample; not a production capacity, concurrency benchmark or latency SLA." }, null, 2) + "\n");
+});
 afterAll(async () => {
   if (!admin) return;
   scope();
@@ -390,12 +564,25 @@ afterAll(async () => {
       failures.push(label);
     }
   };
+  for (const id of saleIds) {
+    const code = await status(sales.get(id));
+    if (code === 404) continue;
+    await clean("restore sale", async () => {
+      const sale = await sales.get(id);
+      if (sale.status === "POSTED") await sales.transition(id, "reverse", sale.version, randomUUID());
+      else if (sale.status === "DRAFT") await sales.deactivate(id, sale.version);
+    });
+  }
+  for (const id of pressings)
+    await clean("reverse pressing", async () => {
+      const record = await processing.get("pressings", id);
+      if (record.status === "POSTED") await processing.reverse("pressings", id, randomUUID());
+    });
   for (const id of sortings)
-    await clean("reverse sorting", () =>
-      apiClient.post("/sortings/" + id + "/reverse", null, {
-        headers: { ...organizationHeaders(), "Idempotency-Key": randomUUID() },
-      }),
-    );
+    await clean("reverse sorting", async () => {
+      const record = await processing.get("sortings", id);
+      if (record.status === "POSTED") await processing.reverse("sortings", id, randomUUID());
+    });
   for (const item of intake)
     if (!item.processed)
       await clean("deactivate intake", () =>

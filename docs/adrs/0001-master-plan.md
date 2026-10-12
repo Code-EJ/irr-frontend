@@ -1,5 +1,41 @@
 # ADR-0001: IRR frontend overhaul and coordinated system master plan
 
+## Isolated homologation execution — 2026-10-11
+
+Continue existing release sequencing under backend ADR-0028. A separate synthetic Railway environment is provisioned; the previous project remains untouched. [The installation handoff](../homologation-installation.md) records reserved origins, current local checks and remaining security, region, mail and public acceptance gates. This authorizes execution without replacing the architecture or equating provisioning with successful deployment or main merge.
+
+## Current executive milestone order — 2026-10-10
+
+Local recovery gate update: the selected-stack V1-V4 backup restored in an isolated PostgreSQL container with 39 matching table counts, 20 matching attachment hashes/references and zero inventory reconciliation differences. The live API restarted healthy. Actual browser PDF upload/download and downloaded-byte rendering passed; in-app local-file viewer acceptance remains separately blocked by browser policy. Backend docs/recovery-verification.md and frontend docs/document-verification.md record the evidence. This completes L2, while broader local workload/browser checks remain in the progress register.
+
+The owner-approved analytics-1 block is implemented and locally verified: matched planned/actual comparisons, unique declared-section coverage, weighted linked-collection productivity and live posted-sale revenue. Backend ADR-0022 and frontend ADR-0021 define the formulas; source references are backend 996e36f / frontend 9e25e91. Validation includes 51 backend unit tests, 95 integration tests, 127 frontend tests, 26 real API tests and actual browser empty/populated/filtered journeys. Operator acceptance of this new screen and the remaining local completion gates are separate. See [the execution register](../MASTER_PLAN_PROGRESS.md).
+
+The owner's Routes phase decision explicitly supersedes the prior requirement to finish external homologation before developing Routes. Identity policy and security remain unchanged. External deployment remains an operator gate, not a blocker for the next functional development milestone.
+
+| Order | Milestone | Status / gate |
+| --- | --- | --- |
+| COMPLETED | Identity & Access | IMPLEMENTED / READY FOR HOMOLOGATION: current backend/frontend, profile, credential revocation, recovery, global/local administration and bootstrap; no functional reopening |
+| PARALLEL OPERATIONS | Email provider configuration / first deployment | OPERATIONAL CONFIGURATION PENDING: external sender/domain/key and public deployment; EXTERNAL CONFIGURATION REQUIRED; no automatic merge, secrets update or database reset |
+| COMPLETED DEVELOPMENT | Routes | IMPLEMENTED / READY FOR HOMOLOGATION: explicit territory, organization-owned reusable planning, dated execution, preserved collection history and verified frontend integration |
+| COMPLETED DEVELOPMENT | First native operational report | IMPLEMENTED / LOCALLY VERIFIED: backend ADR-0021 / frontend ADR-0018; exact execution and collection facts, Brazilian periods and organization filters; see reporting verification |
+| COMPLETED DEVELOPMENT | Approved MVP Analytics | IMPLEMENTED / LOCALLY VERIFIED: backend ADR-0022 / frontend ADR-0021; matched comparisons, unique section-count coverage, weighted productivity and live posted-sale revenue; operator acceptance pending |
+| COMPLETED DEVELOPMENT | Initial processing and inventory | LOCALLY VERIFIED under ADR-0019; sorting/pressing transitions and organization ledger reads; batch and historical-date UX remain incremental improvements |
+| COMPLETED DEVELOPMENT | Buyers and sales lifecycle | LOCALLY VERIFIED under ADR-0020; versioned drafts, invoice-gated posting and compensating reversal; operator acceptance pending |
+| NEXT ACCEPTANCE | Existing integrated workflows and release gates | Operator review, external email/deployment and release-pair approval; local evidence does not certify homologation |
+| PRODUCT DEFINITION | Remaining analytics, exports, indicators and dashboards | PRODUCT DEFINITION REQUIRED for unapproved metric families; approved analytics-1 is implemented in the milestone above |
+| INCREMENTAL EVOLUTION | GPS / route telemetry / mapping | PLANNED_POST_DEPLOY: extension at execution/geometry boundaries; no provider, hardware or advanced map now |
+| FUTURE | Optional BI and advanced analytics | DEFERRED until demonstrated need and separate product authorization |
+
+ADMINISTRATOR remains global, MANAGER remains local, and MEMBER keeps permitted organization operations. No new Identity architecture, role enum or credential policy is introduced. V1–V3 stay immutable; Routes uses additive V4. No data reset. Exclusively /api/v1 is retained; the first approved release manifest freezes that contract, not an ADR or local compilation.
+
+The new Routes and Analytics decisions interpret the historical client requirements without treating all historical extras as current implementation authority. Organization classification and account CITY_HALL are not territorial identities. Municipality/Neighborhood are added only for the demonstrated Routes requirement; no external dataset is imported. Stable IDs, exact kg/km, actor/timestamp history and immutable execution context support implemented analytics-1. Remaining metric families, alerts, exports and GPS retain their separate pending definitions and dependencies.
+
+Historical sequencing and test counts below remain dated evidence. Current statuses follow [requirements traceability](../requirements/traceability.md) and the Routes execution record added with verified implementation.
+
+## Identity delivery update — 2026-10-03
+
+The owner prioritizes complete account self-service and platform administration within M1/M5. [The identity execution record](../identity-integration.md) continues ADR-0015 using backend ADR-0016: profile editing, password change, administrator partner CRUD/reset and explicit organization memberships. Generated contracts remain exclusively `/api/v1`; current fleet/material/intake behavior is preserved. The backend deliberately selects incremental V2, retaining V1, rather than requiring a pre-production database recreation. This update is in progress until component, contract, browser and container gates pass; evidence and actual remaining work will be recorded in the execution record. Backend deploy precedes frontend deploy, with current normal-account clients remaining supported.
+
 > Accepted ownership decision (2026-09-27): the owner selected separate catalogs and stock per organization. [ADR-0009](0009-organization-scope-and-catalog-integrity.md) implements the explicit membership foundation and catalog integrity corrections. Full organization-scoped business-data migration remains pending. [ADR-0010](0010-containerized-redis.md) adds authenticated Docker Redis without moving authorization or inventory truth out of PostgreSQL.
 
 > Identity/attachment update: [ADR-0008](0008-identity-and-attachment-boundaries.md) implements administrator provisioning, exact public routes, creator-scoped attachment DTOs and durable physical deletion. V2 evolves the already-applied V1 without resetting data. Organization and inventory work remains open.
@@ -246,3 +282,63 @@ Board target workflow: Backlog → Ready → In progress → Review → Validati
 | D04 | M1/M5 | F01/F08: frontend contract and gates | Strict typecheck/lint pass; matched login, pagination and 204 contracts. |
 | D05 | M1 | F07/F09: dependency remediation | Aligned Flyway; reviewed advisory dispositions; fresh scans and real migration tests. |
 | D06 | M6 | F10/F12: reproducible deployment | Ephemeral test keys; isolated DB fixtures; health/port/static serving verified. |
+
+## Routes operational implementation checkpoint (2026-10-04)
+
+CURRENT DEVELOPMENT MILESTONE: Routes. Scoped planning, normalized territory, dated execution snapshots/lifecycle/coverage and completed collection linkage are implemented. Local PostgreSQL, frontend/API and browser workflow gates pass. Routes is IMPLEMENTED / READY FOR HOMOLOGATION; public deployment/operator acceptance remains separate. Identity remains IMPLEMENTED / READY FOR HOMOLOGATION. External email configuration is a parallel operational dependency. NEXT: native Analytics, Reports, Filters, Indicators and Dashboards after approved metric/period definitions. PLANNED: GPS/telemetry/maps. No analytics or external tracking code is authorized by this checkpoint.
+
+## Routes delivery closure — 2026-10-05
+
+Identity remains functionally complete. Routes is IMPLEMENTED / READY FOR HOMOLOGATION after additive V4, scoped API, frontend integration, real PostgreSQL/API tests and browser plan/execution/collection verification. See [delivery evidence and remaining gates](../routes-verification.md). The next functional milestone is native Analytics, Reports, Filters, Indicators and Dashboards; approve metric/period definitions before implementation. GPS remains PLANNED_POST_DEPLOY. External email configuration is a parallel operational dependency, not a Routes development blocker.
+
+## Approved operational reporting slice — 2026-10-09
+
+The owner approved completed execution count, reported km/completeness, actual duration and active collected kg, using America/Sao_Paulo and independent execution-completion/collection-realization periods. The reporting execution ADR records the exact semantics. Implementation is IN_PROGRESS; remaining indicators stay PRODUCT DEFINITION REQUIRED. Routes remains implemented, external homologation pending.
+
+## Owner-selected processing integration — 2026-10-09
+
+The first operational reporting slice is implemented and locally verified; see its delivery evidence. After accessibility, the owner selected sorting, pressing and inventory using the existing contracts. ADR-0019 resumes this existing sequence. Frontend scoped sorting/pressing posting, list/details/reversal and read-only balances/lots/movements are implemented. The local contract suite verifies member pressing, exact stock conservation/restoration, idempotent replay and organization isolation. Sales remains the next functional integration; additional analytics formulas remain PRODUCT DEFINITION REQUIRED. See [processing evidence and limitations](../processing-verification.md). This checkpoint does not assert operator homologation or production readiness.
+
+## Sales execution checkpoint — 2026-10-09
+
+ADR-0015 step five continues through ADR-0019 into [ADR-0020](0020-sales-lifecycle-integration.md). Buyers and sales are integrated against backend `20a03c7`, preserving ADR-0014's exclusive `/api/v1` contract. The [sales verification record](../sales-verification.md) distinguishes component, real API and browser evidence. Existing release gates and product-definition dependencies remain; this is execution of the established sequence, not a replacement roadmap.
+
+## Integrated acceptance checkpoint — 2026-10-09
+
+[The integrated acceptance record](../integrated-acceptance.md) consolidates existing release gates without replacing the roadmap. An incremental ADR-0019 refinement adds declared processing dates through current Swagger fields and consistent shared dialogs. The frontend remains on its existing stack and backend `20a03c7` remains unchanged. Multi-line processing, operator/browser acceptance and external release configuration remain explicit pending work.
+
+## Processing batch checkpoint — 2026-10-09
+
+Frontend `9cd733e` completes the previously documented multi-line processing form limitation through the existing Swagger arrays, following ADR-0019. The [processing guide](../processing-verification.md) records queue workflow, atomic backend verification and retry limits. No new roadmap or architecture is introduced. Remaining acceptance and release dependencies follow the [integrated acceptance record](../integrated-acceptance.md).
+
+## Processing acceptance correction — 2026-10-09
+
+Frontend `949e13d` tightens ADR-0019 uncertain-delivery behavior after acceptance review exposed the risk of editing an unresolved command into a new operation. The [processing verification record](../processing-verification.md) documents retained commands, blocked editing and exact replay checks. Existing native-browser/operator and external release gates remain explicit.
+
+## Owner-selected local validation scope — 2026-10-09
+
+The owner selected continued local validation for this execution. Public deployment and external email validation remain future operator gates, rather than dependencies for current local acceptance work. The existing architecture, contract and roadmap remain authoritative. Against served frontend `949e13d`, six read-only local pair checks and the pinned 115-operation Swagger check passed; frontend/backend/PostgreSQL/Redis/Mailpit containers were healthy.
+
+## Larger-batch local acceptance checkpoint — 2026-10-09
+
+The existing ADR-0019 acceptance sequence now has executable evidence for fifty-line sorting/pressing, complete paginated inventory reads, full rollback on a last-line conflict and exact reversal. The [integrated acceptance record](../integrated-acceptance.md) and [processing guide](../processing-verification.md) retain the measured local scope and remaining operator/browser/workload gates. All 25 real API tests pass; no backend issue or new architecture was introduced.
+
+## Browser and operator checkpoint — 2026-10-09
+
+The [operator homologation record](../operator-homologation.md) executes the existing local acceptance gate with the owner as the named participant. Actual browser processing/sales transitions, stock restoration and accessibility controls were inspected; a historical-sale readability defect was corrected. The operator's acceptance remains separate from automated verification and participation. Existing public-release and broader operator gates remain explicit.
+
+## Scoped operator acceptance checkpoint — 2026-10-09
+
+The owner accepted the locally rehearsed processing/sales workflow. See [the acceptance record](../operator-homologation.md) for scope and the remaining valid-PDF verification. Continue the existing release gates: broader operator checks, current-schema recovery rehearsal, external email and public HTTPS matched-image deployment. Additional metric definitions and GPS retain their existing future status; this acceptance does not authorize or certify a production deployment.
+
+## Local completion execution — 2026-10-09
+
+The owner now prioritizes completion and validation of all applicable local requirements before any Railway configuration/deployment. [The central execution register](../MASTER_PLAN_PROGRESS.md) records the source-based audit, dependency-ordered tasks and actual evidence. This changes release sequencing only; existing domain decisions and pending product definitions remain explicit.
+
+## Owner-approved MVP Analytics — 2026-10-10
+
+The owner approved matched planned/actual comparisons, unique declared-section coverage, weighted linked-collection productivity and live posted-sale revenue. [0021-approved-mvp-analytics-integration.md](0021-approved-mvp-analytics-integration.md) records exact cohorts, integrity and verification. Implement locally before any deployment; remaining metric families retain their explicit product dependencies.
+
+## Pre-release consolidation and preparation — 2026-10-10
+
+Backend ADR-0025 records the owner's latest authorization: continue local security/browser/data closure and prepare Railway artifacts, without external resource creation, real secrets or deployment. It supersedes the earlier restriction on preparation only. Existing architecture, `/api/v1`, preserved V1–V4, approved Analytics formulas and synthetic benchmark evidence remain. Follow the current release-readiness register and Master Plan progress; do not equate local compilation or one accepted workflow with complete client delivery.

@@ -26,7 +26,7 @@ const addressLabels = {
   countryCode: "País (sigla)",
 };
 export default function DonorsPage() {
-  const manager = useSession().membership?.role === "MANAGER";
+  const manager = useSession().canManage;
   const [page, setPage] = useState(0);
   const [revision, setRevision] = useState(0);
   const { data, busy, error } = usePage(donors.list, page, revision);

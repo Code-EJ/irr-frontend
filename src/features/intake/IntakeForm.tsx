@@ -1,6 +1,16 @@
 /** @author Enzo Ribas (https://github.com/oEnzoRibas) */
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import {
+  executions,
+  completedExecutionChoices,
+  executionChoice,
+} from "../routes/api";
 import Card from "../../components/Card";
 import Button from "../../components/Button";
 import ResourcePicker from "../../shared/ui/ResourcePicker";
@@ -47,6 +57,7 @@ type Draft = {
   collectionDiaryId: string;
   teamMemberIds: string[];
   routeDescription: string;
+  routeExecutionId: string;
   departureAt: string;
   arrivalAt: string;
   distanceKm: string;
@@ -69,6 +80,7 @@ const blank = (): Draft => ({
   collectionDiaryId: "",
   teamMemberIds: [],
   routeDescription: "",
+  routeExecutionId: "",
   departureAt: "",
   arrivalAt: "",
   distanceKm: "",
@@ -77,6 +89,9 @@ const blank = (): Draft => ({
 /** Explicit collection/donation form; shared input lines retain exact decimals and UUID references. */
 export default function IntakeForm({ kind }: { kind: IntakeKind }) {
   const { id } = useParams();
+  const [query] = useSearchParams();
+  const incomingExecution =
+    kind === "collections" && !id ? (query.get("executionId") ?? "") : "";
   const navigate = useNavigate();
   const [draft, setDraft] = useState(blank);
   const [loading, setLoading] = useState(!!id);
@@ -84,6 +99,9 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
   const [failure, setFailure] = useState("");
   const [saving, setSaving] = useState(false);
   const [revision, setRevision] = useState(0);
+  const [boundExecution, setBoundExecution] = useState(false);
+  const [executionLoading, setExecutionLoading] = useState(false);
+  const [executionError, setExecutionError] = useState("");
   const [originalDates, setOriginalDates] = useState<{
     date?: string;
     departureAt?: string;
@@ -91,7 +109,8 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
   }>({});
   useEffect(() => {
     let active = true;
-    setDraft(blank());
+    setDraft({ ...blank(), routeExecutionId: incomingExecution });
+    setBoundExecution(false);
     setOriginalDates({});
     setLoading(!!id);
     setLoadError("");
@@ -103,6 +122,7 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
           if (!active) return;
           const c = record as Collection;
           const d = record as Donation;
+          setBoundExecution(!!c.routeExecutionId);
           setOriginalDates({
             date: kind === "collections" ? c.realizationDate : d.donationDate,
             departureAt: c.departureAt,
@@ -121,6 +141,7 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
             collectionDiaryId: c.collectionDiaryId ?? "",
             teamMemberIds: c.teamMemberIds ?? [],
             routeDescription: c.routeDescription ?? "",
+            routeExecutionId: c.routeExecutionId ?? "",
             departureAt: localDateTime(c.departureAt),
             arrivalAt: localDateTime(c.arrivalAt),
             distanceKm: c.distanceKm ?? "",
@@ -143,7 +164,41 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
     return () => {
       active = false;
     };
-  }, [kind, id, revision]);
+  }, [kind, id, revision, incomingExecution]);
+  useEffect(() => {
+    let active = true;
+    setExecutionError("");
+    setExecutionLoading(!!draft.routeExecutionId);
+    if (draft.routeExecutionId)
+      void executions
+        .get(draft.routeExecutionId)
+        .then((execution) => {
+          if (!active) return;
+          if (execution.status !== "COMPLETED")
+            throw new Error("Execution must be completed");
+          setDraft((previous) => ({
+            ...previous,
+            vehicleId: execution.vehicleId,
+            driverId: execution.driverId,
+            teamMemberIds: execution.team.map((member) => member.teamMemberId!),
+            departureAt: localDateTime(execution.startedAt),
+            arrivalAt: localDateTime(execution.finishedAt),
+            distanceKm:
+              execution.distanceKm == null
+                ? ""
+                : displayDecimal(execution.distanceKm),
+          }));
+        })
+        .catch((err) => {
+          if (active) setExecutionError(errorMessage(err));
+        })
+        .finally(() => {
+          if (active) setExecutionLoading(false);
+        });
+    return () => {
+      active = false;
+    };
+  }, [draft.routeExecutionId, revision]);
   function update<K extends keyof Draft>(key: K, value: Draft[K]) {
     setDraft((previous) => ({ ...previous, [key]: value }));
   }
@@ -192,6 +247,7 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
           className="stack-form intake-form"
           onSubmit={async (e) => {
             e.preventDefault();
+            if (executionLoading || executionError) return;
             setFailure("");
             let inputs: InputLine[];
             let totalWeightKg: string;
@@ -264,16 +320,22 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
                   teamMemberIds: draft.teamMemberIds,
                   inputItems: inputs,
                   routeDescription: draft.routeDescription || undefined,
-                  departureAt: draft.departureAt
-                    ? submittedInstant(
-                        draft.departureAt,
-                        originalDates.departureAt,
-                      )
-                    : undefined,
-                  arrivalAt: draft.arrivalAt
-                    ? submittedInstant(draft.arrivalAt, originalDates.arrivalAt)
-                    : undefined,
-                  distanceKm,
+                  routeExecutionId: draft.routeExecutionId || undefined,
+                  departureAt:
+                    !draft.routeExecutionId && draft.departureAt
+                      ? submittedInstant(
+                          draft.departureAt,
+                          originalDates.departureAt,
+                        )
+                      : undefined,
+                  arrivalAt:
+                    !draft.routeExecutionId && draft.arrivalAt
+                      ? submittedInstant(
+                          draft.arrivalAt,
+                          originalDates.arrivalAt,
+                        )
+                      : undefined,
+                  distanceKm: draft.routeExecutionId ? undefined : distanceKm,
                   mtrGeneratorId: draft.mtrGeneratorId || undefined,
                   mtrDestinatorId: draft.mtrDestinatorId || undefined,
                   collectionDiaryId: draft.collectionDiaryId || undefined,
@@ -308,7 +370,47 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
             }
           }}
         >
-          <fieldset disabled={saving}>
+          {kind === "collections" && (
+            <section className="route-section">
+              <h2>Execução de rota</h2>
+              <p className="route-muted">
+                Vincule uma execução concluída para preservar o trajeto
+                realizado, o veículo e a equipe. Uma coleta avulsa também pode
+                ser registrada.
+              </p>
+              <ResourcePicker
+                label="Execução concluída (opcional)"
+                value={draft.routeExecutionId}
+                onChange={(value) => update("routeExecutionId", value)}
+                load={completedExecutionChoices}
+                resolve={executionChoice}
+                disabled={saving || boundExecution}
+              />
+              {boundExecution && (
+                <p className="route-muted">
+                  O vínculo original desta coleta é preservado.
+                </p>
+              )}
+              {draft.routeExecutionId && (
+                <Link to={"/route-executions/" + draft.routeExecutionId}>
+                  Consultar execução vinculada →
+                </Link>
+              )}
+              {executionLoading && (
+                <p role="status">Carregando os dados da execução…</p>
+              )}
+              {executionError && (
+                <p role="alert">
+                  {executionError}{" "}
+                  <Button
+                    titulo="Recarregar execução"
+                    onClick={() => setRevision((n) => n + 1)}
+                  />
+                </p>
+              )}
+            </section>
+          )}
+          <fieldset disabled={saving || executionLoading}>
             <legend>Dados da entrada</legend>
             <div className="form-grid">
               <label>
@@ -334,6 +436,7 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
                 <>
                   <ResourcePicker
                     label="Veículo"
+                    disabled={!!draft.routeExecutionId}
                     required
                     value={draft.vehicleId}
                     onChange={(value) => update("vehicleId", value)}
@@ -342,6 +445,7 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
                   />
                   <ResourcePicker
                     label="Motorista"
+                    disabled={!!draft.routeExecutionId}
                     required
                     value={draft.driverId}
                     onChange={(value) => update("driverId", value)}
@@ -358,7 +462,7 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
             )}
           </fieldset>
           {kind === "collections" && (
-            <fieldset disabled={saving}>
+            <fieldset disabled={saving || !!draft.routeExecutionId}>
               <legend>Trajeto e equipe</legend>
               <label>
                 Descrição do trajeto
@@ -547,7 +651,7 @@ export default function IntakeForm({ kind }: { kind: IntakeKind }) {
             <Button
               type="submit"
               titulo={saving ? "Salvando…" : "Salvar entrada"}
-              disabled={saving}
+              disabled={saving || executionLoading || !!executionError}
             />
           </div>
         </form>
